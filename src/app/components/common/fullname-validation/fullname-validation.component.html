@@ -1,0 +1,10 @@
+<div *ngIf="isSubmitted && fNameControl &&  fNameControl.errors">
+  <div *ngIf="fNameControl.errors['required']" style="color: red;">Name is required</div>
+  <div *ngIf="fNameControl.errors['minlength']" style="color: red;">Name must contain
+    {{ fNameControl.errors['minlength'].requiredLength }} characters
+  </div>
+  <div *ngIf="fNameControl.errors['maxlength']" style="color: red;">Name max contain
+    {{ fNameControl.errors['maxlength'].requiredLength }} characters
+  </div>
+  <div *ngIf="fNameControl.errors['pattern'] && !fNameControl.errors['minlength'] && !fNameControl.errors['maxlength']" style="color: red;">Name only contains alphabets</div>
+</div>

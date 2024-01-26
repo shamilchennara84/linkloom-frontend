@@ -39,52 +39,55 @@
           <p class="text-xs text-gray-400 uppercase  ">or</p>
           <span class="w-2/5 border-b dark:border-gray-600 md:w-2/5"></span>
         </div>
-        <div class="mt-5 md:grid grid-cols-2 gap-4">
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="fullname">Full Name</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="fullname" placeholder="Enter your Full name :" />
+        <form [formGroup]=" signupForm" (submit)="onSubmit()">
+          <div class="mt-5 md:grid grid-cols-2 gap-4">
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="fullname">Full Name</label>
+              <input formControlName="fullname" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="fullname" placeholder="Enter your Full name :" />
+              <app-fullname-validation [fNameControl]="signupForm.get('fullname')" [isSubmitted]="isSubmitted "></app-fullname-validation>
+            </div>
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="username">Username</label>
+              <input formControlName="username" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="username" placeholder="Enter your Username :" />
+              <app-username-validation [userNameControl]="signupForm.get('username')" [isSubmitted]="isSubmitted"></app-username-validation>
+            </div>
+
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="email">E-mail Address</label>
+              <input formControlName="email" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="email" placeholder="Enter your Email :" />
+              <app-email-validation [emailControl]="signupForm.get('email')" [isSubmitted]="isSubmitted"></app-email-validation>
+            </div>
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="mobile">Mobile Number</label>
+              <input formControlName="mobile" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="mobile" placeholder="Enter your Mobile Number :" />
+              <app-mobile-validation [mobileControl]="signupForm.get('mobile')" [isSubmitted]="isSubmitted"></app-mobile-validation>
+            </div>
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="password">Password</label>
+              <input formControlName="password" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="password" placeholder="Enter your Password :" />
+              <app-password-validation [passwordControl]="signupForm.get('password')" [isSubmitted]="isSubmitted"></app-password-validation>
+            </div>
+            <div>
+              <label class="font text-sm text-white pb-1 block" for="confirmPassword">Confirm Password</label>
+              <input formControlName="confirmPassword" class="border rounded-lg px-3 py-2 mt-1 mb-2 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="confirmPassword" placeholder="Enter your Confirm Password :" />
+              <app-repeat-password-validation [repeatPassControl]="signupForm.get('confirmPassword')" [isSubmitted]="isSubmitted"></app-repeat-password-validation>
+            </div>
           </div>
 
 
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="username">Username</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="username" placeholder="Enter your Username :" />
+
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+            <a class="text-xs text-gray-400 uppercase hover:text-white " [routerLink]="'../login'">Already an User?</a>
+            <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
           </div>
-
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="email">E-mail Address</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="email" placeholder="Enter your Email :" />
-
+          <div class="mt-5 flex justify-center">
+            <button type="submit" class="py-2 px-4 bg-gradient-to-r from-purple-950 to-purple-400 hover:ring-blue-500 hover:ring-offset-blue-200 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full md:w-1/2 transition ease-in duration-200 text-center text-base font-semibold shadow-md hover:outline-none hover:ring-2 hover:ring-offset-2 rounded-3xl ">
+              Sign Up
+            </button>
           </div>
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="mobile">Mobile Number</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="mobile" placeholder="Enter your Mobile Number :" />
-          </div>
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="password">Password</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="password" placeholder="Enter your Password :" />
-
-          </div>
-          <div>
-            <label class="font text-sm text-white pb-1 block" for="confirmPassword">Confirm Password</label>
-            <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="confirmPassword" placeholder="Enter your Confirm Password :" />
-          </div>
-        </div>
-
-
-
-
-
-        <div class="flex items-center justify-between mt-4">
-          <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-          <a class="text-xs text-gray-400 uppercase hover:text-white " [routerLink]="'../login'">Already an User?</a>
-          <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-        </div>
-        <div class="mt-5 flex justify-center">
-          <button class="py-2 px-4 bg-gradient-to-r from-purple-950 to-purple-400 hover:ring-blue-500 hover:ring-offset-blue-200 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full md:w-1/2 transition ease-in duration-200 text-center text-base font-semibold shadow-md hover:outline-none hover:ring-2 hover:ring-offset-2 rounded-3xl " type="submit">
-            Sign Up
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   </div>
