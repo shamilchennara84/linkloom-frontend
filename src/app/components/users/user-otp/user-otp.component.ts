@@ -1,22 +1,68 @@
 import { Component } from '@angular/core';
 import { LogoComponent } from '../../../shared/reusableComponents/logo/logo.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { otpConcateValidator } from '../../../core/helpers/validation';
+import { OtpValidationComponent } from '../../common/otp-validation/otp-validation.component';
+import { OTP_TIMER } from '../../../shared/constants';
+import { formatTime } from '../../../core/helpers/timer';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-user-otp',
   standalone: true,
-  imports: [LogoComponent],
+  imports: [LogoComponent, ReactiveFormsModule, OtpValidationComponent],
   templateUrl: './user-otp.component.html',
-  styleUrl: './user-otp.component.css'
+  styleUrl: './user-otp.component.css',
 })
 export class UserOtpComponent {
-  otpForm!:FormGroup
+  otpForm!: FormGroup;
+  isSubmitted: boolean = false;
+  reminingTime = 0;
+  formattedTime: string = '03:00';
+  otpResendCount: number = 0;
+  showOTPResend: boolean = true;
 
-  constructor(formBuilder:FormBuilder){}
+  constructor(private formBuilder: FormBuilder,private http:HttpClient,private router:Router) {}
 
-  ngOnInit():void{
-      this.otpForm = this.formBuilder.group({
-          input1:['',[]]
-      })
-   }
+  ngOnInit(): void {
+    this.otpForm = this.formBuilder.group(
+      {
+        digit1: ['', [Validators.required, Validators.pattern('[0-9]')]],
+        digit2: ['', [Validators.required, Validators.pattern('[0-9]')]],
+        digit3: ['', [Validators.required, Validators.pattern('[0-9]')]],
+        digit4: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      },
+      { validators: otpConcateValidator }
+    );
+  }
+  onSubmit() {
+    this.isSubmitted = true;
+    if (this.otpForm.valid) {
+      // Handle form submission logic here
+      const concatenatedDigits =
+        this.otpForm.value.digit1 + this.otpForm.value.digit2 + this.otpForm.value.digit3 + this.otpForm.value.digit4;
+        const otp = {otp:concatenatedDigits}
+        this.http.post('http://localhost:3000/api/user/validateOTP', otp).subscribe({
+          next: (res: any) => {
+            console.log(res);
+            void this.router.navigate(['../login']);
+          },
+        });
+    }
+  }
+
+  startTimer(): void {
+    this.reminingTime = OTP_TIMER;
+
+    const timer = setInterval(() => {
+      this.reminingTime--;
+      if (this.reminingTime <= 0) {
+        clearInterval(timer);
+      }
+      this.formattedTime = formatTime(this.reminingTime);
+    },1000);
+  }
 }
+
