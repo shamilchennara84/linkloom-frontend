@@ -7,7 +7,7 @@ import { OTP_TIMER } from '../../../shared/constants';
 import { formatTime } from '../../../core/helpers/timer';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-otp',
@@ -24,7 +24,7 @@ export class UserOtpComponent {
   otpResendCount: number = 0;
   showOTPResend: boolean = true;
 
-  constructor(private formBuilder: FormBuilder,private http:HttpClient,private router:Router) {}
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.otpForm = this.formBuilder.group(
@@ -37,19 +37,31 @@ export class UserOtpComponent {
       { validators: otpConcateValidator }
     );
   }
+
   onSubmit() {
     this.isSubmitted = true;
     if (this.otpForm.valid) {
       // Handle form submission logic here
       const concatenatedDigits =
         this.otpForm.value.digit1 + this.otpForm.value.digit2 + this.otpForm.value.digit3 + this.otpForm.value.digit4;
-        const otp = {otp:concatenatedDigits}
-        this.http.post('http://localhost:3000/api/user/validateOTP', otp).subscribe({
-          next: (res: any) => {
-            console.log(res);
-            void this.router.navigate(['../login']);
-          },
-        });
+          const otp = { otp: concatenatedDigits };
+      this.http.post('user/validateOTP', otp).subscribe({
+        next: (res: any) => {
+          if (res.error && res.error.message === 'maximum try for OTP exceeded') {
+            void this.router.navigate(['../signup']);
+          } else {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'User created successfully',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              void this.router.navigate(['../login']);
+            });
+          }
+        },
+      });
     }
   }
 
@@ -62,7 +74,6 @@ export class UserOtpComponent {
         clearInterval(timer);
       }
       this.formattedTime = formatTime(this.reminingTime);
-    },1000);
+    }, 1000);
   }
 }
-

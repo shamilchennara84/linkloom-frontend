@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
+import { UserLayoutComponent } from '../user-layout.component';
 
 @Component({
   selector: 'app-user-home',
   standalone: true,
-  imports: [],
+  imports: [UserLayoutComponent],
   templateUrl: './user-home.component.html',
-  styleUrl: './user-home.component.css'
+  styleUrl: './user-home.component.css',
 })
 export class UserHomeComponent {
+
+
+
+
+
+
 
 }

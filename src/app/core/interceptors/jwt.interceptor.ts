@@ -9,8 +9,8 @@ export const jwtInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   const urlArr = req.url.split('/');
-  const user = urlArr[4];
-  const router = urlArr[5];
+  const user = urlArr[0];
+  const router = urlArr[1];
   const authService = inject(AuthService)
   console.log('urlArr',urlArr,'user',user,'router',router);
   //Bypass interceptor logic

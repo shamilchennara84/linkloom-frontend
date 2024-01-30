@@ -1,53 +1,68 @@
+import { type ICoords, IUserAddress } from './common'
+
+// auth credentials
+export interface IUserAuth {
+  fullname: string;
+  username: string;
+  email: string;
+  mobile: string;
+  password: string;
+}
+//Interface for userSchema
+export interface IUser {
+  _id: string;
+  username: string;
+  fullname: string;
+  email: string;
+  password?: string;
+  mobile: string;
+  dob?: Date; // need to check
+  isGoogleAuth: boolean;
+  profilePic: string;
+  isBlocked: boolean;
+  isPremier: boolean;
+  premiumExpiry?: Date;
+  wallet?: number | null;
+  visibility: 'public' | 'private';
+  coords?: ICoords;
+  address?: IUserAddress;
+}
+
+export interface IUserRes extends IUser {}
+
+// for social auth credentials
+export interface IUserSocialAuth {
+  fullname: string;
+  email: string;
+  profilePic?: string;
+}
 
 
-// export interface IUserSocialAuth {
-//   name: string;
-//   email: string;
-//   profilePic?: string;
-// }
+// api response for single user as data
+export interface IApiUserRes {
+  status: number;
+  message: string;
+  data: IUserRes | null;
+}
 
-// export interface IUserAuth {
-//   name: string;
-//   email: string;
-//   password: string;
-// }
+export interface IApiUserAuthRes extends IApiUserRes {
+  accessToken: string;
+  refreshToken: string;
+}
 
-// // interface to respond to front end
-// export interface IUserRes {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   password?: string;
-//   mobile?: number;
-//   dob: Date;
-//   isBlocked: boolean;
-//   profilePic?: string;
-//   wallet: number;
-//   coords?: ICoords;
-//   address?: IUserAddress;
-//   walletHistory: IWalletHistory[] | [];
-// }
+// api response for multiple users as data
+export interface IApiUsersRes {
+  status: number;
+  message: string;
+  data: IUserRes[] | null;
+}
 
-// export interface IApiUserAuthRes {
-//   status: number;
-//   message: string;
-//   data: IUserRes | null;
-//   accessToken: string;
-//   refreshToken: string;
-// }
-
+export interface IUsersAndCount {
+  users: IUserRes[];
+  userCount: number;
+}
 export interface IApiTokenRes {
   status: number;
   message: string;
   accessToken: string;
 }
-// export interface IApiUserRes extends IApiRes<IUserRes> {}
-// export interface IApiUsersRes extends IApiRes<IUserRes[]> {}
-
-// export interface IUserUpdate
-//   extends Omit<IUserRes, '_id' | 'email' | 'password' | 'isBlocked' | 'wallet' | 'walletHistory'> {}
-
-// export interface IUsersAndCount {
-//   users: IUserRes[];
-//   userCount: number;
-// }

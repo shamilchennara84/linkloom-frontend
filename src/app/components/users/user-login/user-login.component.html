@@ -1,22 +1,27 @@
-<div class="bg-black min-h-screen flex flex-col items-center pt-9 ">
+<!-- how you can adjust your code to improve responsiveness at this resolution: -->
 
+<div class="bg-black min-h-screen flex flex-col items-center pt-9">
   <app-logo></app-logo>
-  <div class="relative py-3 w-full sm:w-2/4 md:w-2/6 md:mt-14 ">
-    <div class="relative px-4 py-10 bg-black mx-8 md:mx-24 shadow rounded-3xl border sm:p-10 shadow-red-900">
+  <div class="relative py-3 w-full sm:w-3/4 md:w-3/4 lg:w-1/2 xl:w-2/6 md:mt-10">
+    <div class="relative px-4 py-10 bg-black mx-2 sm:mx-4 md:mx-6 lg:mx-8 xl:mx-24 shadow rounded-3xl border sm:p-10 shadow-red-900">
       <div class="max-w-md mx-auto text-white">
         <div class="flex items-center space-x-5 justify-center">
         </div>
+        <form [formGroup]="loginForm" (submit) ='onSubmit()'>
         <div class="mt-5">
           <label class="font-semibold text-sm text-white pb-1 block" for="login">E-mail</label>
-          <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="login" placeholder="Enter your E-mail :" />
+          <input formControlName="email" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="login" placeholder="Enter your E-mail :" />
+           <app-email-validation [emailControl]="loginForm.get('email')" [isSubmitted]="isSubmitted"></app-email-validation>
           <label class="font-semibold text-sm text-white pb-1 block" for="password">Password</label>
-          <input class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="password" placeholder="Enter your Password :" />
+          <input formControlName="password"  class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="password" placeholder="Enter your Password :" />
+          
         </div>
         <div class="mt-5">
           <button class="py-2 px-4 bg-gradient-to-r from-purple-950 to-purple-400 hover:ring-blue-500 hover:ring-offset-blue-200 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md hover:outline-none hover:ring-2 hover:ring-offset-2 rounded-md" type="submit">
             Log in
           </button>
         </div>
+        </form>
         <div class="flex items-center justify-between my-4">
           <span class="w-2/5 border-b dark:border-gray-600 md:w-1/4"></span>
           <p class="text-xs text-gray-400 uppercase  ">or</p>

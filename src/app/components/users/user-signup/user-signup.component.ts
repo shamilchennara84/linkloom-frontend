@@ -65,8 +65,8 @@ export class UserSignupComponent {
     // console.log(this.signupForm.invalid, this.signupForm.get('confirmPassword'), this.signupForm.get('fullname'));
     if (!this.signupForm.invalid) {
       const user = this.signupForm.getRawValue()
-      // console.log(user);
-      this.http.post('http://localhost:3000/api/user/register',user).subscribe({
+      console.log(user);
+      this.http.post('user/register',user).subscribe({
         next:(res:any) =>{
            localStorage.setItem('userAuthToken', res.token);
            void this.router.navigate(['../otp']);
