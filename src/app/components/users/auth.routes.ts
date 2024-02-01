@@ -1,10 +1,13 @@
 import { Route } from '@angular/router';
-import USER_CHILD_ROUTES from './user-layout/user-child.routes';
+import { loginGuard } from '../../core/guards/login.guard';
+
+
 
 export default [
   {
     path: 'login',
     loadComponent: () => import('./user-login/user-login.component').then((c) => c.UserLoginComponent),
+    
   },
   {
     path: 'signup',
@@ -24,17 +27,6 @@ export default [
     loadComponent: () =>
       import('./user-forgotpassword/user-forgotpassword.component').then((c) => c.UserForgotpasswordComponent),
   },
-  {
-    path: 'user',
-    loadComponent: () => import('./user-layout/user-layout.component').then((c) => c.UserLayoutComponent),
-    children: USER_CHILD_ROUTES,
-  },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ] as Route[];
-// export const USER_ROUTE: Routes = [
-//   { path: 'home', component: UserHomeComponent },
-//   { path: 'login', component: UserLoginComponent },
-//   { path: 'signup', component: UserSignupComponent },
-//   { path: 'otp', component: UserOtpComponent },
-//   { path: 'resetpassword', component: UserResetpasswordComponent },
-// ];

@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandler, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { isTokenExpired } from '../helpers/jwt-token';
-import { AuthService } from '../services/auth.service';
+import { TokenrefreshService } from '../services/tokenrefresh.service';
 import { type Observable } from 'rxjs/internal/Observable';
 import { inject } from '@angular/core';
 
@@ -11,7 +11,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
   const urlArr = req.url.split('/');
   const user = urlArr[0];
   const router = urlArr[1];
-  const authService = inject(AuthService)
+  const tokenrefreshService = inject(TokenrefreshService);    
   console.log('urlArr',urlArr,'user',user,'router',router);
   //Bypass interceptor logic
   if (req.headers.has('Bypass-Interceptor')) {
@@ -48,7 +48,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
   //checking refresh token if access token is invalid
   const refreshToken = localStorage.getItem(`${user}RefreshToken`);
   if (refreshToken && !isTokenExpired(refreshToken)) {
-    authService.getAccessToken(refreshToken).subscribe({
+    tokenrefreshService.getAccessToken(refreshToken).subscribe({
       next: (res: { accessToken: string }) => {
         const newAccessToken = res.accessToken;
         localStorage.setItem(`${user}AccessToken`, newAccessToken);

@@ -1,15 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { IApiTokenRes } from '../models/interfaces/users';
+import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
 const { baseUrl } = environment;
 
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class AuthService {
-  constructor(private readonly http: HttpClient) {}
+export class TokenrefreshService {
+constructor(private readonly http: HttpClient) {}
 
 
 
@@ -26,14 +27,4 @@ getAccessToken(refreshToken:string):Observable<IApiTokenRes>{
 
   return this.http.get<IApiTokenRes>(`${baseUrl}token`, httpOptions);
 
-}
-
-
-
-
-
-
-
-
-
-}
+}}

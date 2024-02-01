@@ -7,7 +7,6 @@ import { validateByTrimming } from '../../../core/helpers/validation';
 import { HttpClient } from '@angular/common/http';
 import { EmailValidationComponent } from "../../common/email-validation/email-validation.component";
 import { Router } from '@angular/router';
-import { error } from 'console';
 import { IApiUserAuthRes } from '../../../core/models/interfaces/users';
 
 @Component({
@@ -40,9 +39,9 @@ export class UserLoginComponent {
       const user = this.loginForm.getRawValue();
       this.http.post<IApiUserAuthRes>('user/login', user).subscribe({
         next: (res: any) => {
-          localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
-          void this.router.navigate(['../user']);
+          localStorage.setItem('userAccessToken', res.accessToken);
+          localStorage.setItem('userRefreshToken', res.refreshToken);
+          void this.router.navigate(['/user']);
         },
       });
     } else {

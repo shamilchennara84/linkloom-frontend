@@ -10,7 +10,7 @@
         <form [formGroup]="loginForm" (submit) ='onSubmit()'>
         <div class="mt-5">
           <label class="font-semibold text-sm text-white pb-1 block" for="login">E-mail</label>
-          <input formControlName="email" class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="login" placeholder="Enter your E-mail :" />
+          <input formControlName="email" class="border rounded-lg px-3 py-2 mt-1 mb-3 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="text" id="login" placeholder="Enter your E-mail :" />
            <app-email-validation [emailControl]="loginForm.get('email')" [isSubmitted]="isSubmitted"></app-email-validation>
           <label class="font-semibold text-sm text-white pb-1 block" for="password">Password</label>
           <input formControlName="password"  class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full bg-white text-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500" type="password" id="password" placeholder="Enter your Password :" />
