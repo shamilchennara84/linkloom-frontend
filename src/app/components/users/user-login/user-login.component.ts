@@ -5,9 +5,11 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@a
 import { emailValidators, passwordValidators } from '../../../shared/validators';
 import { validateByTrimming } from '../../../core/helpers/validation';
 import { HttpClient } from '@angular/common/http';
-import { EmailValidationComponent } from "../../common/email-validation/email-validation.component";
+import { EmailValidationComponent } from '../../common/email-validation/email-validation.component';
 import { Router } from '@angular/router';
 import { IApiUserAuthRes } from '../../../core/models/interfaces/users';
+import { Store } from '@ngrx/store';
+import { saveUserOnStore } from '../../../core/states/users/user.actions';
 
 @Component({
   selector: 'app-user-login',
@@ -20,7 +22,12 @@ export class UserLoginComponent {
   loginForm!: FormGroup;
   isSubmitted = false;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private router: Router,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -41,6 +48,10 @@ export class UserLoginComponent {
         next: (res: any) => {
           localStorage.setItem('userAccessToken', res.accessToken);
           localStorage.setItem('userRefreshToken', res.refreshToken);
+          if (res.data !== null) {
+            console.log('Dispatching saveUserOnStore action with payload:', { userDetails: res.data });
+            this.store.dispatch(saveUserOnStore({ userDetails: res.data }));
+          }
           void this.router.navigate(['/user']);
         },
       });

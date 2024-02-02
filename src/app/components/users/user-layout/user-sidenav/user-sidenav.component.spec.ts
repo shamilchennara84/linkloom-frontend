@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserSidenavComponent } from './user-sidenav.component';
+import { UserSidenavComponent } from './UserSidenavComponent';
 
 describe('UserSidenavComponent', () => {
   let component: UserSidenavComponent;
@@ -8,10 +8,9 @@ describe('UserSidenavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserSidenavComponent]
-    })
-    .compileComponents();
-    
+      imports: [UserSidenavComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(UserSidenavComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

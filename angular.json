@@ -13,6 +13,7 @@
         "build": {
           "builder": "@ngx-env/builder:application",
           "options": {
+            "externalDependencies":[""],
             "outputPath": "dist/link-loom",
             "index": "src/index.html",
             "browser": "src/main.ts",

@@ -1,4 +1,4 @@
-import { type ICoords, IUserAddress } from './common'
+import { type ICoords, IUserAddress } from './common';
 
 // auth credentials
 export interface IUserAuth {
@@ -37,12 +37,11 @@ export interface IUserSocialAuth {
   profilePic?: string;
 }
 
-
 // api response for single user as data
 export interface IApiUserRes {
   status: number;
   message: string;
-  data: IUserRes | null;
+  data: IUserRes;
 }
 
 export interface IApiUserAuthRes extends IApiUserRes {

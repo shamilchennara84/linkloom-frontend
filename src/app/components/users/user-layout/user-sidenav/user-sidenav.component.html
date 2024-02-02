@@ -3,9 +3,13 @@
     <img class="rounded-full  mx-auto object-cover mb-[10px]" [width]="profilePicSize()" [height]="profilePicSize()" src="https://github.com/creativetimofficial/soft-ui-dashboard-tailwind/blob/main/build/assets/img/team-2.jpg?raw=true" alt="profilepic">
   </a>
   
-  <div class="header-text " [class.hide-header-text]="sideNavCollapsed()" >
-      <p class="font-bold ">User</p>
-      <p >Full Name</p>
+  <div *ngIf="userDetails$ | async as userDetails" class="header-text " [class.hide-header-text]="sideNavCollapsed()">
+      <p class="font-bold ">
+        {{ userDetails?.username }}
+      </p>
+      <p>
+        {{ userDetails?.fullname }}
+      </p>
   </div>
   <mat-nav-list>
     <a mat-list-item *ngFor="let item of menuItems()" class="text-left menu-item" [routerLink]='item.route' routerLinkActive="selected-menu-item"     #rla="routerLinkActive" [activated]="rla.isActive" >

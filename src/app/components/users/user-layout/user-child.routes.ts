@@ -1,44 +1,46 @@
 import { Route } from '@angular/router';
 import { UserLayoutComponent } from './user-layout.component';
-import { authGuard } from '../../../core/guards/auth.guard';
+import { UserHomeComponent } from './user-home/user-home.component';
+import { UserNotificationComponent } from './user-notification/user-notification.component';
+import { UserChatroomComponent } from './user-chatroom/user-chatroom.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserAddPostComponent } from './user-add-post/user-add-post.component';
+import { UserSearchComponent } from './user-search/user-search.component';
+import { UserProfileEditComponent } from './user-profile-edit/user-profile-edit.component';
 
 export default [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: '',
     component: UserLayoutComponent,
     children: [
       {
         path: 'home',
-        loadComponent: () => import('./user-home/user-home.component').then((c) => c.UserHomeComponent),
-       
+        component: UserHomeComponent,
       },
       {
         path: 'notification',
-        loadComponent: () =>
-          import('./user-notification/user-notification.component').then((c) => c.UserNotificationComponent),
-     
+        component: UserNotificationComponent,
       },
       {
         path: 'chatroom',
-        loadComponent: () => import('./user-chatroom/user-chatroom.component').then((c) => c.UserChatroomComponent),
-  
+        component: UserChatroomComponent,
       },
       {
         path: 'profile',
-        loadComponent: () => import('./user-profile/user-profile.component').then((c) => c.UserProfileComponent),
-        
+        children: [
+          { path: '', component: UserProfileComponent },
+          { path: 'edit/:id', component: UserProfileEditComponent },
+        ],
       },
       {
         path: 'posts',
-        loadComponent: () => import('./user-add-post/user-add-post.component').then((c) => c.UserAddPostComponent),
-       
+        component: UserAddPostComponent,
       },
       {
         path: 'search',
-        loadComponent: () => import('./user-search/user-search.component').then((c) => c.UserSearchComponent),
-        
+        component: UserSearchComponent,
       },
     ],
   },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ] as Route[];
