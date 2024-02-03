@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserLayoutComponent } from '../user-layout.component';
+import { UserLayoutComponent } from '../user-layout/user-layout.component';
 @Component({
   selector: 'app-user-notification',
   standalone: true,

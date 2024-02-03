@@ -7,15 +7,16 @@ import { authGuard } from './core/guards/auth.guard';
 
 
 export const APP_ROUTE: Routes = [
-  {
-    path: 'auth',
-    loadChildren: () => import('./components/users/auth.routes'),
-    canActivate: [loginGuard],
-  },
+ 
   {
     path: 'user',
-    loadChildren: () => import('./components/users/user-layout/user-child.routes'),
-    canActivate: [authGuard], 
+    loadChildren: () => import('./components/users/user.routes'),
+
+  },
+  {
+    path: 'admin',
+    loadChildren:()=> import('./components/admin/admin.routes')
+    
   },
 
   {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserLayoutComponent } from '../user-layout.component';
+import { UserLayoutComponent } from '../user-layout/user-layout.component';
 
 @Component({
   selector: 'app-user-home',
@@ -8,12 +8,4 @@ import { UserLayoutComponent } from '../user-layout.component';
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css',
 })
-export class UserHomeComponent {
-
-
-
-
-
-
-
-}
+export class UserHomeComponent {}

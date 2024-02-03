@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { UserLayoutComponent } from '../user-layout.component';
+import { UserLayoutComponent } from '../user-layout/user-layout.component';
 
 @Component({
   selector: 'app-user-chatroom',
@@ -9,6 +9,4 @@ import { UserLayoutComponent } from '../user-layout.component';
   templateUrl: './user-chatroom.component.html',
   styleUrl: './user-chatroom.component.css',
 })
-export class UserChatroomComponent {
-  
-}
+export class UserChatroomComponent {}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserLayoutComponent } from '../user-layout.component';
+import { UserLayoutComponent } from '../user-layout/user-layout.component';
 
 @Component({
   selector: 'app-user-search',
@@ -8,6 +8,4 @@ import { UserLayoutComponent } from '../user-layout.component';
   templateUrl: './user-search.component.html',
   styleUrl: './user-search.component.css',
 })
-export class UserSearchComponent {
-  
-}
+export class UserSearchComponent {}

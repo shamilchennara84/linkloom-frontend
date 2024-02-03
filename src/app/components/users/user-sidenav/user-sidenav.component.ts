@@ -1,14 +1,14 @@
 import { Component, Input, OnInit, computed, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MenuItem } from '../../../../core/models/types/menuItems';
+import { MenuItem } from '../../../core/models/types/menuItems';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { IUserRes } from '../../../../core/models/interfaces/users';
+import { IUserRes } from '../../../core/models/interfaces/users';
 import { Store, select } from '@ngrx/store';
-import { selectUserDetails } from '../../../../core/states/users/user.selector';
+import { selectUserDetails } from '../../../core/states/users/user.selector';
 
 @Component({
   selector: 'app-user-sidenav',
@@ -31,8 +31,6 @@ export class UserSidenavComponent implements OnInit {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
   }
 
-  
-  
   menuItems = signal<MenuItem[]>([
     {
       icon: 'home',
