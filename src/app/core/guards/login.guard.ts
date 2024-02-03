@@ -9,7 +9,7 @@ export const loginGuard: CanActivateFn = (route) => {
   const role = route.parent?.routeConfig?.path;
 
   // Check if localStorage is available
-  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+  // if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
     const token = localStorage.getItem(`${role}RefreshToken`);
     console.log('role', role, 'token', token, 'router', route);
 
@@ -22,10 +22,6 @@ export const loginGuard: CanActivateFn = (route) => {
       router.navigate([`/${role}/home`]);
       return false;
     }
-  } else {
-    // If localStorage is not available, allow navigation
-    console.warn('localStorage is not available loginguard');
-    return true;
-  }
+
 };
 
