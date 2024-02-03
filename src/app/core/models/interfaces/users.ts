@@ -43,6 +43,15 @@ export interface IApiUserRes {
   message: string;
   data: IUserRes;
 }
+export interface IApiProfileRes {
+  status: number;
+  message: string;
+  data: {
+    "postsCount":number,
+    "followersCount":number,
+    "followingCount":number
+  };
+}
 
 export interface IApiUserAuthRes extends IApiUserRes {
   accessToken: string;

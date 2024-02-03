@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { IApiUserRes } from '../models/interfaces/users';
+import { IApiProfileRes, IApiUserRes } from '../models/interfaces/users';
 
 @Injectable({
   providedIn: 'root',
@@ -11,5 +11,8 @@ export class UserService {
 
   getUserDetails(userId: string): Observable<IApiUserRes> {
     return this.http.get<IApiUserRes>(`user/get/${userId}`);
+  }
+  getUserProfile(userId: string): Observable<IApiProfileRes> {
+    return this.http.get<IApiProfileRes>(`user/getProfile/${userId}`);
   }
 }

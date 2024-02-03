@@ -31,6 +31,8 @@ export class UserSidenavComponent implements OnInit {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
   }
 
+  
+  
   menuItems = signal<MenuItem[]>([
     {
       icon: 'home',
