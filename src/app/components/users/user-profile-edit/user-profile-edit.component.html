@@ -1,0 +1,47 @@
+<div class="max-w-2xl mx-auto shadow-xl rounded-lg text-gray-900 border-2 border-gray-300 bg-white">
+  <div class="rounded-t-lg h-32 bg-gradient-to-br from-gray-800 via-gray-700 to-red-400 overflow-hidden"></div>
+  <div class="mx-auto w-40 h-40 relative -mt-20 border-4 border-white rounded-full overflow-hidden">
+    <div class="relative">
+      <app-profile-dp [hieght]="155" [width]="155" [currDp]="dpUrl" (deleteDp)="deleteProfilePic()" (imageReady)="imageReady($event)"></app-profile-dp>
+    </div>
+  </div>
+
+  <div class="py-4 px-24 my-3">
+    <ng-container class="flex flex-col">
+      <form [formGroup]="profileForm" (submit)="onSubmit()">
+
+        <div class="flex items-center mb-3">
+          <label class="font-semibold text-gray-700 my-1">Name:</label>
+          <div class="flex flex-col flex-1">
+            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="fullname">
+            <app-fullname-validation [fNameControl]="profileForm.get('fullname')" [isSubmitted]="isSubmitted"></app-fullname-validation>
+          </div>
+        </div>
+
+
+        <div class="flex items-center mb-3">
+          <label class="font-semibold text-gray-700 my-1">Mobile:</label>
+          <div class="flex flex-col flex-1">
+            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="mobile">
+            <app-mobile-validation [mobileControl]="profileForm.get('mobile')" [isSubmitted]="isSubmitted"></app-mobile-validation>
+          </div>
+        </div>
+
+        <div class="flex items-center mb-3">
+          <label class="font-semibold text-gray-700 my-1">Date of Birth:</label>
+          <div class="flex flex-col flex-1">
+            <input type="date" class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="dob">
+            <app-dob-validation [dobControl]="profileForm.get('dob')" [isSubmitted]="isSubmitted"></app-dob-validation>
+          </div>
+        </div>
+
+ 
+        <hr class="border-t mx-8 mt-2">
+        <div class="flex justify-around items-center p-4 space-x-4">
+          <button routerLink="/user/profile" class="w-1/3 block rounded-full bg-red-400 hover:bg-amber-600 hover:shadow-lg font-semibold text-gray-800 px-6 py-2">Cancel</button>
+          <button type="submit" class="w-1/3 block rounded-full bg-red-400 hover:bg-amber-600 hover:shadow-lg font-semibold text-gray-800 px-6 py-2">Save</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>

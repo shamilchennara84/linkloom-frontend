@@ -1,4 +1,5 @@
 import { FormBuilder, type AbstractControl, type ValidationErrors, type ValidatorFn } from '@angular/forms';
+import { MinAge, MinDate } from '../../shared/constants';
 
 // Create a shared FormBuilder instance
 const formBuilder = new FormBuilder();
@@ -38,5 +39,28 @@ export const otpConcateValidator: ValidatorFn = (control: AbstractControl): Vali
   } else if (isNaN(digit1) || isNaN(digit2) || isNaN(digit3) || isNaN(digit4)) {
     return { pattern:true};
   }
+  return null;
+};
+
+
+export const validateDOB: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const dob = control.get('dob');
+  if (dob == null) return null;
+
+  const selectedDate = new Date(dob.value);
+  console.log(dob, 'dob from validateDOB');
+  console.log(selectedDate, 'selectedDate from validateDOB');
+
+  const today = new Date();
+  const minAgeDate = new Date(today.getFullYear() - MinAge, today.getMonth(), today.getDate());
+
+  if (selectedDate > minAgeDate) {
+    dob.setErrors({ minAge: true });
+    return { minAge: true };
+  } else if (selectedDate < MinDate) {
+    dob.setErrors({ minDate: true });
+    return { minDate: true };
+  }
+
   return null;
 };

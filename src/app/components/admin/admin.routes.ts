@@ -1,14 +1,18 @@
 import { Route } from '@angular/router';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { loginGuard } from '../../core/guards/login.guard';
+import { authGuard } from '../../core/guards/auth.guard';
 
 export default [
   {
     path: 'login',
     loadComponent: () => import('./admin-login/admin-login.component').then((m) => m.AdminLoginComponent),
+    canActivate: [loginGuard],
   },
   {
     path: '',
     component: AdminLayoutComponent,
+    canActivateChild:[authGuard],
     children: [
       {
         path: '', // Empty path for the default route
@@ -18,12 +22,13 @@ export default [
       // Define your other routes here
       {
         path: 'home',
-        loadComponent: () =>
-          import('./admin-home/admin-home.component').then((m) => m.AdminHomeComponent),
+        loadComponent: () => import('./admin-home/admin-home.component').then((m) => m.AdminHomeComponent),
+        
       },
       {
         path: 'users',
         loadComponent: () => import('./admin-users/admin-users.component').then((m) => m.AdminUsersComponent),
+        
       },
       // Add more routes as needed
     ],

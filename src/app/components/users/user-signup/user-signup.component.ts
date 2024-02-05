@@ -69,7 +69,7 @@ export class UserSignupComponent {
       this.http.post('user/register',user).subscribe({
         next:(res:any) =>{
            localStorage.setItem('userAuthToken', res.token);
-           void this.router.navigate(['../otp']);
+           void this.router.navigate(['/user/otp']);
         }
       })
     }

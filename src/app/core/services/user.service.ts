@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUsersAndCount } from '../models/interfaces/users';
+import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
 
 @Injectable({
@@ -33,5 +33,16 @@ export class UserService {
   }
   getUserProfile(userId: string): Observable<IApiProfileRes> {
     return this.http.get<IApiProfileRes>(`user/getProfile/${userId}`);
+  }
+
+  updateUserDetails(userId: string, userData: IUserUpdate): Observable<IApiUserRes> {
+    return this.http.put<IApiUserRes>(`user/update/${userId}`, userData);
+  }
+  updateUserProfile(userId: string, formData: FormData): Observable<IApiUserRes> {
+    return this.http.patch<IApiUserRes>(`user/update/profileimage/${userId}`, formData);
+  }
+
+  deleteUserProfile(userId: string): Observable<IApiUserRes> {
+    return this.http.patch<IApiUserRes>(`user/remove/profileimage/${userId}`, {});
   }
 }

@@ -3,10 +3,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from '../../../core/models/types/menuItems';
-
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-sidenav',
@@ -20,8 +19,30 @@ export class AdminSidenavComponent {
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
-
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
+
+  constructor(private router: Router) {}
+
+  showConfirmDialog(): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout',
+      cancelButtonText: 'No, stay logged in',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onLogout();
+      }
+    });
+  }
+
+  onLogout(): void {
+    localStorage.removeItem('adminAccessToken');
+    localStorage.removeItem('adminRefreshToken');
+    void this.router.navigate(['/admin/login']);
+  }
 
   menuItems = signal<MenuItem[]>([
     {
@@ -36,5 +57,3 @@ export class AdminSidenavComponent {
     },
   ]);
 }
-
-

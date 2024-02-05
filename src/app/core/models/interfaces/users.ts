@@ -30,12 +30,7 @@ export interface IUser {
 
 export interface IUserRes extends IUser {}
 
-// for social auth credentials
-export interface IUserSocialAuth {
-  fullname: string;
-  email: string;
-  profilePic?: string;
-}
+
 
 // api response for single user as data
 export interface IApiUserRes {
@@ -52,6 +47,9 @@ export interface IApiProfileRes {
     "followingCount":number
   };
 }
+
+export interface IUserUpdate
+  extends Omit<IUserRes, '_id' | 'email' | 'password' | 'isBlocked' > {}
 
 export interface IApiUserAuthRes extends IApiUserRes {
   accessToken: string;

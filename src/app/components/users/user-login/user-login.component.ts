@@ -10,13 +10,14 @@ import { Router } from '@angular/router';
 import { IApiUserAuthRes } from '../../../core/models/interfaces/users';
 import { Store } from '@ngrx/store';
 import { saveUserOnStore } from '../../../core/states/users/user.actions';
+import { PasswordValidationComponent } from '../../common/password-validation/password-validation.component';
 
 @Component({
   selector: 'app-user-login',
   standalone: true,
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css',
-  imports: [LogoComponent, RouterLink, ReactiveFormsModule, EmailValidationComponent],
+  imports: [LogoComponent, RouterLink, ReactiveFormsModule, EmailValidationComponent,PasswordValidationComponent],
 })
 export class UserLoginComponent {
   loginForm!: FormGroup;
@@ -52,7 +53,7 @@ export class UserLoginComponent {
             console.log('Dispatching saveUserOnStore action with payload:', { userDetails: res.data });
             this.store.dispatch(saveUserOnStore({ userDetails: res.data }));
           }
-          void this.router.navigate(['/user']);
+          void this.router.navigate(['/user/home']);
         },
       });
     } else {

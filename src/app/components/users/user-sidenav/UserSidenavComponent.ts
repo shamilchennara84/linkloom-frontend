@@ -4,11 +4,14 @@ import { MenuItem } from '../../../core/models/types/menuItems';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
+import { deleteUserFromStore } from '../../../core/states/users/user.actions';
+import Swal from 'sweetalert2';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-sidenav',
@@ -18,6 +21,7 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
   styleUrl: './user-sidenav.component.css',
 })
 export class UserSidenavComponent implements OnInit {
+  imgUrl: string = `${environment.backendUrl}images/`;
   sideNavCollapsed = signal(true);
   userDetails$!: Observable<IUserRes | null>;
   @Input() set collapsed(val: boolean) {
@@ -26,9 +30,31 @@ export class UserSidenavComponent implements OnInit {
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private router: Router) {}
   ngOnInit(): void {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
+  }
+
+  showConfirmDialog() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout',
+      cancelButtonText: 'No, stay logged in',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onLogout();
+      }
+    });
+  }
+
+  onLogout(): void {
+    localStorage.removeItem('userAccessToken');
+    localStorage.removeItem('userRefreshToken');
+    this.store.dispatch(deleteUserFromStore());
+    void this.router.navigate(['/user/login']);
   }
 
   menuItems = signal<MenuItem[]>([

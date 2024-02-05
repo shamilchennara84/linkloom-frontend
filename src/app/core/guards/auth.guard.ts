@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 
 export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot): boolean => {
   const router = inject(Router);
-  const role = route.routeConfig?.path;
+  const role = route.parent?.parent?.routeConfig?.path;
 
   // Check if localStorage is available
   if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
@@ -15,7 +15,8 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot): boolean
 
       if (token === null || isTokenExpired(token)) {
         if (role !== 'user') {
-          router.navigate([`/auth`]);
+          console.log(`routing to ${role} login`);
+          router.navigate([`/${role}/login`]);
           return false;
         }
 
@@ -28,7 +29,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot): boolean
           cancelButtonText: 'Cancel',
         }).then((result) => {
           if (result.isConfirmed) {
-            router.navigate(['/auth']);
+            router.navigate(['/user/login']);
           }
         });
         return false;

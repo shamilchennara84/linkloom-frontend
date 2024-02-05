@@ -48,7 +48,7 @@ export class UserOtpComponent {
       this.http.post('user/validateOTP', otp).subscribe({
         next: (res: any) => {
           if (res.error && res.error.message === 'maximum try for OTP exceeded') {
-            void this.router.navigate(['../signup']);
+            void this.router.navigate(['/user/signup']);
           } else {
             Swal.fire({
               position: 'center',
@@ -57,7 +57,7 @@ export class UserOtpComponent {
               showConfirmButton: false,
               timer: 1500,
             }).then(() => {
-              void this.router.navigate(['../login']);
+              void this.router.navigate(['/user/login']);
             });
           }
         },

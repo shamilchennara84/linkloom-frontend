@@ -1,7 +1,7 @@
 <div *ngIf="userDetails$ | async as userDetails">
   <div class="sidenav-header text-center mt-4">
     <a routerLink="/user/profile" class="profile-image">
-      <img class="rounded-full  mx-auto object-cover mb-[10px]" [width]="profilePicSize()" [height]="profilePicSize()" src="{{userDetails?.profilePic}}" alt="profilepic">
+      <img class="rounded-full mx-auto object-cover mb-[10px]" [width]="profilePicSize()" [height]="profilePicSize()" [src]="imgUrl + userDetails?.profilePic" alt="profilepic">
     </a>
 
     <div class="header-text " [class.hide-header-text]="sideNavCollapsed()">
@@ -12,22 +12,28 @@
         {{ userDetails?.fullname }}
       </p>
     </div>
-</div>
+  </div>
 
   <mat-nav-list>
-    <a mat-list-item *ngFor="let item of menuItems()" class="text-left menu-item" [routerLink]='item.route' routerLinkActive="selected-menu-item"     #rla="routerLinkActive" [activated]="rla.isActive" >
-    <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-    <span matListItemTitle *ngIf="!sideNavCollapsed()">{{item.label}}</span>
-        
+    <a mat-list-item *ngFor="let item of menuItems()" class="text-left menu-item" [routerLink]='item.route' routerLinkActive="selected-menu-item" #rla="routerLinkActive" [activated]="rla.isActive">
+      <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+      <span matListItemTitle *ngIf="!sideNavCollapsed()">{{item.label}}</span>
+
     </a>
 
-        <!-- Logout mat-list-item -->
-        <a mat-list-item  class="text-left menu-item" routerLinkActive="selected-menu-item">
-          <mat-icon matListItemIcon>exit_to_app</mat-icon>
-          <span matListItemTitle>Logout</span>
-        </a>
+    <!-- Logout mat-list-item -->
+     <!-- <a routerLink="/user/home" (click)="onLogout()">
+       <span class="cursor-pointer px-2 py-1 hover:bg-gray-800 hover:text-amber-500 rounded block mb-5">
+         <i class="w-8 fas fa-calendar-alt p-2 bg-gray-800 rounded-full"></i>
+         <span class="mx-2">Logout</span>
+       </span>
+     </a> -->
+    <a mat-list-item class="text-left menu-item" (click)="showConfirmDialog()">
+      <mat-icon matListItemIcon>exit_to_app</mat-icon>
+      <span matListItemTitle>Logout</span>
+    </a>
 
   </mat-nav-list>
 
-  
+
 </div>

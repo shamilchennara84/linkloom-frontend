@@ -1,8 +1,8 @@
 
   <div class="sidenav-header text-center mt-4">
-    <a routerLink="/user/profile" class="profile-image">
+    <!-- <a routerLink="#" class="profile-image"> -->
       <img class="rounded-full  mx-auto object-cover mb-[10px]" [width]="profilePicSize()" [height]="profilePicSize()" src="assets/image/admin.png" alt="profilepic">
-    </a>
+    <!-- </a> -->
 
     <div class="header-text " [class.hide-header-text]="sideNavCollapsed()">
       <p class="font-bold ">
@@ -20,7 +20,7 @@
     </a>
 
     <!-- Logout mat-list-item -->
-    <a mat-list-item class="text-left menu-item" routerLinkActive="selected-menu-item">
+    <a mat-list-item class="text-left menu-item" (click)="showConfirmDialog()">
       <mat-icon matListItemIcon>exit_to_app</mat-icon>
       <span matListItemTitle>Logout</span>
     </a>

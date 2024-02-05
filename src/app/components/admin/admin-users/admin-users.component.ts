@@ -3,11 +3,12 @@ import { UserService } from '../../../core/services/user.service';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { TableFilterComponent } from '../../common/table-filter/table-filter.component';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TableFilterComponent],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.css'
 })
