@@ -1,1 +1,8 @@
-Add Post
+
+<!-- <mat-toolbar color="secondary">
+    Upload Image
+</mat-toolbar> -->
+
+<div class="container">
+    <app-post-control [width]="400" [height]="400" (imageReady)="imageReady($event)" />
+</div>

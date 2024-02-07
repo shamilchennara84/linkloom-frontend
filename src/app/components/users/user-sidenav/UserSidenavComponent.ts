@@ -27,13 +27,18 @@ export class UserSidenavComponent implements OnInit {
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
+   placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  profileImg: string = '';
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
 
   constructor(private store: Store, private router: Router) {}
   ngOnInit(): void {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
-  }
+     this.userDetails$.subscribe((userProfile) => {
+      this.profileImg =
+        userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
+  })}
 
   showConfirmDialog() {
     Swal.fire({

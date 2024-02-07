@@ -18,13 +18,15 @@ export class ProfileDpComponent {
     this.imageWidth.set(val);
   }
 
-  @Input() currDp: string = '';
-
   imageHeight = signal(0);
   // eslint-disable-next-line accessor-pairs
-  @Input() set hieght(val: number) {
+  @Input() set height(val: number) {
     this.imageHeight.set(val);
   }
+  @Input() currDp: string = '';
+  
+  croppedImage = signal<CropperDialogueResult | undefined>(undefined);
+
 
   placeholder = computed(() => 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200');
 
@@ -33,7 +35,6 @@ export class ProfileDpComponent {
     return this.croppedImage()?.imageUrl ?? this.placeholder();
   });
 
-  croppedImage = signal<CropperDialogueResult | undefined>(undefined);
   dialog = inject(MatDialog);
 
   fileSelected(event: any): void {

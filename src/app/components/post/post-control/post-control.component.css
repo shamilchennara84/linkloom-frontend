@@ -1,0 +1,14 @@
+img{
+    border-radius: 5px;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.custom-button {
+  min-height:  34px; /* Adjust this value as needed */
+  padding:  0  16px; /* Optional: Add horizontal padding for better appearance */
+}

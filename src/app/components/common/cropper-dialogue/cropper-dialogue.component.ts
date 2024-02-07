@@ -24,12 +24,12 @@ export interface CropperDialogueResult {
   styleUrl: './cropper-dialogue.component.css',
 })
 export class CropperDialogueComponent implements OnInit {
+  
+  data: CropperDialogueData = inject(MAT_DIALOG_DATA);
+  result = signal<CropperDialogueResult | undefined>(undefined);
   ngOnInit(): void {
     console.log(this.data, 'data from cropped dialogue');
   }
-
-  data: CropperDialogueData = inject(MAT_DIALOG_DATA);
-  result = signal<CropperDialogueResult | undefined>(undefined);
 
   imageCropped(event: ImageCroppedEvent): void {
     const { blob, objectUrl } = event;
@@ -40,4 +40,11 @@ export class CropperDialogueComponent implements OnInit {
       this.result.set({ blob, imageUrl: objectUrl });
     }
   }
+
+  
+
+
+
+
+
 }

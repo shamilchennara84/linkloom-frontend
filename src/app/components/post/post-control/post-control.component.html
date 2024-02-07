@@ -1,0 +1,7 @@
+<div  [style.width]="imageWidth()+'px'" [style.height]="imageHeight()+'px'  ">
+    <img class='border border-dashed hover:border-red-300 mat-elevation-z5' [src]="imageSource()" height="imageHeight()" width="imageWidth() ">
+    <input #inputField type="file" hidden (change)="fileSelected($event)" (click)="inputField.value=''">
+    <button mat-raised-button color="accent" class="custom-button" (click)="inputField.click()">
+     <mat-icon>cloud_upload</mat-icon>Select Photo
+   </button>
+</div>

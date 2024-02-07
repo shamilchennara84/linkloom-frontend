@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed } from '@angular/core';
 import { UserLayoutComponent } from '../user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,9 +22,15 @@ export class UserProfileComponent implements OnInit {
   faCheck = faCheck;
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserRes | null>;
+  placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  profileImg: string = '';
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
+    this.userProfile$.subscribe((userProfile) => {
+      this.profileImg =
+        userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
+    });
   }
 }
