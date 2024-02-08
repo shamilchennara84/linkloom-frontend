@@ -11,6 +11,7 @@ import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
+import { MatFormFieldControl } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-user-sidenav',

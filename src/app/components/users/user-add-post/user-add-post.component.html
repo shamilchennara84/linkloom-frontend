@@ -1,8 +1,22 @@
-
 <!-- <mat-toolbar color="secondary">
     Upload Image
 </mat-toolbar> -->
+<div>
+    <h1 class="text-slate-500 text-4xl font-thin text-center mb-10 hover:text-red-400">CREATE A POST</h1>
+    <div class="container flex justify-center gap-24 ">
+    <div >
+      <app-post-control [width]="400" [height]="400" (imageReady)="imageReady($event)" />
+    </div>
+    <div class="px-24">
+      <app-place-autocomplete (placeChanged)="placeValue = $event"></app-place-autocomplete>
+      <div *ngIf="placeValue">
+        <h1 class="text-white">{{placeValue.name}}</h1>
+      </div>
+      <div class="flex flex-col mt-4">
+        <label for="postquote" class="text-slate-400 ">Enter the Quote</label>
+        <textarea id="postquote" [(ngModel)]="description" placeholder="Quote for the post" class="form-control w-full mt-2 py-2 text-sm text-black bg-white rounded-md pl-3 focus:outline-none focus:bg-white focus:text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500  "></textarea>
+      </div>
 
-<div class="container">
-    <app-post-control [width]="400" [height]="400" (imageReady)="imageReady($event)" />
+    </div>
+  </div>
 </div>

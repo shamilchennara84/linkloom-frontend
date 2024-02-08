@@ -7,11 +7,12 @@ import {
 } from '../../common/cropper-dialogue/cropper-dialogue.component';
 import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-post-control',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, CropperDialogueComponent],
+  imports: [MatButtonModule, MatIcon, CropperDialogueComponent, NgOptimizedImage],
   templateUrl: './post-control.component.html',
   styleUrl: './post-control.component.css',
 })
@@ -30,12 +31,12 @@ export class PostControlComponent {
   dialog = inject(MatDialog);
 
   placeholder = computed(
-    () => `https://placehold.co/${this.imageWidth()}x${this.imageHeight()}/FFFFFF/000000?text=Upload+Image`
+    () => `https://placehold.co/${this.imageWidth()}x${this.imageHeight()}/FFFFFF/5B7C99?text=Upload+Image`
   );
 
   imageSource = computed(() => {
     if (this.croppedImage()) {
-      return this.croppedImage()?.imageUrl;
+      return this.croppedImage()?.imageUrl || '';
     } else {
       return this.placeholder();
     }
@@ -59,12 +60,11 @@ export class PostControlComponent {
   @Output()
   imageReady = new EventEmitter<Blob>();
 
-constructor(){
-  effect(()=>{
-    if(this.croppedImage()){
-      this.imageReady.emit(this.croppedImage()?.blob)
-    }
-  })
-}
-
+  constructor() {
+    effect(() => {
+      if (this.croppedImage()) {
+        this.imageReady.emit(this.croppedImage()?.blob);
+      }
+    });
+  }
 }

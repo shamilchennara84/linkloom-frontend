@@ -1,7 +1,12 @@
-<div  [style.width]="imageWidth()+'px'" [style.height]="imageHeight()+'px'  ">
-    <img class='border border-dashed hover:border-red-300 mat-elevation-z5' [src]="imageSource()" height="imageHeight()" width="imageWidth() ">
-    <input #inputField type="file" hidden (change)="fileSelected($event)" (click)="inputField.value=''">
-    <button mat-raised-button color="accent" class="custom-button" (click)="inputField.click()">
-     <mat-icon>cloud_upload</mat-icon>Select Photo
-   </button>
-</div>
+<div  [style.width]="imageWidth()+'px'"  >
+    <!-- <img class='border border-dashed hover:border-red-300 mat-elevation-z5' [src]="imageSource()" height="imageHeight()" width="imageWidth() "> -->
+    <div>
+       <img class='border border-dashed hover:border-red-300 mat-elevation-z5' [ngSrc]="imageSource()" height="400" width="400 " priority class="mb-3 ">
+       <input #inputField type="file" hidden (change)="fileSelected($event)" (click)="inputField.value=''">
+    </div>
+   <div class="hover:border-blue-500 hover:ring-4 hover:ring-blue-500" >
+    <button mat-raised-button color="accent" class="custom-button " (click)="inputField.click()">
+      <mat-icon>cloud_upload</mat-icon>Select Photo
+    </button>
+   </div>
+    

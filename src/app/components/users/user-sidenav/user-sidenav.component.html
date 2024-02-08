@@ -24,7 +24,7 @@
 
     <a mat-list-item class="text-left menu-item" (click)="showConfirmDialog()">
       <mat-icon matListItemIcon>exit_to_app</mat-icon>
-      <span matListItemTitle>Logout</span>
+      <span matListItemTitle *ngIf="!sideNavCollapsed()">Logout</span>
     </a>
 
   </mat-nav-list>
