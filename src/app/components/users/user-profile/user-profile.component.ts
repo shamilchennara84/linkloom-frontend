@@ -1,14 +1,17 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { UserLayoutComponent } from '../user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCheck, faCertificate } from '@fortawesome/free-solid-svg-icons';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import {  IPostRes } from '../../../core/models/interfaces/posts';
+import { UserService } from '../../../core/services/user.service';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -22,15 +25,30 @@ export class UserProfileComponent implements OnInit {
   faCheck = faCheck;
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserRes | null>;
+  userPosts$!: Observable<IPostRes[] | null>;
   placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
   profileImg: string = '';
-  constructor(private store: Store) {}
+  userId: string | undefined = undefined;
+
+  getEncodedImagePath(imagePath: string): string {
+    return encodeURIComponent(imagePath);
+  }
+
+  constructor(private store: Store, private userService: UserService) {}
 
   ngOnInit(): void {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
     this.userProfile$.subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
+
+      this.userId = userProfile?._id;
     });
+
+    if (this.userId) {
+      this.userService.getUserPosts(this.userId).subscribe((response) => {
+        this.userPosts$ = of(response.data);
+      });
+    }
   }
 }

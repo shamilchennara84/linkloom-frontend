@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
+import { IApiPostRes, IPostRes } from '../models/interfaces/posts';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,8 @@ export class UserService {
 
   deleteUserProfile(userId: string): Observable<IApiUserRes> {
     return this.http.patch<IApiUserRes>(`user/remove/profileimage/${userId}`, {});
+  }
+  getUserPosts(userId: string): Observable<IApiPostRes> {
+    return this.http.get<IApiPostRes>(`user/userPost/${userId}`);
   }
 }
