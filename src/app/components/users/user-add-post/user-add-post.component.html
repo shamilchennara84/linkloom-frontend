@@ -1,22 +1,25 @@
-<!-- <mat-toolbar color="secondary">
-    Upload Image
-</mat-toolbar> -->
-<div>
-    <h1 class="text-slate-500 text-4xl font-thin text-center mb-10 hover:text-red-400">CREATE A POST</h1>
-    <div class="container flex justify-center gap-24 ">
-    <div >
+<form (ngSubmit)="onSubmit()">
+  <div class="container flex justify-center gap-24">
+    <div>
       <app-post-control [width]="400" [height]="400" (imageReady)="imageReady($event)" />
     </div>
     <div class="px-24">
-      <app-place-autocomplete (placeChanged)="placeValue = $event"></app-place-autocomplete>
-      <div *ngIf="placeValue">
+      <app-place-autocomplete (placeChanged)="handlePlaceChange($event)"></app-place-autocomplete>
+      <!-- <div *ngIf="placeValue">
         <h1 class="text-white">{{placeValue.name}}</h1>
-      </div>
+      </div> -->
       <div class="flex flex-col mt-4">
-        <label for="postquote" class="text-slate-400 ">Enter the Quote</label>
-        <textarea id="postquote" [(ngModel)]="description" placeholder="Quote for the post" class="form-control w-full mt-2 py-2 text-sm text-black bg-white rounded-md pl-3 focus:outline-none focus:bg-white focus:text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500  "></textarea>
+        <label for="postquote" class="text-slate-400">Enter the Quote</label>
+        <textarea id="postquote" name="postquote" [(ngModel)]="postQuote" placeholder="Quote for the post" class="form-control w-full mt-2 py-2 text-sm text-black bg-white rounded-md pl-3 focus:outline-none focus:bg-white focus:text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500"></textarea>
       </div>
-
+      <div class="mt-4">
+        <button type="submit" class="group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            Create Post
+          </span>
+     
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</form>

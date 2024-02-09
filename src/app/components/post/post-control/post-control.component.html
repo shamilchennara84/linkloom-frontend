@@ -5,7 +5,7 @@
        <input #inputField type="file" hidden (change)="fileSelected($event)" (click)="inputField.value=''">
     </div>
    <div class="hover:border-blue-500 hover:ring-4 hover:ring-blue-500" >
-    <button mat-raised-button color="accent" class="custom-button " (click)="inputField.click()">
+    <button type="button" mat-raised-button color="accent" class="custom-button " (click)="inputField.click()">
       <mat-icon>cloud_upload</mat-icon>Select Photo
     </button>
    </div>

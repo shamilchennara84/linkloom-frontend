@@ -11,6 +11,9 @@ import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { Observable } from 'rxjs/internal/Observable';
 import { IUserRes } from '../../../core/models/interfaces/users';
+import Swal from 'sweetalert2';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-add-post',
@@ -20,15 +23,22 @@ import { IUserRes } from '../../../core/models/interfaces/users';
   styleUrl: './user-add-post.component.css',
 })
 export class UserAddPostComponent implements OnInit {
-  placeValue!: PlaceSearchResult | null;
-  description!: string;
+  imageFile: Blob | null = null;
   userDetails$!: Observable<IUserRes | null>;
   userId = ' ';
-  user: IUserRes | null = null;
-  constructor(private store: Store) {}
+  user!: IUserRes 
+  placeValue!: PlaceSearchResult | null;
+  postQuote!: string;
+
+  constructor(private store: Store,private http:HttpClient,private router:Router) {}
+  
+  handlePlaceChange(event: PlaceSearchResult) {
+    console.log('Place changed:', event);
+    this.placeValue = event;
+  }
 
   ngOnInit(): void {
-    this.description = '';
+    this.postQuote = '';
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
 
     this.userDetails$.subscribe((user) => {
@@ -38,9 +48,58 @@ export class UserAddPostComponent implements OnInit {
       }
     });
   }
-  
+
   imageReady(blob: Blob) {
+    this.imageFile = blob;
+    console.log(blob);
+  }
+
+  onSubmit() {
     const formData = new FormData();
-    formData.append('image', blob, this.user?.fullname + '.jpg');
+    let hasError = false;
+    let errorMessages = [];
+    formData.append('userId',this.user?._id)
+    // Check if imageFile is not null
+    if (!this.imageFile) {
+      errorMessages.push('Image is not selected!');
+      hasError = true;
+    } else {
+      formData.append('Image', this.imageFile, this.user?.fullname + '.jpg');
+    }
+
+    // Validate quote
+    if (!this.postQuote || this.postQuote.trim().length === 0) {
+      errorMessages.push('Quote cannot be empty!');
+      hasError = true;
+    } else {
+      formData.append('caption', this.postQuote);
+    }
+
+    // Validate placeValue
+    if (!this.placeValue || !this.placeValue.name) {
+      errorMessages.push('Place is not selected!');
+      hasError = true;
+    } else {
+      formData.append('location', JSON.stringify(this.placeValue.name));
+    }
+
+    // Only proceed if there are no errors
+    if (!hasError) {
+      this.http.post('user/addPost', formData).subscribe({
+        next: (res: any) => {
+          
+          void this.router.navigate(['/user/profile']);
+        },
+      });}
+    
+    
+    else {
+      // Display all error messages
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: errorMessages.join('<br/>'),
+      });
+    }
   }
 }

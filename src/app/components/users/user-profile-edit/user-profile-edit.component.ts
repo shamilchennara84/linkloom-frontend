@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FullnameValidationComponent } from '../../common/fullname-validation/fullname-validation.component';
 import { MobileValidationComponent } from '../../common/mobile-validation/mobile-validation.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IUserRes, IUserUpdate } from '../../../core/models/interfaces/users';
+import { IUserRes } from '../../../core/models/interfaces/users';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { Store, select } from '@ngrx/store';
 import { validateByTrimming, validateDOB } from '../../../core/helpers/validation';
