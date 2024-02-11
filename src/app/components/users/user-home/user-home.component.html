@@ -1,6 +1,4 @@
-<!-- <div class="bg-black p-1 grid justify-center items-center">
-  <app-img-post [userName]="'John Doe'" [userLocation]="'New York, USA'"  [postUrl]="'https://picsum.photos/id/244/900/900'" [userLikes]="92372"></app-img-post>
-  <app-img-post [userName]="'John Doe'" [userLocation]="'New York, USA'"  [postUrl]="'https://picsum.photos/id/244/900/900'" [userLikes]="92372"></app-img-post>
-  <app-img-post [userName]="'John Doe'" [userLocation]="'New York, USA'"  [postUrl]="'https://picsum.photos/id/244/900/900'" [userLikes]="92372"></app-img-post>
-  <app-img-post [userName]="'John Doe'" [userLocation]="'New York, USA'"  [postUrl]="'https://picsum.photos/id/244/900/900'" [userLikes]="92372"></app-img-post>
-</div> -->
+<div *ngFor="let post of homePosts$ | async"  class="bg-black p-1 grid justify-center items-center">
+  <app-img-post [liked]="post.likedByCurrentUser" [userId]="userId" [postId]="post._id" [userImageUrl]="imgUrl +post.user[0].profilePic" [userName]="post.user[0].username | titlecase" [userLocation]=post.location [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"></app-img-post>
+</div>
+<!-- [liked]="" -->

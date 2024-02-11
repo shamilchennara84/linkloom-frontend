@@ -1,3 +1,4 @@
+import { ILikeCountRes, IPostUserRes } from './posts';
 import { IUserRes, IUsersAndCount } from './users';
 
 export interface ICoords {
@@ -13,7 +14,7 @@ export interface IUserAddress {
   zip: number;
 }
 
-export type AllResTypes = IUserRes | IUserRes[] | IUsersAndCount |null;
+export type AllResTypes = IUserRes | IUserRes[] | IUsersAndCount | IPostUserRes[] | ILikeCountRes | null;
 
 export interface IApiRes<T extends AllResTypes> {
   status: number;

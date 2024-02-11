@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
-import { IApiPostRes, IPostRes } from '../models/interfaces/posts';
+import { IApiPostRes, ILikeCountRes, IPostUserRes } from '../models/interfaces/posts';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +48,14 @@ export class UserService {
   }
   getUserPosts(userId: string): Observable<IApiPostRes> {
     return this.http.get<IApiPostRes>(`user/userPost/${userId}`);
+  }
+  getLatestPosts(userId: string): Observable<IApiRes<IPostUserRes[] | null>> {
+    return this.http.get<IApiRes<IPostUserRes[] | null>>(`user/homePost/${userId}`);
+  }
+  likePost(userId: string, postId: string): Observable<IApiRes<ILikeCountRes | null>> {
+    return this.http.get<IApiRes<ILikeCountRes | null>>(`user/like/${userId}/${postId}`);
+  }
+  unlikePost(userId: string, postId: string): Observable<IApiRes<ILikeCountRes | null>> {
+    return this.http.get<IApiRes<ILikeCountRes | null>>(`user/Unlike/${userId}/${postId}`);
   }
 }
