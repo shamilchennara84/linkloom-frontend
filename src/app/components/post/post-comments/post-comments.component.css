@@ -1,0 +1,4 @@
+.scrolling-container {
+  max-height:  200px; /* Adjust this value based on your desired maximum height */
+  overflow-y: auto; /* Enables vertical scrolling */
+}

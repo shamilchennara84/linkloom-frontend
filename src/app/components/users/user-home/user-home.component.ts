@@ -5,10 +5,10 @@ import { UserService } from '../../../core/services/user.service';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { Observable, of } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
-import { IPostRes, IPostUserRes } from '../../../core/models/interfaces/posts';
+import {  IPostUserRes } from '../../../core/models/interfaces/posts';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
-import { IApiRes } from '../../../core/models/interfaces/common';
+
 
 @Component({
   selector: 'app-user-home',

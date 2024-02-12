@@ -1,3 +1,4 @@
+import { ICommentRes } from './comments';
 import { ILikeCountRes, IPostUserRes } from './posts';
 import { IUserRes, IUsersAndCount } from './users';
 
@@ -14,7 +15,16 @@ export interface IUserAddress {
   zip: number;
 }
 
-export type AllResTypes = IUserRes | IUserRes[] | IUsersAndCount | IPostUserRes[] | ILikeCountRes | null;
+export type AllResTypes =
+  | IUserRes
+  | IUserRes[]
+  | IUsersAndCount
+  | IPostUserRes[]
+  | ILikeCountRes
+  | ICommentRes
+  | ICommentRes[]
+  | null;
+
 
 export interface IApiRes<T extends AllResTypes> {
   status: number;

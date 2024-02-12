@@ -1,10 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
+import { CommonModule } from '@angular/common';
+import { PostCommentsComponent } from '../../post/post-comments/post-comments.component';
 
 @Component({
   selector: 'app-img-post',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,PostCommentsComponent],
   templateUrl: './img-post.component.html',
   styleUrl: './img-post.component.css',
 })
@@ -19,10 +21,11 @@ export class ImgPostComponent {
   @Input() userId: string | undefined;
   @Input() postId!: string;
   @Input() liked: boolean = false;
+  @Input() commentModal: boolean = false;
 
   constructor(private userService: UserService) {}
 
-  toggleLike(event: MouseEvent) {
+  toggleLike(event: Event) {
     event.stopPropagation();
     this.liked = !this.liked;
     if (this.userId && this.postUrl) {
@@ -46,5 +49,8 @@ export class ImgPostComponent {
         });
       }
     }
+  }
+  toggleCommentModal(event: Event) {
+    this.commentModal = !this.commentModal;
   }
 }

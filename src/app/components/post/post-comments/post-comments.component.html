@@ -1,0 +1,13 @@
+<section class="bg-white dark:bg-black py-8 lg:py-16 antialiased  ">
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class=" font-bold text-sm text-gray-900 dark:text-white">Comments ({{comments.length}})</h2>
+    </div>
+    <app-comment-form submitLabel="Comment" (handleSubmit)="addComment({text:$event,parentId:null}) "></app-comment-form>
+   
+<div class="scrolling-container">
+  <app-comment *ngFor="let comment of comments" [comment]="comment"></app-comment>
+</div>
+    
+  </div>
+</section>
