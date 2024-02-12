@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -28,8 +29,18 @@ export class CommentFormComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    console.log(this.form.value);
-    this.handleSubmit.emit(this.form.value);
+onSubmit() {
+  console.log(this.form.value);
+  this.handleSubmit.emit(this.form.value);
+  this.form.reset({ comment: '' }); // Reset the form to its initial state
+   Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Your comment was posted!',
+      showConfirmButton: false,
+      timer:  1500, // Duration in milliseconds
+      toast: true, // Enable toast mode
+    });
   }
 }
+
