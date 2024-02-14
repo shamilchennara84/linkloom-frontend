@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './post-comments.component.html',
   styleUrl: './post-comments.component.css',
-  imports: [CommentComponent, CommentFormComponent,CommonModule],
+  imports: [CommentComponent, CommentFormComponent, CommonModule],
 })
 export class PostCommentsComponent implements OnInit {
-  @Input() userId!: string;
+  @Input() userId: string | undefined;
   @Input() postId!: string;
   comments: ICommentRes[] = [];
   constructor(private commentService: CommentService) {}
@@ -29,8 +29,12 @@ export class PostCommentsComponent implements OnInit {
     });
   }
 
-  addComment(text: string, parentId: null | string): void {
-    this.commentService.createComments(text, parentId, this.userId, this.postId).subscribe((createdComment) => {
+  addComment(text: string): void {
+    if (!this.userId) {
+      console.error('User ID is not available');
+      return;
+    }
+    this.commentService.createComments(text, this.userId, this.postId).subscribe((createdComment) => {
       const newComment = createdComment.data;
       if (newComment) {
         console.log(newComment);

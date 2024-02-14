@@ -59,7 +59,7 @@ export default [
       },
       {
         path: 'profile',
-        canActivate:[authGuard],
+        canActivate: [authGuard],
         children: [
           {
             path: '',
@@ -71,6 +71,11 @@ export default [
               import('./user-profile-edit/user-profile-edit.component').then((c) => c.UserProfileEditComponent),
           },
         ],
+      },
+      {
+        path: 'userprofile/:id',
+        loadComponent: () => import('.//user-second-profile.js/user-second-profile.js.component').then((c) => c.UserSecondProfileJsComponent),
+        canActivate: [authGuard],
       },
       {
         path: 'posts',

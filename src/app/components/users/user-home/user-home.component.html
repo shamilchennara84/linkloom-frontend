@@ -1,4 +1,4 @@
-<div *ngFor="let post of homePosts$ | async"  class="bg-black p-1 grid justify-center items-center">
-  <app-img-post [liked]="post.likedByCurrentUser" [userId]="userId" [postId]="post._id" [userImageUrl]="imgUrl +post.user[0].profilePic" [userName]="post.user[0].username | titlecase" [userLocation]=post.location [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"></app-img-post>
+<div *ngFor="let post of homePosts$ | async" class="bg-black p-1 grid justify-center  items-center">
+  <app-img-post [liked]="post.likedByCurrentUser" [userId]="userId" [postId]="post._id" [postUser]="post.userId"    [userImageUrl]="imgUrl + post.user[0].profilePic || ''" [userName]="post.user[0].username | titlecase" [userLocation]="post.location" [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"></app-img-post>
 </div>
 <!-- [liked]="" -->

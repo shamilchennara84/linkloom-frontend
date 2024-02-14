@@ -1,9 +1,11 @@
 <div class="flex border rounded w-full">
   <div class="bg-black text-white rounded-sm max-w-md">
     <div class="flex items-center px-4 py-3">
-      <img class="h-8 w-8 rounded-full" [src]="userImageUrl || userPlaceholderImageUrl" />
+   <a [routerLink]="['/user/userprofile/', postUser]">
+     <img class="h-8 w-8 rounded-full" [src]="userImageUrl || userPlaceholderImageUrl" />
+   </a>
       <div class="ml-3 ">
-        <span class="text-md font-semibold antialiased block leading-tight">
+        <span class="text-md font-sans antialiased block leading-tight">
           {{ userName }}</span>
         <span class="text-xs block">
           {{ userLocation }}</span>

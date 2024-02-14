@@ -14,10 +14,10 @@ export class CommentService {
     return this.http.get<IApiRes<ICommentRes[] | null>>(`user/comments/${postId} `);
   }
 
-  createComments(text: string, parentId: null | string,userId:string,postId:string): Observable<IApiRes<ICommentRes >> {
+  createComments(text: string,userId:string,postId:string): Observable<IApiRes<ICommentRes >> {
     return this.http.post<IApiRes<ICommentRes >>(`user/createcomment`, {
      text,
-      parentId,
+   
       createdAt: new Date().toISOString(),
       userId,
       postId

@@ -2,11 +2,12 @@ import { Component, Input } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { PostCommentsComponent } from '../../post/post-comments/post-comments.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-img-post',
   standalone: true,
-  imports: [CommonModule,PostCommentsComponent],
+  imports: [CommonModule,PostCommentsComponent,RouterModule],
   templateUrl: './img-post.component.html',
   styleUrl: './img-post.component.css',
 })
@@ -18,10 +19,11 @@ export class ImgPostComponent {
     'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
   @Input() postUrl!: string;
   @Input() userLikes!: number;
-  @Input() userId: string | undefined;
+  @Input() userId: string | undefined ;
   @Input() postId!: string;
   @Input() liked: boolean = false;
   @Input() commentModal: boolean = false;
+  @Input() postUser!:string
 
   constructor(private userService: UserService) {}
 
