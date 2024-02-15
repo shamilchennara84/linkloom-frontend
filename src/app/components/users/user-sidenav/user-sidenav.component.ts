@@ -10,8 +10,7 @@ import { IUserRes } from '../../../core/models/interfaces/users';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import Swal from 'sweetalert2';
-import { environment } from '../../../../environments/environment';
-import { MatFormFieldControl } from '@angular/material/form-field';
+import { environment } from '../../../../environments/environment'
 
 @Component({
   selector: 'app-user-sidenav',
@@ -27,7 +26,7 @@ export class UserSidenavComponent implements OnInit {
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
-  placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));

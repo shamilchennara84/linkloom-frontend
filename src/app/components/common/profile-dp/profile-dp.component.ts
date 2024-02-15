@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, Output, computed, effect, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, computed, effect, inject, signal } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { filter } from 'rxjs';
 import { CropperDialogueComponent, type CropperDialogueResult } from '../cropper-dialogue/cropper-dialogue.component';
-
 
 @Component({
   selector: 'app-profile-dp',
@@ -11,7 +10,7 @@ import { CropperDialogueComponent, type CropperDialogueResult } from '../cropper
   templateUrl: './profile-dp.component.html',
   styleUrl: './profile-dp.component.css',
 })
-export class ProfileDpComponent {
+export class ProfileDpComponent implements OnInit {
   imageWidth = signal(0);
   // eslint-disable-next-line accessor-pairs
   @Input() set width(val: number) {
@@ -24,16 +23,22 @@ export class ProfileDpComponent {
     this.imageHeight.set(val);
   }
   @Input() currDp: string = '';
-  
-  croppedImage = signal<CropperDialogueResult | undefined>(undefined);
 
+  croppedImage = signal<CropperDialogueResult | undefined>(undefined);
 
   placeholder = computed(() => 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200');
 
-  imageSource = computed(() => {
-    console.log(this.croppedImage(), 'croppedImage() returns this in imageSurce');
-    return this.croppedImage()?.imageUrl ?? this.placeholder();
-  });
+  // imageSource = computed(() => {
+  //   console.log(this.croppedImage(), 'croppedImage() returns this in imageSurce');
+  //   return this.croppedImage()?.imageUrl ?? this.placeholder();
+  // });
+  imageSource(): string {
+    return this.currDp ? this.currDp : this.placeholder();
+  }
+
+  ngOnInit(): void {
+   
+  }
 
   dialog = inject(MatDialog);
 

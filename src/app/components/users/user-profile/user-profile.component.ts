@@ -26,7 +26,7 @@ export class UserProfileComponent implements OnInit {
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserRes | null>;
   userPosts$!: Observable<IPostRes[] | null>;
-  placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
   userId: string | undefined = undefined;
 

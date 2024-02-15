@@ -6,6 +6,7 @@
     </div>
   </div>
 
+
   <div class="py-4 px-24 my-3">
     <ng-container class="flex flex-col">
       <form [formGroup]="profileForm" (submit)="onSubmit()">
@@ -34,26 +35,34 @@
             <app-dob-validation [dobControl]="profileForm.get('dob')" [isSubmitted]="isSubmitted"></app-dob-validation>
           </div>
         </div>
+        <div class="flex justify-between mb-3 ">
+          <div class="flex items-center">
+            <label class="font-semibold text-gray-700 my-1 me-2">Privacy:</label>
+            <div class="check">
 
- 
+             <input formControlName="visibility" id="check" type="checkbox" [checked]="isPrivate" (change)="onPrivacyChange($event)">
+             <label for="check">
+             </label>
+             
+          </div>
+          </div>
+          <div>
+
+        <p class="text-slate-400">
+          {{ profileForm.get('visibility')?.value ? 'Private' : 'Public' }}
+        </p>
+          </div>
+        </div>
+
+
+
+
         <hr class="border-t mx-8 mt-2">
         <div class="flex justify-around items-center p-4 space-x-4">
           <button routerLink="/user/profile" class="w-1/3 block rounded-full bg-red-400 hover:bg-amber-600 hover:shadow-lg font-semibold text-gray-800 px-6 py-2">Cancel</button>
           <button type="submit" class="w-1/3 block rounded-full bg-red-400 hover:bg-amber-600 hover:shadow-lg font-semibold text-gray-800 px-6 py-2">Save</button>
         </div>
-        <div class="flex items-center mb-3">
-          <label class="font-semibold text-gray-700 my-1">Profile Privacy:</label>
-          <div class="flex flex-col flex-1">
-            <div class="flex items-center">
-              <input id="publicProfile" name="privacy" type="radio" class="form-radio text-red-500" formControlName="privacy" value="public">
-              <label for="publicProfile" class="ml-2 text-gray-700">Public</label>
-            </div>
-            <div class="flex items-center">
-              <input id="privateProfile" name="privacy" type="radio" class="form-radio text-red-500" formControlName="privacy" value="private">
-              <label for="privateProfile" class="ml-2 text-gray-700">Private</label>
-            </div>
-          </div>
-        </div>
+
       </form>
     </ng-container>
   </div>

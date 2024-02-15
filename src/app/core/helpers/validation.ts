@@ -48,8 +48,7 @@ export const validateDOB: ValidatorFn = (control: AbstractControl): ValidationEr
   if (dob == null) return null;
 
   const selectedDate = new Date(dob.value);
-  console.log(dob, 'dob from validateDOB');
-  console.log(selectedDate, 'selectedDate from validateDOB');
+
 
   const today = new Date();
   const minAgeDate = new Date(today.getFullYear() - MinAge, today.getMonth(), today.getDate());

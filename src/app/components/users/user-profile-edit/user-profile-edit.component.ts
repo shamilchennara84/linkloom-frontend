@@ -15,6 +15,10 @@ import { Router } from '@angular/router';
 import { DobValidationComponent } from '../../common/dob-validation/dob-validation.component';
 import { ProfileDpComponent } from '../../common/profile-dp/profile-dp.component';
 
+enum Visibility {
+  Public = 'public',
+  Private = 'private',
+}
 
 @Component({
   selector: 'app-user-profile-edit',
@@ -38,6 +42,7 @@ export class UserProfileEditComponent implements OnInit {
   addressUpdateMode = true;
   selectedFile!: File;
   dpUrl = '';
+  isPrivate = false;
 
   constructor(
     private store: Store,
@@ -52,6 +57,7 @@ export class UserProfileEditComponent implements OnInit {
         fullname: ['', [validateByTrimming(nameValidators)]],
         mobile: ['', [validateByTrimming(mobileValidators)]],
         dob: [''],
+        visibility: [false],
       },
       {
         validators: validateDOB,
@@ -64,13 +70,16 @@ export class UserProfileEditComponent implements OnInit {
         this.userId = this.user._id;
         this.profileForm.get('fullname')?.setValue(this.user.fullname);
         this.profileForm.get('mobile')?.setValue(this.user.mobile != null ? String(this.user.mobile) : '');
+
         if (this.user.dob) {
           this.profileForm.get('dob')?.patchValue(dateToString(new Date(this.user.dob)));
         }
         if (this.user.profilePic !== undefined) this.dpUrl = environment.backendUrl + `images/${this.user.profilePic}`;
-        console.log(this.dpUrl, 'image url');
+
+        const isPrivate = this.user.visibility === Visibility.Private;
+
+        this.profileForm.get('visibility')?.setValue(isPrivate);
       }
-      console.log(this.dpUrl, 'dpUrl from edit profile');
     });
   }
 
@@ -78,11 +87,12 @@ export class UserProfileEditComponent implements OnInit {
     this.isSubmitted = true;
     if (this.profileForm.valid) {
       const userData = this.profileForm.getRawValue();
-      // const user: IUserUpdate = {
+
       const user: any = {
         fullname: userData.fullname,
         mobile: userData.mobile,
         dob: userData.dob,
+        visibility: userData.visibility ? Visibility.Private : Visibility.Public,
       };
       this.userService.updateUserDetails(this.userId, user).subscribe({
         next: (res) => {
@@ -121,5 +131,16 @@ export class UserProfileEditComponent implements OnInit {
         if (res.data != null) this.store.dispatch(saveUserOnStore({ userDetails: res.data }));
       },
     });
+  }
+
+  onPrivacyChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.isPrivate = input.checked;
+    const privacyControl = this.profileForm.get('visibility');
+    if (privacyControl) {
+      privacyControl.setValue(this.isPrivate);
+    } else {
+      console.warn('No control named "privacy" found in the form group.');
+    }
   }
 }
