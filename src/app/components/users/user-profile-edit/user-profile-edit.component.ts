@@ -14,11 +14,8 @@ import { saveUserOnStore } from '../../../core/states/users/user.actions';
 import { Router } from '@angular/router';
 import { DobValidationComponent } from '../../common/dob-validation/dob-validation.component';
 import { ProfileDpComponent } from '../../common/profile-dp/profile-dp.component';
+import { Visibility } from '../../../core/models/enums/privacy';
 
-enum Visibility {
-  Public = 'public',
-  Private = 'private',
-}
 
 @Component({
   selector: 'app-user-profile-edit',
