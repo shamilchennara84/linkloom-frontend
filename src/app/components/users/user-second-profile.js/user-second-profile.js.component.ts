@@ -3,7 +3,7 @@ import { faCertificate, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../environments/environment';
 import { Observable, Subject, map, switchMap, takeUntil, tap } from 'rxjs';
 import { IPostRes } from '../../../core/models/interfaces/posts';
-import { IUserRes } from '../../../core/models/interfaces/users';
+import {  IUserProfileData, IUserRes } from '../../../core/models/interfaces/users';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,11 +22,14 @@ export class UserSecondProfileJsComponent {
   imgUrl: string = `${environment.backendUrl}images/`;
   faCheck = faCheck;
   faCertificate = faCertificate;
-  userProfile$!: Observable<IUserRes | null>;
+  userProfile$!: Observable<IUserProfileData | null>;
   userPosts$!: Observable<IPostRes[] | null>;
   placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
   profileImg: string = '';
   userId$!: Observable<string>;
+  userPostsCount!: number;
+  followersCount!: number;
+  followingCount!: number;
 
   constructor(private userService: UserService, private router: ActivatedRoute) {}
 
@@ -49,8 +52,18 @@ export class UserSecondProfileJsComponent {
     this.userProfile$.pipe(takeUntil(this.destroy$)).subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
+      if (userProfile) {
+        this.userPostsCount = userProfile.postsCount;
+        this.followersCount = userProfile.followersCount;
+        this.followingCount = userProfile.followingCount;
+      }
     });
   }
+
+  handleFollowerCountChange($event: number) {
+    this.followersCount = $event
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

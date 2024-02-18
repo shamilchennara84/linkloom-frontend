@@ -1,4 +1,5 @@
 import { ICommentRes } from './comments';
+import { IFollowCountRes, IFollowStatus } from './followers';
 import { ILikeCountRes, IPostUserRes } from './posts';
 import { IUserRes, IUsersAndCount } from './users';
 
@@ -23,6 +24,8 @@ export type AllResTypes =
   | ILikeCountRes
   | ICommentRes
   | ICommentRes[]
+  | IFollowCountRes
+  | IFollowStatus
   | null;
 
 
@@ -31,3 +34,4 @@ export interface IApiRes<T extends AllResTypes> {
   message: string;
   data: T;
 }
+

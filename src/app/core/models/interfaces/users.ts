@@ -30,13 +30,17 @@ export interface IUser {
 
 export interface IUserRes extends IUser {}
 
-
+export interface IUserProfileData extends IUserRes {
+  postsCount: number;
+  followersCount: number;
+  followingCount: number;
+}
 
 // api response for single user as data
 export interface IApiUserRes {
   status: number;
   message: string;
-  data: IUserRes;
+  data: IUserProfileData;
 }
 export interface IApiProfileRes {
   status: number;

@@ -30,9 +30,7 @@ export class UserProfileComponent implements OnInit {
   profileImg: string = '';
   userId: string | undefined = undefined;
 
-  // getEncodedImagePath(imagePath: string): string {
-  //   return encodeURIComponent(imagePath);
-  // }
+
 
   constructor(private store: Store, private userService: UserService) {}
 

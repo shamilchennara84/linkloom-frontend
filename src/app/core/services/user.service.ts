@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
 import { IApiPostRes, ILikeCountRes, IPostUserRes } from '../models/interfaces/posts';
+import { IFollowCountRes, IFollowStatus } from '../models/interfaces/followers';
 
 @Injectable({
   providedIn: 'root',
@@ -57,5 +58,13 @@ export class UserService {
   }
   unlikePost(userId: string, postId: string): Observable<IApiRes<ILikeCountRes | null>> {
     return this.http.get<IApiRes<ILikeCountRes | null>>(`user/Unlike/${userId}/${postId}`);
+  }
+
+  followStatus(userId: string): Observable<IApiRes<IFollowStatus | null>> {
+    return this.http.get<IApiRes<IFollowStatus | null>>(`user/follow/${userId}`, {});
+  }
+
+  followRequest(userId: string, statusString: string): Observable<IApiRes<IFollowCountRes | null>> {
+    return this.http.post<IApiRes<IFollowCountRes | null>>(`user/follow/${userId}`, {  status: statusString });
   }
 }
