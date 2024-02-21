@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot): boolean
   if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
     try {
       const token = localStorage.getItem(`${role}RefreshToken`);
-      console.log('role', role, 'route', route, 'token', token);
+      // console.log('role', role, 'route', route, 'token', token);
 
       if (token === null || isTokenExpired(token)) {
         if (role !== 'user') {

@@ -1,0 +1,9 @@
+.chat-list {
+  width: 40%;
+  margin: 16px;
+  background: rgb(245, 244, 241);
+  border-radius: 16px;
+}
+.search-input{
+    margin: 16px
+}

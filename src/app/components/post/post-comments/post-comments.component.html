@@ -5,7 +5,7 @@
     </div>
     <app-comment-form submitLabel="Comment" (handleSubmit)="addComment($event) "></app-comment-form>
    
-<div class="scrolling-container">
+<div class="scrolling-container ">
   <app-comment *ngFor="let comment of comments" [comment]="comment"></app-comment>
 </div>
     

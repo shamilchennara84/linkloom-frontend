@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ImgPostComponent } from '../../common/img-post/img-post.component';
+import { ImgPostComponent } from '../../post/img-post/img-post.component';
 import { Store, select } from '@ngrx/store';
 import { UserService } from '../../../core/services/user.service';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { Observable, of } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
-import {  IPostUserRes } from '../../../core/models/interfaces/posts';
+import { IPostUserRes } from '../../../core/models/interfaces/posts';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
-
 
 @Component({
   selector: 'app-user-home',
@@ -18,10 +17,10 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './user-home.component.css',
 })
 export class UserHomeComponent implements OnInit {
-  imgUrl:string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images/`;
   userProfile$!: Observable<IUserRes | null>;
   userId: string | undefined;
-  homePosts$!:Observable<IPostUserRes[] | null>
+  homePosts$!: Observable<IPostUserRes[] | null>;
 
   constructor(private store: Store, private userService: UserService) {}
   ngOnInit(): void {

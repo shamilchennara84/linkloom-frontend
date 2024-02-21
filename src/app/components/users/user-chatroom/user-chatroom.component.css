@@ -1,0 +1,15 @@
+.container {
+  height: calc(100vh-70px);
+
+  
+}
+
+
+
+.chat-message {
+  width: 60%;
+  margin: 16px;
+  background: rgb(245, 244, 241);
+  border-radius: 16px;
+}
+

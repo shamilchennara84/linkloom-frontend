@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
-import { PostCommentsComponent } from '../../post/post-comments/post-comments.component';
+import { PostCommentsComponent } from '../post-comments/post-comments.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './img-post.component.html',
   styleUrl: './img-post.component.css',
 })
-export class ImgPostComponent {
+export class ImgPostComponent implements OnInit {
   @Input() userName!: string;
   @Input() userLocation!: string;
   @Input() userImageUrl!: string;
@@ -25,8 +25,10 @@ export class ImgPostComponent {
   @Input() postUser!: string;
   @Input() profileImg!: string;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService) {}
+  ngOnInit(): void {
     this.profileImg = this.userImageUrl ? this.userImageUrl : this.userPlaceholderImageUrl;
+    console.log(this.profileImg, 'last', this.userImageUrl, 'first');
   }
 
   toggleLike(event: Event) {

@@ -14,11 +14,15 @@ export class CommentComponent implements OnInit {
   @Input() comment!: any;
   imgUrl: string = `${environment.backendUrl}images/`;
   @Input() userImageUrl!: string;
-  @Input() userPlaceholderImageUrl: string =
-    'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
+  profileImg!: string;
 
   ngOnInit(): void {
-    this.userImageUrl =  this.comment.user.profilePic;
-    
+    this.userImageUrl = this.comment.user.profilePic;
+
+    this.profileImg =
+      this.comment && this.comment.user && this.comment.user.profilePic
+        ? `${this.imgUrl}${this.comment.user.profilePic}`
+        : this.userPlaceholderImageUrl;
   }
 }
