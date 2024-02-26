@@ -1,8 +1,20 @@
 <div class="w-full flex container">
-  <div class="w-3/12 h-[80vh] bg-slate-500 overflow-hidden ">
-    <app-chat-list class="mat-elevation-z5 chat-list"></app-chat-list>
+  <div class="w-3/12 h-[80vh] bg-black overflow-hidden border">
+    <app-chat-list class="mat-elevation-z5 chat-list" (conversationEmitter)="handleConversation($event)"></app-chat-list>
   </div>
-  <div class=" w-8/12 ml-auto bg-slate-500 ">
-    <app-chat-message class="mat-elevation-z5 bg-slate-300 chat-message ">sdasd</app-chat-message>
+  <div *ngIf="conversationId; else noConversation" class="w-8/12 ml-auto bg-black overflow-hidden border px-2 ">
+
+    <app-chat-message class=" bg-black chat-message "[secondUser]="secondUser" [user]="user" [conversationId]=" conversationId"></app-chat-message>
+ 
+    
   </div>
+  
+  <ng-template #noConversation>
+  
+      <div class="message-placeholder text-slate-400 flex flex-col items-center justify-center border w-8/12 h-[80vh] ml-auto p-0">
+        <fa-icon class="text-[40px]" [icon]="faUsers"></fa-icon>
+        <p class="text-[26px]">Connect with a friend</p>
+      </div>
+    
+  </ng-template>
 </div>

@@ -1,3 +1,52 @@
-<div class=" h-[70vh] overflow-auto  chat-section">
-sdfsdf
+<div class="h-[65vh] overflow-auto chat-section ">
+
+  <ng-container *ngIf="!conversationId; else chatContent">
+    <app-chat-blank></app-chat-blank>
+  </ng-container>
+  <ng-template #chatContent>
+    <div *ngFor="let message of allMessages" class="chat" [ngClass]="message.senderId == user._id ? 'chat-end' :'chat-start'">
+    
+      <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+          <img alt="profile img" [src]="(message.senderId == user._id ? profilePic : imgUrl + message.sendersInfo[0].profilePic) || placeholder" />
+        </div>
+      </div>
+    
+      <div class="chat-header text-slate-500"> {{message.senderId == user._id ? 'you' : message.sendersInfo[0].username}}</div>
+
+      <div class="chat-bubble chat-bubble-primary " [ngClass]="message.senderId == user._id ? 'chat-bubble-success' :'chat-bubble-primary'">
+        <p>{{message.content}}</p>
+      </div>
+      <div class="chat-footer opacity-50  text-white">{{message?.createdAt | date: 'medium'}}</div>
+    </div>
+  </ng-template>
+
+  <!-- <div class="chat chat-start">
+    <div class="chat-image avatar">
+      <div class="w-10 rounded-full">
+        <img alt="" src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=400" />
+      </div>
+    </div>
+
+    <div class="chat-header">you</div>
+
+    <div class="chat-bubble">
+      <p>testing</p>
+    </div>
+    <div class="chat-footer opacity-50 text-white">sample date</div>
+  </div> -->
+
 </div>
+<form class="mt-12">
+  <div class="flex">
+    <textarea class="block mx-4 p-2.5 w-11/12 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-orange-300 focus:border-orange-300 resize-none" placeholder="Your message..." [(ngModel)]="text" [ngModelOptions]="{standalone: true}" rows=" 1"></textarea>
+   
+    <button class="flex items-center bg-[#D40853] text-white gap-1 px-4 py-2 cursor-pointer  font-semibold tracking-widest rounded-md hover:bg-red-400 duration-300 hover:gap-2 hover:translate-x-3" (click)="onSubmitMessage()">
+      Send
+      <svg class="w-5 h-5" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" stroke-linejoin="round" stroke-linecap="round"></path>
+      </svg>
+    </button>
+
+  </div>
+</form>

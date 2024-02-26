@@ -8,8 +8,7 @@
 
 .chat-message {
   width: 60%;
-  margin: 16px;
-  background: rgb(245, 244, 241);
+  background-color: rgb(13, 68, 220) ;
   border-radius: 16px;
 }
 

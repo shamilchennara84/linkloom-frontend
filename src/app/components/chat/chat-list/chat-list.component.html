@@ -1,7 +1,11 @@
- <div class="  search-input  max-h-[70vh] overflow-auto">
+<div class="search-input max-h-[70vh] overflow-auto">
+  <mat-form-field class="w-full ">
+    <input matInput placeholder="Search for users..." [formControl]="searchControl" [matAutocomplete]="users" >
+  </mat-form-field>
+  <mat-autocomplete #users="matAutocomplete">
+    <ng-container *ngIf="filtered$ | async as allUsers">
+     <mat-option *ngFor="let user of allUsers" (click)="getConversation(user)">{{user.fullname}}</mat-option>
 
-   <mat-form-field class="w-full">
-     <input  matInput placeholder="search for users......" [formControl]="searchControl">
-   </mat-form-field>
-
- </div>
+    </ng-container>
+  </mat-autocomplete>
+</div>

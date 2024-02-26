@@ -7,6 +7,7 @@ export function isTokenExpired(token: string): boolean {
 
   const expireTime = payload.exp * 1000;
   if (expireTime > Date.now()) {
+    console.log("token not expired");
     return false;
   }
 

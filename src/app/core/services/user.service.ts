@@ -5,6 +5,7 @@ import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount 
 import { IApiRes } from '../models/interfaces/common';
 import { IApiPostRes, ILikeCountRes, IPostUserRes } from '../models/interfaces/posts';
 import { IFollowCountRes, IFollowStatus } from '../models/interfaces/followers';
+import { IFollowedUsers } from '../models/interfaces/chats';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,10 @@ export class UserService {
   }
 
   followRequest(userId: string, statusString: string): Observable<IApiRes<IFollowCountRes | null>> {
-    return this.http.post<IApiRes<IFollowCountRes | null>>(`user/follow/${userId}`, {  status: statusString });
+    return this.http.post<IApiRes<IFollowCountRes | null>>(`user/follow/${userId}`, { status: statusString });
+  }
+
+  getAllfollowedUsers(): Observable<IApiRes<IFollowedUsers | null>> {
+    return this.http.get<IApiRes<IFollowedUsers | null>>('user/followedUsers');
   }
 }

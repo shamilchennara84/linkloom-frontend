@@ -6,6 +6,7 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot): boolean => {
   const router = inject(Router);
   const role = route.parent?.parent?.routeConfig?.path;
+  // console.log("hello auth guard");
 
   // Check if localStorage is available
   if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
