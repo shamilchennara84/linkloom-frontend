@@ -1,0 +1,24 @@
+<div class="ms-2 p-3 flex rounded-lg   hover:scale-105 transition duration-300 ease-in-out cursor-pointer flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row first:2xl:flex-row md:w-36 lg:w-80 xl:lg:w-70 shadow-[0_3px_10px_rgb(0,0,0,0.2)] hover:border-none my-2 bg-black hover:bg-slate-600 border text-white">
+  <div class="avatar placeholder">
+    <div class="bg-neutral text-neutral-content rounded-full w-8 h-8 mx-auto my-auto">
+      <!-- username logo-->
+      <span><img [src]="imgUrl+conversation.otherMemberProfilePic" alt=""></span>
+      <!-- <span class="">{{conversation.unreadCount}}</span> -->
+    </div>
+  </div>
+
+  <div class="ml-1 my-auto">
+    <div>
+      <!-- username -->
+      <!-- <span class="text-sm font-sans font-semibold text-center">{{user?.name}}</span> -->
+      <span class="text-sm font-sans font-semibold text-center">{{conversation.otherMemberUsername}} </span>
+    </div>
+
+   <div>
+     <span class="text-xs lg:text-start xl:text-start sm:text-center" *ngIf="conversation.lastChat.content; else noContent">{{conversation.lastChat.content}}</span>
+     <ng-template #noContent><span class="text-xs lg:text-start xl:text-start sm:text-center">sent message</span></ng-template>
+   </div>
+  </div>
+  @if (conversation.unreadCount>0) {<div class=" badge badge-warning badge-outline ms-16">{{conversation.unreadCount}} new message</div>}
+   
+</div>

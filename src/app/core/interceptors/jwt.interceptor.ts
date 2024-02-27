@@ -12,7 +12,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
   const user = urlArr[0];
   const router = urlArr[1];
   const tokenrefreshService = inject(TokenrefreshService);    
-  console.log('urlArr',urlArr,'user',user,'router',router);
+  // console.log('urlArr',urlArr,'user',user,'router',router);
   //Bypass interceptor logic
   if (req.headers.has('Bypass-Interceptor')) {
     console.log('bypassing the jwtintercpetor');
@@ -28,7 +28,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
   if (router === 'validateOTP' || router === 'resendOtp') {
     console.log('getting authToken, inside validateOTp or resend otp');
     const authToken = localStorage.getItem(`${user}AuthToken`);
-    console.log(authToken);
+    // console.log(authToken);
     if (authToken) {
       const authRequest = req.clone({ setHeaders: { Authorization: `Bearer ${authToken}` } });
       return next(authRequest);

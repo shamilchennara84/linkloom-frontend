@@ -38,15 +38,15 @@ export class UserChatroomComponent implements OnInit,OnDestroy {
         this.user = userProfile
       }
     });
+    this.socketService.allConversationHistory();
   }
   
   handleConversation(conversation: IConversation | null) {
     if (conversation) {
       this.conversationId = conversation._id;
       this.secondUser = conversation.members.filter((x)=>x!==this.user._id)[0]
-      //  this.socketService.createChat(loggedUserId, userId);
       this.socketService.getChatHistory(this.conversationId);
-      //  this.socketService.getSelctedUserName(userId);
+       this.socketService.getSelectedUserName(this.secondUser);
     } else {
       this.conversationId = null;
     }

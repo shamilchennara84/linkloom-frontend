@@ -1,17 +1,28 @@
-<div class="h-[65vh] overflow-auto chat-section ">
+<div class="p-3 h-[10vh] border flex items-center bg-slate-900">
+  <div class="avatar w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 flex items-start">
+    <img [src]="imgUrl + secondUserDetails.profilePic" class="rounded-full" />
+  </div>
+  <div class="ml-4">
+    <p class="text-sm font-sans font-semibold text-white">
+      {{ secondUserDetails.username }}
+    </p>
+  </div>
+</div>
+
+<div class="h-[58vh] overflow-auto chat-section p-2 bg-slate-800">
 
   <ng-container *ngIf="!conversationId; else chatContent">
     <app-chat-blank></app-chat-blank>
   </ng-container>
   <ng-template #chatContent>
     <div *ngFor="let message of allMessages" class="chat" [ngClass]="message.senderId == user._id ? 'chat-end' :'chat-start'">
-    
+
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
           <img alt="profile img" [src]="(message.senderId == user._id ? profilePic : imgUrl + message.sendersInfo[0].profilePic) || placeholder" />
         </div>
       </div>
-    
+
       <div class="chat-header text-slate-500"> {{message.senderId == user._id ? 'you' : message.sendersInfo[0].username}}</div>
 
       <div class="chat-bubble chat-bubble-primary " [ngClass]="message.senderId == user._id ? 'chat-bubble-success' :'chat-bubble-primary'">
@@ -21,26 +32,13 @@
     </div>
   </ng-template>
 
-  <!-- <div class="chat chat-start">
-    <div class="chat-image avatar">
-      <div class="w-10 rounded-full">
-        <img alt="" src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=400" />
-      </div>
-    </div>
 
-    <div class="chat-header">you</div>
-
-    <div class="chat-bubble">
-      <p>testing</p>
-    </div>
-    <div class="chat-footer opacity-50 text-white">sample date</div>
-  </div> -->
 
 </div>
-<form class="mt-12">
+<form class="mt-7">
   <div class="flex">
     <textarea class="block mx-4 p-2.5 w-11/12 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-orange-300 focus:border-orange-300 resize-none" placeholder="Your message..." [(ngModel)]="text" [ngModelOptions]="{standalone: true}" rows=" 1"></textarea>
-   
+
     <button class="flex items-center bg-[#D40853] text-white gap-1 px-4 py-2 cursor-pointer  font-semibold tracking-widest rounded-md hover:bg-red-400 duration-300 hover:gap-2 hover:translate-x-3" (click)="onSubmitMessage()">
       Send
       <svg class="w-5 h-5" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

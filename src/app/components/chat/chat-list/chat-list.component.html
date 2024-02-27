@@ -8,4 +8,8 @@
 
     </ng-container>
   </mat-autocomplete>
+
+  <app-conversation-list *ngFor="let conversation of allConversationItems" [conversation]="conversation" (click)="selectConversation(conversation)"></app-conversation-list>
+
+
 </div>
