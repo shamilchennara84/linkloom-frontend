@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {  IPostRes } from '../../../core/models/interfaces/posts';
 import { UserService } from '../../../core/services/user.service';
+import { response } from 'express';
 
 
 @Component({
@@ -29,8 +30,9 @@ export class UserProfileComponent implements OnInit {
   placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
   userId: string | undefined = undefined;
-
-
+  userPostsCount!: number;
+  followersCount!: number;
+  followingCount!: number;
 
   constructor(private store: Store, private userService: UserService) {}
 
@@ -47,6 +49,17 @@ export class UserProfileComponent implements OnInit {
       this.userService.getUserPosts(this.userId).subscribe((response) => {
         this.userPosts$ = of(response.data);
       });
+
+      this.userService.getUserDetails(this.userId).subscribe((response)=>{
+         this.userPostsCount = response.data.postsCount;
+         this.followersCount = response.data.followersCount;
+         this.followingCount = response.data.followingCount;
+      })
+
     }
+
+
+
+
   }
 }
