@@ -3,6 +3,7 @@ import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { PostCommentsComponent } from '../post-comments/post-comments.component';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-img-post',
@@ -12,10 +13,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './img-post.component.css',
 })
 export class ImgPostComponent implements OnInit {
+  imgUrl: string = `${environment.backendUrl}images/`;
+  userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   @Input() userName!: string;
   @Input() userLocation!: string;
   @Input() userImageUrl!: string;
-  @Input() userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   @Input() postUrl!: string;
   @Input() userLikes!: number;
   @Input() userId: string | undefined;
@@ -23,11 +25,12 @@ export class ImgPostComponent implements OnInit {
   @Input() liked: boolean = false;
   @Input() commentModal: boolean = false;
   @Input() postUser!: string;
-  @Input() profileImg!: string;
+  profileImg!: string;
 
   constructor(private userService: UserService) {}
   ngOnInit(): void {
-    this.profileImg = this.userImageUrl ? this.userImageUrl : this.userPlaceholderImageUrl;
+    console.log('post image');
+    this.profileImg = this.userImageUrl ? this.imgUrl + this.userImageUrl : this.userPlaceholderImageUrl;
     console.log(this.profileImg, 'last', this.userImageUrl, 'first');
   }
 

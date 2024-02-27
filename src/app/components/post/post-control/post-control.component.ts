@@ -8,6 +8,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-post-control',
@@ -45,15 +46,25 @@ export class PostControlComponent {
   fileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      const dialogRef = this.dialog.open(CropperDialogueComponent, {
-        data: { image: file, width: this.imageWidth(), height: this.imageHeight() },
-        width: '500px',
-      });
+      const fileType = file.type;
+      const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+      if (validImageTypes.includes(fileType)) {
+        const dialogRef = this.dialog.open(CropperDialogueComponent, {
+          data: { image: file, width: this.imageWidth(), height: this.imageHeight() },
+          width: '500px',
+        });
 
-      dialogRef
-        .afterClosed()
-        .pipe(filter((result) => !!result))
-        .subscribe((result) => this.croppedImage.set(result));
+        dialogRef
+          .afterClosed()
+          .pipe(filter((result) => !!result))
+          .subscribe((result) => this.croppedImage.set(result));
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please select an image file.',
+        });
+      }
     }
   }
 

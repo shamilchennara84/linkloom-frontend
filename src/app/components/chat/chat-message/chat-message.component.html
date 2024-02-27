@@ -1,6 +1,7 @@
 <div class="p-3 h-[10vh] border flex items-center bg-slate-900">
   <div class="avatar w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 flex items-start">
-    <img [src]="imgUrl + secondUserDetails.profilePic" class="rounded-full" />
+    <img *ngIf="secondUserDetails.profilePic" [src]="imgUrl + secondUserDetails.profilePic" class="rounded-full" />
+    <img *ngIf="!secondUserDetails.profilePic" [src]="placeholder" class="rounded-full" />
   </div>
   <div class="ml-4">
     <p class="text-sm font-sans font-semibold text-white">
@@ -19,7 +20,7 @@
 
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
-          <img alt="profile img" [src]="(message.senderId == user._id ? profilePic : imgUrl + message.sendersInfo[0].profilePic) || placeholder" />
+           <img alt="profile img" [src]="(message.senderId == user._id ? profilePic : (message.sendersInfo[0].profilePic ? imgUrl + message.sendersInfo[0].profilePic : placeholder))" />
         </div>
       </div>
 

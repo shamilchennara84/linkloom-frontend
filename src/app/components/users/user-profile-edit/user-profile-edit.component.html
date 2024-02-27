@@ -14,7 +14,7 @@
         <div class="flex items-center mb-3">
           <label class="font-semibold text-gray-700 my-1">Name:</label>
           <div class="flex flex-col flex-1">
-            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="fullname">
+            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1 bg-white" formControlName="fullname">
             <app-fullname-validation [fNameControl]="profileForm.get('fullname')" [isSubmitted]="isSubmitted"></app-fullname-validation>
           </div>
         </div>
@@ -23,7 +23,7 @@
         <div class="flex items-center mb-3">
           <label class="font-semibold text-gray-700 my-1">Mobile:</label>
           <div class="flex flex-col flex-1">
-            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="mobile">
+            <input class="border-b border-gray-500 focus:outline-none ml-2 flex-1 bg-white" formControlName="mobile">
             <app-mobile-validation [mobileControl]="profileForm.get('mobile')" [isSubmitted]="isSubmitted"></app-mobile-validation>
           </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="flex items-center mb-3">
           <label class="font-semibold text-gray-700 my-1">Date of Birth:</label>
           <div class="flex flex-col flex-1">
-            <input type="date" class="border-b border-gray-500 focus:outline-none ml-2 flex-1" formControlName="dob">
+            <input type="date" class="border-b border-gray-500 focus:outline-none ml-2 flex-1 bg-white" formControlName="dob">
             <app-dob-validation [dobControl]="profileForm.get('dob')" [isSubmitted]="isSubmitted"></app-dob-validation>
           </div>
         </div>

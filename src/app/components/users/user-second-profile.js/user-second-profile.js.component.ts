@@ -24,7 +24,7 @@ export class UserSecondProfileJsComponent {
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserProfileData | null>;
   userPosts$!: Observable<IPostRes[] | null>;
-  placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
+  placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
   userId$!: Observable<string>;
   userPostsCount!: number;
@@ -61,7 +61,7 @@ export class UserSecondProfileJsComponent {
   }
 
   handleFollowerCountChange($event: number) {
-    this.followersCount = $event
+    this.followersCount = $event;
   }
 
   ngOnDestroy() {

@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { UserService } from '../../../core/services/user.service';
 import { IFollowedUsers } from '../../../core/models/interfaces/chats';
-import { Observable, Subscription, combineLatest, map, startWith } from 'rxjs';
+import { Observable, Subject, Subscription, combineLatest, map, startWith, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { IUser } from '../../../core/models/interfaces/users';
 import { ChatServiceService } from '../../../core/services/chat-service.service';
@@ -34,19 +34,21 @@ export class ChatListComponent implements OnInit {
   filtered$!: Observable<IUser[] | undefined>;
   @Output() conversationEmitter = new EventEmitter<IConversation | null>();
   allConversationItems: IConversationListItem[] = [];
-  private allConversations: Subscription | undefined;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserService,
     private chatService: ChatServiceService,
     private socket: SocketService
-  ) {}
+  ) {
+     this.socket.conversationsStatus$.pipe(takeUntil(this.destroy$)).subscribe((data: IConversationListItem[]) => {
+       console.log('Received new conversation items:', data);
+       data.forEach((item) => this.allConversationItems.push(item));
+     });
+  }
 
   ngOnInit() {
-    this.allConversations = this.socket.conversationsStatus$.subscribe((data: IConversationListItem[]) => {
-      console.log('Received new conversation items:', data);
-      data.forEach((item) => this.allConversationItems.push(item));
-    });
+   
     this.alluser$ = this.userService.getAllfollowedUsers().pipe(map((response) => response.data));
 
     this.filtered$ = combineLatest([this.alluser$, this.searchControl.valueChanges.pipe(startWith(''))]).pipe(
@@ -57,14 +59,16 @@ export class ChatListComponent implements OnInit {
   }
 
   getConversation(otherUser: IUser) {
+    console.log('Loading conversation for user:', otherUser._id);
     this.chatService.getConversation(otherUser._id).subscribe((response: IApiRes<IConversation | null>) => {
+       console.log('Conversation loaded:', response.data);
       const conversation = response.data;
       const index = this.allConversationItems.findIndex((item) => item._id === conversation?._id);
 
       if (index !== -1) {
         this.allConversationItems[index].unreadCount = 0;
       }
-      console.log("emmiting conversation",conversation);
+      console.log('emmiting conversation', conversation);
       this.conversationEmitter.emit(conversation);
     });
   }
@@ -79,9 +83,9 @@ export class ChatListComponent implements OnInit {
     this.conversationEmitter.emit(conversation);
   }
 
-  ngOnDestroy(): void {
-    if (this.allConversations) {
-      this.allConversations.unsubscribe();
-    }
+   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-}
+  }
+
