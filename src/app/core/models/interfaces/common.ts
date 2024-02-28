@@ -1,7 +1,7 @@
 import { IChatHistoryItem, IFollowedUsers } from './chats';
 import { ICommentRes } from './comments';
 import { IConversation, IConversationListItem } from './conversation';
-import { IFollowCountRes, IFollowStatus } from './followers';
+import { IFollowCountRes, IFollowStatus, IUserSearchItem } from './followers';
 import { ILikeCountRes, IPostUserRes } from './posts';
 import { IUserRes, IUsersAndCount } from './users';
 
@@ -32,6 +32,7 @@ export type AllResTypes =
   | IConversation
   | IConversationListItem[]
   | IChatHistoryItem[]
+  | IUserSearchItem[]
   | null;
 
 export interface IApiRes<T extends AllResTypes> {
