@@ -4,8 +4,6 @@ import { IApiRes } from '../models/interfaces/common';
 import { Observable } from 'rxjs';
 import { IConversation, IConversationListItem } from '../models/interfaces/conversation';
 
-
-
 @Injectable({
   providedIn: 'root',
 })

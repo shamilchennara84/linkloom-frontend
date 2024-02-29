@@ -3,7 +3,7 @@ import { ICommentRes } from './comments';
 import { IConversation, IConversationListItem } from './conversation';
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from './followers';
 import { ILikeCountRes, IPostUserRes } from './posts';
-import { IUserRes, IUsersAndCount } from './users';
+import { IUserChatSearch, IUserRes, IUsersAndCount } from './users';
 
 export interface ICoords {
   type?: string;
@@ -33,6 +33,7 @@ export type AllResTypes =
   | IConversationListItem[]
   | IChatHistoryItem[]
   | IUserSearchItem[]
+  | IUserChatSearch[]
   | null;
 
 export interface IApiRes<T extends AllResTypes> {
