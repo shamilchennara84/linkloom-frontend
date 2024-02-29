@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
+import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserChatSearch, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
 import { IApiPostRes, ILikeCountRes, IPostUserRes } from '../models/interfaces/posts';
-import { IFollowCountRes, IFollowStatus } from '../models/interfaces/followers';
+import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 import { IFollowedUsers } from '../models/interfaces/chats';
 
 @Injectable({
@@ -69,7 +69,11 @@ export class UserService {
     return this.http.post<IApiRes<IFollowCountRes | null>>(`user/follow/${userId}`, { status: statusString });
   }
 
-  getAllfollowedUsers(): Observable<IApiRes<IFollowedUsers | null>> {
-    return this.http.get<IApiRes<IFollowedUsers | null>>('user/followedUsers');
+  getAllfollowedUsers(): Observable<IApiRes<IUserChatSearch[] | null>> {
+    return this.http.get<IApiRes<IUserChatSearch[] | null>>('user/followedUsers');
+  }
+
+  searchUser(query: string): Observable<IApiRes<IUserSearchItem[] | null>> {
+    return this.http.get<IApiRes<IUserSearchItem[] | null>>(`user/userSearch?query=${query}`);
   }
 }
