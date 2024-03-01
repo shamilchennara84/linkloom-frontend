@@ -10,48 +10,38 @@ import { CropperDialogueComponent, type CropperDialogueResult } from '../cropper
   templateUrl: './profile-dp.component.html',
   styleUrl: './profile-dp.component.css',
 })
-export class ProfileDpComponent implements OnInit {
+export class ProfileDpComponent {
   imageWidth = signal(0);
-  // eslint-disable-next-line accessor-pairs
+
   @Input() set width(val: number) {
     this.imageWidth.set(val);
   }
-
-  imageHeight = signal(0);
-  // eslint-disable-next-line accessor-pairs
   @Input() set height(val: number) {
     this.imageHeight.set(val);
   }
+  @Output() imageReady = new EventEmitter<Blob>();
+  @Output() deleteDp = new EventEmitter();
+  imageHeight = signal(0);
   @Input() currDp: string = '';
 
   croppedImage = signal<CropperDialogueResult | undefined>(undefined);
+  placeholder = computed(() => 'assets/placeholder/profile.png');
 
-  placeholder = computed(() => 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200');
-
-  // imageSource = computed(() => {
-  //   console.log(this.croppedImage(), 'croppedImage() returns this in imageSurce');
-  //   return this.croppedImage()?.imageUrl ?? this.placeholder();
-  // });
   imageSource(): string {
     return this.currDp ? this.currDp : this.placeholder();
-  }
-
-  ngOnInit(): void {
-   
   }
 
   dialog = inject(MatDialog);
 
   fileSelected(event: any): void {
     const file = event.target.files[0];
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+
     if (file) {
       const dialogRef = this.dialog.open(CropperDialogueComponent, {
         data: { image: file, width: this.imageWidth(), height: this.imageHeight() },
         width: '500px',
       });
 
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       dialogRef
         .afterClosed()
         .pipe(filter((result) => !!result))
@@ -61,8 +51,6 @@ export class ProfileDpComponent implements OnInit {
     }
   }
 
-  @Output() imageReady = new EventEmitter<Blob>();
-
   constructor() {
     effect(() => {
       if (this.croppedImage() !== undefined) {
@@ -70,8 +58,6 @@ export class ProfileDpComponent implements OnInit {
       }
     });
   }
-
-  @Output() deleteDp = new EventEmitter();
 
   deleteProfilePic(): void {
     this.croppedImage.set(undefined);
