@@ -81,4 +81,4 @@ export class UserProfileComponent implements OnInit {
     });
   }
 }
-// {[liked]="post.likedByCurrentUser" [userId]="userId" [postId]="post._id" [postUser]="post.userId"    [userImageUrl]=" post.user[0].profilePic " [userName]="post.user[0].username | titlecase" [userLocation]="post.location" [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"></app-img-post>},
+

@@ -114,13 +114,13 @@ export class BarGraphComponent implements OnInit {
           name: 'Posts',
           type: 'bar',
           data: chartData.map((data) => data[1]),
-          color: '#',
+          color: '#FFA500',
         },
         {
           name: 'Likes',
           type: 'bar',
           data: chartData.map((data) => data[2]),
-          color: '#38419D',
+          color: '#000080',
         },
         {
           name: 'Comments',

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,ts}"],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     // screens: {
     //   sm: "640px",
@@ -12,10 +12,10 @@ module.exports = {
     // },
     extend: {
       colors: {
-        "custom-black": "#020000",
+        'custom-black': '#020000',
       },
     },
   },
   variants: {},
-  plugins: [require("daisyui")],
+  plugins: [require('daisyui')],
 };
