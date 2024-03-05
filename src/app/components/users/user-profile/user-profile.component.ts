@@ -33,6 +33,7 @@ export class UserProfileComponent implements OnInit {
   userPostsCount!: number;
   followersCount!: number;
   followingCount!: number;
+  user!:IUserRes | null
 
   constructor(private store: Store, private userService: UserService, private dialog: MatDialog) {}
 
@@ -41,7 +42,7 @@ export class UserProfileComponent implements OnInit {
     this.userProfile$.subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
-
+       this.user=userProfile
       this.userId = userProfile?._id;
     });
 
@@ -61,9 +62,10 @@ export class UserProfileComponent implements OnInit {
   openModal(post:IPostRes) {
     console.log(post);
     const dialogRef = this.dialog.open(ProfilePostComponent, {
-      width: '50vw', // 55% of the viewport width
-      height: '60vh', // 71.5% of the viewport height
-      data: { userId: this.userId, post:post  },
+      width: '80%', // 55% of the viewport width
+      height: '80%', // 71.5% of the viewport height
+      data: { post: post, userImageUrl: this.profileImg, user: this.user },
+      panelClass: ['no-scroll'],
     });
 
      const dialogComponentInstance = dialogRef.componentInstance;

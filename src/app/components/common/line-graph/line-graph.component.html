@@ -1,0 +1,6 @@
+<div [chart]="chart"></div>
+
+<button (click)="toggleDataView()" class="m-3 relative cursor-pointer opacity-90 hover:opacity-100 transition-opacity p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#ED0B51] to-[#ED0B51] active:scale-95">
+  <span class="w-full h-full flex items-center gap-2 px-5 py-2 bg-[#ffffff] text-[#ffffff] rounded-[14px] bg-gradient-to-t from-[#000000dc] to-[#000000]">
+    {{this.showYearlyData?'showYearlyData':'showMonthlyData'}}</span>
+</button>

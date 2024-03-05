@@ -1,9 +1,10 @@
+import { adminCardData } from './admin';
 import { IChatHistoryItem, IFollowedUsers } from './chats';
 import { ICommentRes } from './comments';
 import { IConversation, IConversationListItem } from './conversation';
 import { IFollowCountRes, IFollowStatus } from './followers';
-import { ILikeCountRes, IPostUserRes } from './posts';
-import { IUserRes, IUsersAndCount } from './users';
+import { ILikeCountRes, IPostPerMonth, IPostUserRes } from './posts';
+import { IUserPerMonth, IUserPerYear, IUserRes, IUsersAndCount } from './users';
 
 export interface ICoords {
   type?: string;
@@ -32,6 +33,10 @@ export type AllResTypes =
   | IConversation
   | IConversationListItem[]
   | IChatHistoryItem[]
+  | IUserPerMonth[]
+  | IUserPerYear[]
+  | IPostPerMonth[]
+  | adminCardData
   | null;
 
 export interface IApiRes<T extends AllResTypes> {

@@ -1,1 +1,15 @@
-<p class="text-red-700">admin-dashboard works!</p>
+<div class="container mx-auto">
+<p class="text-white text-2xl font-bold mb-4">Admin Dashboard</p>
+  <div class="flex justify-between">
+    <app-line-graph></app-line-graph>
+    <app-bar-graph></app-bar-graph>
+  </div>
+
+  <div class="flex" *ngIf="adminCardData$ | async as adminCardData">
+<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="usersSVG" [title]="'Active Members'" [number]="adminCardData.ActiveUser"></app-report-card>
+<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="postSVG" [title]="'Posts Published'" [number]="adminCardData.Posts"></app-report-card>
+<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0 hover:scale-105" [svgPath]="reportsSVG" [title]="'Reported Incidents'" [number]="12768"></app-report-card>
+<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="deleteUserSVG" [title]="'Deleted Accounts'" [number]="12768"></app-report-card>
+
+  </div>
+</div>

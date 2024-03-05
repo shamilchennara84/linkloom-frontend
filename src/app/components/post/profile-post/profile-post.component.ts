@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../core/services/user.service';
@@ -7,8 +7,7 @@ import { RouterModule } from '@angular/router';
 import { IPostRes } from '../../../core/models/interfaces/posts';
 import { Observable } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
-import { Store, select } from '@ngrx/store';
-import { selectUserDetails } from '../../../core/states/users/user.selector';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile-post',
@@ -29,34 +28,28 @@ export class ProfilePostComponent {
   commentModal = false;
   @Input() post!: IPostRes;
   @Input() userName!: string;
-
   @Input() userImageUrl!: string;
   @Input() userId: string | undefined;
   @Input() postUser!: string;
   @Output() closeModal = new EventEmitter<void>();
   userProfile$!: Observable<IUserRes | null>;
 
-  constructor(private userService: UserService, private store: Store) {}
+  constructor(private userService: UserService, @Inject(MAT_DIALOG_DATA) public data: any) {
+ }
 
   ngOnInit(): void {
-    this.userProfile$ = this.store.pipe(select(selectUserDetails));
-    this.userProfile$.subscribe((userProfile) => {
-      this.profileImg =
-        userProfile && userProfile.profilePic
-          ? `${this.imgUrl}${userProfile.profilePic}`
-          : this.userPlaceholderImageUrl;
-    });
-    this.postId = this.post._id;
-    this.postUrl = this.post.postURL;
-    console.log(this.post.location);
+    
+
+    };
+    // this.postId = this.data.post._id;
+    // this.postUrl = this.data.post.postURL;
+    
 
     // this.userLikes = this.post.likeCount
     // this.liked = this.post.likedByCurrentUser;
 
-    console.log('post image');
-    this.profileImg = this.userImageUrl ? this.imgUrl + this.userImageUrl : this.userPlaceholderImageUrl;
-    console.log(this.profileImg, 'last', this.userImageUrl, 'first');
-  }
+ 
+  
 
   toggleLike(event: Event) {
     event.stopPropagation();

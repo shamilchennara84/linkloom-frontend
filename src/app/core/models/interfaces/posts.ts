@@ -35,3 +35,16 @@ export interface ILikeCountRes {
   postId: string;
   count: number;
 }
+export interface IPostPerMonth {
+  monthYear: string;
+  count: number;
+  likes: number;
+  comments: number;
+}
+
+ export interface IPostPerYear {
+  year: string; 
+  count: number; 
+  likes: number; 
+  comments: number; 
+}
