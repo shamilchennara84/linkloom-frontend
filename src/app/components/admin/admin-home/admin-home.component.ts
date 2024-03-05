@@ -5,8 +5,7 @@ import { ReportCardComponent } from '../../common/report-card/report-card.compon
 import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { Observable, map } from 'rxjs';
-import { adminCardData } from '../../../core/models/interfaces/admin';
-
+import { IAdminCardData } from '../../../core/models/interfaces/admin';
 
 @Component({
   selector: 'app-admin-home',
@@ -20,7 +19,7 @@ export class AdminHomeComponent {
   postSVG: string = `https://cdn-icons-png.flaticon.com/128/8307/8307423.png`;
   reportsSVG: string = `https://cdn-icons-png.flaticon.com/128/8479/8479683.png`;
   deleteUserSVG: string = `https://cdn-icons-png.flaticon.com/128/2444/2444442.png`;
-  adminCardData$: Observable<adminCardData | null>;
+  adminCardData$: Observable<IAdminCardData | null>;
 
   constructor(private userService: UserService) {
     this.adminCardData$ = this.userService.getAdminCardData().pipe(map((response) => response.data));

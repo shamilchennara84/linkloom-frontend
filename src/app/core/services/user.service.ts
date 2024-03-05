@@ -2,13 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 
-import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserPerMonth, IUserPerYear, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
+import {
+  IApiProfileRes,
+  IApiUserRes,
+  IApiUsersRes,
+  IUserChatSearch,
+  IUserPerMonth,
+  IUserPerYear,
+  IUserUpdate,
+  IUsersAndCount,
+} from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
 import { IApiPostRes, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes } from '../models/interfaces/posts';
-import { IFollowCountRes, IFollowStatus } from '../models/interfaces/followers';
+import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 
-import { IFollowedUsers } from '../models/interfaces/chats';
-import { adminCardData } from '../models/interfaces/admin';
+import { IAdminCardData } from '../models/interfaces/admin';
 
 @Injectable({
   providedIn: 'root',
@@ -39,22 +47,21 @@ export class UserService {
   getNewActiveUsersPerMonth(): Observable<IApiRes<IUserPerMonth[]>> {
     return this.http.get<IApiRes<IUserPerMonth[]>>(`admin/newuserpermonth`);
   }
-  
+
   getNewActiveUsersPerYear(): Observable<IApiRes<IUserPerYear[] | null>> {
     return this.http.get<IApiRes<IUserPerYear[]>>(`admin/newuserperyear`);
   }
-  
+
   getPostsPerMonth(): Observable<IApiRes<IPostPerMonth[] | null>> {
     return this.http.get<IApiRes<IPostPerMonth[]>>(`admin/postpermonth`);
   }
   getPostsPerYear(): Observable<IApiRes<IPostPerYear[] | null>> {
     return this.http.get<IApiRes<IPostPerYear[]>>(`admin/postperyear`);
   }
-  getAdminCardData(): Observable<IApiRes<adminCardData | null>> {
-    return this.http.get<IApiRes<adminCardData | null>>('admin/admincards')
+  getAdminCardData(): Observable<IApiRes<IAdminCardData | null>> {
+    return this.http.get<IApiRes<IAdminCardData | null>>('admin/admincards');
   }
 
-  
   //users service
   getUserDetails(userId: string): Observable<IApiUserRes> {
     return this.http.get<IApiUserRes>(`user/get/${userId}`);
@@ -102,4 +109,3 @@ export class UserService {
     return this.http.get<IApiRes<IUserSearchItem[] | null>>(`user/userSearch?query=${query}`);
   }
 }
-  
