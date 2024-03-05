@@ -16,6 +16,7 @@ export class PostCommentsComponent implements OnInit {
   @Input() userId: string | undefined;
   @Input() postId!: string;
   comments: ICommentRes[] = [];
+  dropdownVisible = false;
   constructor(private commentService: CommentService) {}
 
   ngOnInit(): void {
@@ -44,6 +45,10 @@ export class PostCommentsComponent implements OnInit {
         console.log('error while creating comment');
       }
     });
+  }
+
+  toggleDropdown() {
+    this.dropdownVisible = !this.dropdownVisible;
   }
 }
 //

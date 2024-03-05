@@ -1,11 +1,6 @@
 .container {
   height: calc(100vh-70px);
-
-  
 }
-
-
-
 .chat-message {
   width: 60%;
   background-color: rgb(13, 68, 220) ;

@@ -34,21 +34,21 @@
         </div>
 
         <!-- post, following, followers list for medium screens -->
-         <ul class="hidden md:flex space-x-8 mb-4">
-           <li>
-             <span class="font-semibold">{{userPostsCount}}</span>
-             posts
-           </li>
+        <ul class="hidden md:flex space-x-8 mb-4">
+          <li>
+            <span class="font-semibold">{{userPostsCount}}</span>
+            posts
+          </li>
 
-           <li>
-             <span class="font-semibold">{{followersCount}}</span>
-             followers
-           </li>
-           <li>
-             <span class="font-semibold">{{followingCount}}</span>
-             following
-           </li>
-         </ul>
+          <li>
+            <span class="font-semibold">{{followersCount}}</span>
+            followers
+          </li>
+          <li>
+            <span class="font-semibold">{{followingCount}}</span>
+            following
+          </li>
+        </ul>
 
         <!-- user meta form medium screens -->
         <div class="hidden md:block">
@@ -75,16 +75,20 @@
       <ul class="flex md:hidden justify-around space-x-8 border-t 
                 text-center p-2 text-gray-600 leading-snug text-sm">
         <li>
-          <span class="font-semibold text-gray-800 block">{{userPostsCount}}</span>
+
+          <span class="font-semibold">{{userPostsCount}}</span>
+
           posts
         </li>
 
         <li>
-          <span class="font-semibold text-gray-800 block">{{followersCount}}</span>
+
+          <span class="font-semibold">{{followersCount}}</span>
           followers
         </li>
         <li>
-          <span class="font-semibold text-gray-800 block">{{followingCount}}</span>
+          <span class="font-semibold">{{followingCount}}</span>
+
           following
         </li>
       </ul>
@@ -111,34 +115,27 @@
       <div class="flex flex-wrap -mx-px md:-mx-3">
 
         <!-- Display post content here -->
-        <div class="w-1/3 p-px md:px-3" *ngFor="let post of userPosts$ | async">
+        <div class="w-1/3 p-px md:px-2" *ngFor="let post of userPosts$ | async">
           <!-- post 1-->
-          <a href="#">
-            <article class="post bg-gray-100 text-white relative pb-full md:mb-6">
-              <!-- post image-->
-              <img class="w-full h-full absolute left-0 top-0 object-cover" [src]="imgUrl + post.postURL" alt="image">
+
+          <article class="post bg-gray-100 text-white relative pb-full md:mb-4" (click)="openModal(post)">
+            <!-- post image-->
+            <img class="w-full h-full absolute left-0 top-0 object-cover" [src]="imgUrl + post.postURL" alt="image" >
+       
 
 
-              <i class="fas fa-square absolute right-0 top-0 m-1"></i>
-              <!-- overlay-->
-              <div class="overlay bg-gray-800 bg-opacity-25 w-full h-full absolute 
+            <i class="fas fa-square absolute right-0 top-0 m-1"></i>
+            <!-- overlay-->
+            <div class="overlay bg-gray-800 bg-opacity-25 w-full h-full absolute 
                                 left-0 top-0 hidden">
-                <div class="flex justify-center items-center 
+              <div class="flex justify-center items-center 
                                     space-x-4 h-full">
-                  <span class="p-2">
-                    <i class="fas fa-heart"></i>
-                    412K
-                  </span>
 
-                  <span class="p-2">
-                    <i class="fas fa-comment"></i>
-                    2,909
-                  </span>
-                </div>
               </div>
+            </div>
 
-            </article>
-          </a>
+          </article>
+
         </div>
       </div>
 
@@ -147,3 +144,4 @@
     </div>
   </div>
 </main>
+

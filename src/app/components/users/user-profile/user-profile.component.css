@@ -12,3 +12,7 @@
     display: block;
   }
 }
+
+.no-scroll .mat-dialog-container {
+ overflow: hidden !important;
+}

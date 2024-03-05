@@ -8,11 +8,12 @@ import { IUserRes } from '../../../core/models/interfaces/users';
 import { IPostUserRes } from '../../../core/models/interfaces/posts';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { UserHomeProfileComponent } from '../user-home-profile/user-home-profile.component';
 
 @Component({
   selector: 'app-user-home',
   standalone: true,
-  imports: [ImgPostComponent, CommonModule],
+  imports: [ImgPostComponent, CommonModule, UserHomeProfileComponent],
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css',
 })

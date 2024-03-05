@@ -1,6 +1,14 @@
-/* .mat-toolbar-background {
-    background-color: black;
-    color: white;
+.container {
+ height: calc(100vh - 144px) !important;
+}
 
-} */
 
+.hide-scrollbar::-webkit-scrollbar {
+ display: none;
+}
+
+
+.hide-scrollbar {
+ -ms-overflow-style: none; 
+ scrollbar-width: none; 
+}

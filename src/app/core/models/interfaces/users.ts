@@ -93,3 +93,14 @@ export interface IApiTokenRes {
   message: string;
   accessToken: string;
 }
+
+export interface IUserPerMonth{
+  month:string;
+  count:number
+}
+export interface IUserPerYear {
+  year: string;
+  count: number;
+}
+
+

@@ -1,17 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserChatSearch, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
+
+import { IApiProfileRes, IApiUserRes, IApiUsersRes, IUserPerMonth, IUserPerYear, IUserUpdate, IUsersAndCount } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
-import { IApiPostRes, ILikeCountRes, IPostUserRes } from '../models/interfaces/posts';
-import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
+import { IApiPostRes, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes } from '../models/interfaces/posts';
+import { IFollowCountRes, IFollowStatus } from '../models/interfaces/followers';
+
 import { IFollowedUsers } from '../models/interfaces/chats';
+import { adminCardData } from '../models/interfaces/admin';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   constructor(private http: HttpClient) {}
+
+  //admin services
 
   getAllUsers(page: number, limit: number, searchQuery: string): Observable<IApiRes<IUsersAndCount | null>> {
     return this.http.get<IApiRes<IUsersAndCount | null>>(
@@ -31,6 +36,26 @@ export class UserService {
     return this.http.get<IApiUsersRes>('admin/users?blocked=false');
   }
 
+  getNewActiveUsersPerMonth(): Observable<IApiRes<IUserPerMonth[]>> {
+    return this.http.get<IApiRes<IUserPerMonth[]>>(`admin/newuserpermonth`);
+  }
+  
+  getNewActiveUsersPerYear(): Observable<IApiRes<IUserPerYear[] | null>> {
+    return this.http.get<IApiRes<IUserPerYear[]>>(`admin/newuserperyear`);
+  }
+  
+  getPostsPerMonth(): Observable<IApiRes<IPostPerMonth[] | null>> {
+    return this.http.get<IApiRes<IPostPerMonth[]>>(`admin/postpermonth`);
+  }
+  getPostsPerYear(): Observable<IApiRes<IPostPerYear[] | null>> {
+    return this.http.get<IApiRes<IPostPerYear[]>>(`admin/postperyear`);
+  }
+  getAdminCardData(): Observable<IApiRes<adminCardData | null>> {
+    return this.http.get<IApiRes<adminCardData | null>>('admin/admincards')
+  }
+
+  
+  //users service
   getUserDetails(userId: string): Observable<IApiUserRes> {
     return this.http.get<IApiUserRes>(`user/get/${userId}`);
   }
@@ -77,3 +102,4 @@ export class UserService {
     return this.http.get<IApiRes<IUserSearchItem[] | null>>(`user/userSearch?query=${query}`);
   }
 }
+  

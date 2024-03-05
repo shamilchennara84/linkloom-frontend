@@ -1,12 +1,24 @@
-<section class="bg-white dark:bg-black py-8 lg:py-16 antialiased  ">
+<section class="bg-white dark:bg-black py-2 lg:py-3 antialiased h-[100%]">
   <div class="max-w-2xl mx-auto px-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class=" font-bold text-sm text-gray-900 dark:text-white">Comments ({{comments.length}})</h2>
     </div>
     <app-comment-form submitLabel="Comment" (handleSubmit)="addComment($event) "></app-comment-form>
    
-<div class="scrolling-container ">
-  <app-comment *ngFor="let comment of comments" [comment]="comment"></app-comment>
+
+
+ <button *ngIf="comments.length>0" class=" dropdown-trigger cursor-pointer bg-gray-800 px-3 py-2 rounded-md text-white tracking-wider shadow-xl animate-bounce hover:animate-none " (click)="toggleDropdown()">
+   <svg class="w-5 h-5" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <path d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" stroke-linejoin="round" stroke-linecap="round"></path>
+   </svg>
+   Show Comments
+ </button>
+
+  <!-- Dropdown Content -->
+<div  [ngClass]="{'hidden': !dropdownVisible}">
+  <div class="scrolling-container">
+    <app-comment *ngFor="let comment of comments" [comment]="comment"></app-comment>
+  </div>
 </div>
     
   </div>
