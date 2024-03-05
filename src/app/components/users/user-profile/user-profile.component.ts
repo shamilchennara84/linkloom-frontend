@@ -14,6 +14,7 @@ import { UserService } from '../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfilePostComponent } from '../../post/profile-post/profile-post.component';
 
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,

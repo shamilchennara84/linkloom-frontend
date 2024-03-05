@@ -42,6 +42,23 @@ export interface IApiUserRes {
   message: string;
   data: IUserProfileData;
 }
+
+export interface IUserChatSearch
+  extends Omit<
+    IUserRes,
+    | 'email'
+    | 'password'
+    | 'isBlocked'
+    | 'isGoogleAuth'
+    | 'isPremier'
+    | 'dob'
+    | 'mobile'
+    | 'premiumExpiry'
+    | 'wallet'
+    | 'visibility'
+    | 'coords'
+    | 'address'
+  > {}
 export interface IApiProfileRes {
   status: number;
   message: string;

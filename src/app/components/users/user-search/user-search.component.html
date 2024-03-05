@@ -1,1 +1,29 @@
-User Search
+<!-- <div class="container mx-auto grid justify-items-center   ">
+  <div class="container mx-auto flex justify-center ">
+  <input placeholder="Search..." [formControl]="searchControl" class="sm:w-11/12   md:w-2/6  bg-[#292929] border-2 border-[#3e3e3e] rounded-lg text-white px-6 py-3 text-base hover:border-[#fff] cursor-pointer transition mx-auto" type="text" />
+   <div *ngFor="let option of filteredOptions" class="text-white">
+     {{ option }}
+   </div>
+    </div>
+  </div> -->
+
+<div class="container mx-auto grid justify-items-center">
+  <div class="container mx-auto flex justify-center">
+    <mat-form-field class="w-full sm:w-11/12   md:w-2/6">
+      <input matInput placeholder="Search for users..." [formControl]="searchControl" [matAutocomplete]="users">
+    </mat-form-field>
+    <mat-autocomplete #users="matAutocomplete">
+      <ng-container *ngIf="filtered$ | async as Users">
+        <mat-option *ngFor="let user of Users" (click)="getProfile(user._id)">
+          <div class="flex items-center">
+            <img [src]="getImageUrl(user)" alt="User Avatar" class="w-10 h-10 rounded-full mr-4">
+            <div>
+              <div class="font-semibold">{{user.userfname}} <span  class="text-slate-500 font-light"> {{user.username}}</span></div>
+              <div class="text-sm text-gray-500">{{user.followers}} Followers</div>
+            </div>
+          </div>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </div>
+</div>
