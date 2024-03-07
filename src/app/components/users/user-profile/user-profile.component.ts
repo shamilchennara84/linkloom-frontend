@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { IPostRes } from '../../../core/models/interfaces/posts';
+import { IPostRes, ITaggedPost } from '../../../core/models/interfaces/posts';
 import { UserService } from '../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfilePostComponent } from '../../post/profile-post/profile-post.component';
@@ -28,13 +28,15 @@ export class UserProfileComponent implements OnInit {
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserRes | null>;
   userPosts$!: Observable<IPostRes[] | null>;
+  userSavedPosts$!: Observable<ITaggedPost[] | null>;
   placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
   userId: string | undefined = undefined;
   userPostsCount!: number;
   followersCount!: number;
   followingCount!: number;
-  user!:IUserRes | null
+  user!: IUserRes | null;
+  activeTab: string = 'post';
 
   constructor(private store: Store, private userService: UserService, private dialog: MatDialog) {}
 
@@ -43,13 +45,17 @@ export class UserProfileComponent implements OnInit {
     this.userProfile$.subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
-       this.user=userProfile
+      this.user = userProfile;
       this.userId = userProfile?._id;
     });
 
     if (this.userId) {
       this.userService.getUserPosts(this.userId).subscribe((response) => {
         this.userPosts$ = of(response.data);
+      });
+      this.userService.getUserSavedPosts(this.userId).subscribe((response) => {
+        console.log(response, 'user save post recieved');
+        this.userSavedPosts$ = of(response.data);
       });
 
       this.userService.getUserDetails(this.userId).subscribe((response) => {
@@ -60,26 +66,29 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  openModal(post:IPostRes) {
+  openModal(post: IPostRes ) {
+    
     console.log(post);
     const dialogRef = this.dialog.open(ProfilePostComponent, {
-      width: '80%', // 55% of the viewport width
-      height: '80%', // 71.5% of the viewport height
+      width: '80%',
+      height: '80%',
       data: { post: post, userImageUrl: this.profileImg, user: this.user },
       panelClass: ['no-scroll'],
     });
 
-     const dialogComponentInstance = dialogRef.componentInstance;
+    const dialogComponentInstance = dialogRef.componentInstance;
 
- 
-     dialogComponentInstance.closeModal.subscribe(() => {
-       dialogRef.close(); 
-     });
+    dialogComponentInstance.closeModal.subscribe(() => {
+      dialogRef.close();
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
-     
     });
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
   }
 }
 

@@ -12,10 +12,19 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment'
 
+
 @Component({
   selector: 'app-user-sidenav',
   standalone: true,
-  imports: [MatToolbarModule, MatListModule, MatIconModule, CommonModule, NgOptimizedImage, RouterModule],
+  imports: [
+    MatToolbarModule,
+    MatListModule,
+    MatIconModule,
+    CommonModule,
+    NgOptimizedImage,
+    RouterModule,
+    
+  ],
   templateUrl: './user-sidenav.component.html',
   styleUrl: './user-sidenav.component.css',
 })

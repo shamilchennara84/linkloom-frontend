@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PostCommentsComponent } from '../post-comments/post-comments.component';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-img-post',
@@ -22,9 +23,10 @@ export class ImgPostComponent implements OnInit {
   @Input() userLikes!: number;
   @Input() userId: string | undefined;
   @Input() postId!: string;
-  @Input() liked: boolean = false;
-  @Input() commentModal: boolean = false;
   @Input() postUser!: string;
+  @Input() liked: boolean = false;
+  @Input() tagged: boolean = false;
+  commentModal: boolean = false;
   profileImg!: string;
 
   constructor(private userService: UserService) {}
@@ -54,6 +56,38 @@ export class ImgPostComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error unliking post:', error);
+          },
+        });
+      }
+    }
+  }
+  toggleTagHandler(event: Event) {
+    event.stopPropagation();
+    this.tagged = !this.tagged;
+    if (this.userId && this.postUrl) {
+      if (this.tagged) {
+        this.userService.tagPost(this.userId, this.postId).subscribe({
+          next: () => {
+               Swal.fire({
+                 position: 'top-end',
+                 icon: 'success',
+                 title: 'Post saved',
+                 showConfirmButton: false,
+                 timer: 1500, // Duration in milliseconds
+                 toast: true, // Enable toast mode
+               });
+          },
+          error: (error:Error) => {
+            console.error('Error tagging post:', error);
+          },
+        });
+      } else {
+        this.userService.untagPost(this.userId, this.postId).subscribe({
+          next: () => {
+            console.log('Post untagged successfully');
+          },
+          error: (error:Error) => {
+            console.error('Error untagging post:', error);
           },
         });
       }

@@ -4,6 +4,7 @@ import { ICommentRes } from '../../../core/models/interfaces/comments';
 import { CommentComponent } from '../comment/comment.component';
 import { CommentFormComponent } from '../comment-form/comment-form.component';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-post-comments',
@@ -50,5 +51,27 @@ export class PostCommentsComponent implements OnInit {
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
+
+  onCommentRemoved(commentId: string) {
+    this.commentService.deleteComment(commentId).subscribe({
+      next: () => {
+        this.comments = this.comments.filter((comment) => comment._id !== commentId);
+        console.log('Comment removed:', commentId);
+      },
+      error: (error: Error) => {
+        console.error('Failed to remove comment:', error);
+      },
+    });
+  }
+  onCommentReported(commentId: string) {
+    console.log('comment reported', commentId);
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Comment Reported',
+      showConfirmButton: false,
+      timer: 1500, // Duration in milliseconds
+      toast: true, // Enable toast mode
+    });
+  }
 }
-//

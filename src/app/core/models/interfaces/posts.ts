@@ -18,11 +18,13 @@ export interface IApiPostRes {
   data: IPostRes[]
 }
 
+
 export interface IPostUserRes extends IPostRes {
   user: IUserRes[];
   likes: ILikeRes[];
   likeCount: number;
   likedByCurrentUser: boolean;
+  taggedByCurrentUser:boolean
 }
 
 export interface ILikeRes {
@@ -48,3 +50,28 @@ export interface IPostPerMonth {
   likes: number; 
   comments: number; 
 }
+
+export interface ITagSchema {
+  postId: string;
+  userId: string;
+  createdAt: Date;
+}
+export interface ITagRes {
+  _id: string;
+  postId: string;
+  userId: string;
+  createdAt: Date;
+}
+export interface ITaggedPost extends ITagRes {
+  postDetails:IPostRes[]
+}
+
+export interface IApiSavedPost {
+  status: number;
+  message: string;
+  data: ITaggedPost[];
+}
+
+
+
+

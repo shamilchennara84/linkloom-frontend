@@ -1,17 +1,21 @@
-<mat-toolbar class="mat-elevation-z3 relative z-10 mat-toolbar-background ">
-  <button mat-icon-button (click)="collapsed.set(!collapsed())">
-    <mat-icon>
-      menu
-    </mat-icon>
-  </button>
-</mat-toolbar>
-<mat-sidenav-container class="h-screen">
-  <mat-sidenav class="sidenav" opened mode="side" [style.width]="sidenavWidth()">
-    <app-user-sidenav [collapsed]='collapsed()'>
-
-    </app-user-sidenav>
-  </mat-sidenav>
-  <mat-sidenav-content class="content p-10  bg-[#010101] " [style.margin-left]="sidenavWidth()  ">
-    <router-outlet ></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<div *ngIf="showLoader$ | async as showLoader">
+  <app-loader *ngIf="showLoader"></app-loader>
+</div>
+<div *ngIf="!(showLoader$ | async)">
+  <mat-toolbar class="mat-elevation-z3 relative z-10 mat-toolbar-background ">
+    <button mat-icon-button (click)="collapsed.set(!collapsed())">
+      <mat-icon>
+        menu
+      </mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-sidenav-container class="h-screen">
+    <mat-sidenav class="sidenav" opened mode="side" [style.width]="sidenavWidth()">
+      <app-user-sidenav [collapsed]='collapsed()'>
+      </app-user-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content class="content p-10 bg-[#010101] " [style.margin-left]="sidenavWidth() ">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

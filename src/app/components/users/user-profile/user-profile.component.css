@@ -16,3 +16,8 @@
 .no-scroll .mat-dialog-container {
  overflow: hidden !important;
 }
+
+.active {
+ color: #007bff; /* Bootstrap primary color */
+ border-bottom: 2px solid #007bff;
+}

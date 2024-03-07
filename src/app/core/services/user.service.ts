@@ -13,7 +13,7 @@ import {
   IUsersAndCount,
 } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
-import { IApiPostRes, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes } from '../models/interfaces/posts';
+import { IApiPostRes, IApiSavedPost, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes, ITagRes } from '../models/interfaces/posts';
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 
 import { IAdminCardData } from '../models/interfaces/admin';
@@ -83,6 +83,11 @@ export class UserService {
   getUserPosts(userId: string): Observable<IApiPostRes> {
     return this.http.get<IApiPostRes>(`user/userPost/${userId}`);
   }
+
+  getUserSavedPosts(userId: string): Observable<IApiSavedPost> {
+    return this.http.get<IApiSavedPost>(`user/usersavedPost/${userId}`);
+  }
+
   getLatestPosts(userId: string): Observable<IApiRes<IPostUserRes[] | null>> {
     return this.http.get<IApiRes<IPostUserRes[] | null>>(`user/homePost/${userId}`);
   }
@@ -91,6 +96,13 @@ export class UserService {
   }
   unlikePost(userId: string, postId: string): Observable<IApiRes<ILikeCountRes | null>> {
     return this.http.get<IApiRes<ILikeCountRes | null>>(`user/Unlike/${userId}/${postId}`);
+  }
+
+  tagPost(userId: string, postId: string): Observable<IApiRes<ITagRes | null>> {
+    return this.http.get<IApiRes<ITagRes | null>>(`user/tag/${userId}/${postId}`);
+  }
+  untagPost(userId: string, postId: string): Observable<IApiRes<ITagRes | null>> {
+    return this.http.get<IApiRes<ITagRes | null>>(`user/Untag/${userId}/${postId}`);
   }
 
   followStatus(userId: string): Observable<IApiRes<IFollowStatus | null>> {

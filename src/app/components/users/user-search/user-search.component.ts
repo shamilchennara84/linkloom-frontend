@@ -9,11 +9,19 @@ import { UserService } from '../../../core/services/user.service';
 import { IUserSearchItem } from '../../../core/models/interfaces/followers';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { UserHomeProfileComponent } from '../user-home-profile/user-home-profile.component';
 
 @Component({
   selector: 'app-user-search',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    UserHomeProfileComponent,
+  ],
   templateUrl: './user-search.component.html',
   styleUrl: './user-search.component.css',
 })

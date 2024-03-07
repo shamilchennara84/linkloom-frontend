@@ -9,11 +9,12 @@ import { IPostUserRes } from '../../../core/models/interfaces/posts';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { UserHomeProfileComponent } from '../user-home-profile/user-home-profile.component';
+import { UserSearchComponent } from '../user-search/user-search.component';
 
 @Component({
   selector: 'app-user-home',
   standalone: true,
-  imports: [ImgPostComponent, CommonModule, UserHomeProfileComponent],
+  imports: [ImgPostComponent, CommonModule, UserHomeProfileComponent, UserSearchComponent],
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css',
 })
@@ -32,6 +33,7 @@ export class UserHomeComponent implements OnInit {
     if (this.userId) {
       this.userService.getLatestPosts(this.userId).subscribe((response) => {
         this.homePosts$ = of(response.data);
+        console.log(response.data);
       });
     }
   }
