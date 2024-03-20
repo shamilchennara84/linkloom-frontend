@@ -4,7 +4,7 @@ import { ICommentRes } from './comments';
 import { IConversation, IConversationListItem } from './conversation';
 
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from './followers';
-import { INotificationRes } from './notification';
+import { INotificationRes, INotificationWithUser } from './notification';
 import { ILikeCountRes, IPostPerMonth, IPostUserRes, ITagRes } from './posts';
 import { IUserChatSearch, IUserPerMonth, IUserPerYear, IUserRes, IUsersAndCount } from './users';
 
@@ -42,7 +42,8 @@ export type AllResTypes =
   | IAdminCardData
   | IUserSearchItem[]
   | ITagRes
-  | INotificationRes[]
+  | INotificationWithUser[]
+  | INotificationRes
   | null;
 
 export interface IApiRes<T extends AllResTypes> {

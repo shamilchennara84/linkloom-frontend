@@ -6,6 +6,7 @@ import { FollowRequestComponent } from '../../common/follow-request/follow-reque
 
 import { NotificationListComponent } from '../notification-list/notification-list.component';
 
+
 @Component({
   selector: 'app-user-notification',
   standalone: true,

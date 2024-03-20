@@ -13,7 +13,7 @@ import { IPostRes, ITaggedPost } from '../../../core/models/interfaces/posts';
 import { UserService } from '../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfilePostComponent } from '../../post/profile-post/profile-post.component';
-
+import { FollowerListComponent } from '../follower-list/follower-list.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -66,8 +66,7 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  openModal(post: IPostRes ) {
-    
+  openModal(post: IPostRes) {
     console.log(post);
     const dialogRef = this.dialog.open(ProfilePostComponent, {
       width: '80%',
@@ -87,8 +86,27 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  openFollowerListModal() {
+    const dialogRef = this.dialog.open(FollowerListComponent, {
+      width: '30%',
+      height: '40%',
+      data: {
+        user: this.user,
+      },
+    });
+
+    const dialogComponentInstance = dialogRef.componentInstance;
+
+    dialogComponentInstance.closeModal.subscribe(() => {
+      dialogRef.close();
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
+  }
+
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
 }
-

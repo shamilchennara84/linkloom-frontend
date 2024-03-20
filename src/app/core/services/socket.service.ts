@@ -2,12 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Socket, io } from 'socket.io-client';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject, tap } from 'rxjs';
 import { IChatHistoryItem, IChatReq } from '../models/interfaces/chats';
 import { IApiRes } from '../models/interfaces/common';
 import { IConversationListItem } from '../models/interfaces/conversation';
 import { IApiUserRes, IUserProfileData } from '../models/interfaces/users';
-import { INotification, INotificationRes } from '../models/interfaces/notification';
+import { INotification, INotificationRes, INotificationWithUser } from '../models/interfaces/notification';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -39,11 +39,11 @@ export class SocketService {
   public conversationsStatus$: Observable<IConversationListItem[]> = this.conversationsStatusSubject.asObservable();
 
   //notification section
-  private allNotificationSubject: Subject<INotificationRes[]> = new Subject<INotificationRes[]>();
-  public allNotifications$: Observable<INotificationRes[]> = this.allNotificationSubject.asObservable();
+  private allNotificationSubject: Subject<INotificationWithUser[]> = new Subject<INotificationWithUser[]>();
+  public allNotifications$: Observable<INotificationWithUser[]> = this.allNotificationSubject.asObservable();
 
-  private notificationSubject: Subject<INotificationRes> = new Subject<INotificationRes>();
-  public notifications$: Observable<INotificationRes> = this.notificationSubject.asObservable();
+  private notificationSubject: Subject<INotificationWithUser> = new Subject<INotificationWithUser>();
+  public notifications$: Observable<INotificationWithUser> = this.notificationSubject.asObservable();
 
   setupSocketConnection(userId: String) {
     this.socket = io(this.backendUrl, {
@@ -64,7 +64,7 @@ export class SocketService {
       this.messageSubject.next(data);
     });
 
-    this.socket.on('receive-notification', (data: INotificationRes) => {
+    this.socket.on('receive-notification', (data: INotificationWithUser) => {
       console.log('notification received', data);
       this.notificationSubject.next(data);
     });
@@ -72,10 +72,14 @@ export class SocketService {
 
   getNotifications() {
     console.log('get notification');
-    return this.http.get<IApiRes<INotificationRes[] | null>>(`user/notifications`).subscribe((res) => {
-      console.log('Emitting notifications:', res.data); // Log the data being emitted
-      this.allNotificationSubject.next(res.data as INotificationRes[]);
-    });
+     this.allNotificationSubject.next([]);
+     const cacheBuster = new Date().getTime();
+    return this.http
+      .get<IApiRes<INotificationWithUser[] | null>>(`user/notifications?${cacheBuster}`)
+      .subscribe((res) => {
+        console.log('Emitting notifications:', res.data); // Log the data being emitted
+        this.allNotificationSubject.next(res.data as INotificationWithUser[]);
+      });
   }
 
   allConversationHistory() {
@@ -87,8 +91,9 @@ export class SocketService {
   }
 
   getChatHistory(roomId: string) {
+     const cacheBuster = new Date().getTime();
     this.http
-      .get<IApiRes<IChatHistoryItem[] | null>>(`user/chat/history/${roomId}`, httpOptions)
+      .get<IApiRes<IChatHistoryItem[] | null>>(`user/chat/history/${roomId}?${cacheBuster}`, httpOptions)
       .subscribe((res) => {
         this.allMessagesSubject.next(res.data as IChatHistoryItem[]);
       });
@@ -115,6 +120,9 @@ export class SocketService {
 
   acceptFollowRequest(notificationId: string) {
     return this.http.patch(`user/friendrequest/accept/${notificationId}`, httpOptions);
+  }
+  removeNotification(notificationId: string): Observable<IApiRes<INotificationRes | null>> {
+    return this.http.delete<IApiRes<INotificationRes | null>>(`user/notification/${notificationId}`, httpOptions);
   }
 
   socketOff() {

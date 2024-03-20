@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ChatBlankComponent } from '../chat-blank/chat-blank.component';
 import { SocketService } from '../../../core/services/socket.service';
-import { combineLatest, map, Subscription } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { IChatHistoryItem } from '../../../core/models/interfaces/chats';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -36,22 +36,18 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   constructor(private socket: SocketService) {}
 
   ngOnInit(): void {
-    console.log("trying to get the fetched message");
-    combineLatest([this.socket.selectedUser$, this.socket.allMessage$])
-      .pipe(
-        map(([secondUserData, allMessagesData]) => {
-          this.secondUserDetails = secondUserData;
-          this.allMessages = allMessagesData;
-        })
-      )
-      .subscribe(() => {
-       
-        this.messageSubscription = this.socket.message$.subscribe((data: IChatHistoryItem) => {
-          this.allMessages.push(data);
-        });
-        this.profilePic =
-          this.user && this.user.profilePic ? `${this.imgUrl}${this.user.profilePic}` : this.placeholder;
-      });
+    this.socket.selectedUser$.subscribe((secondUserData) => {
+      this.secondUserDetails = secondUserData;
+    });
+    this.socket.allMessage$.subscribe((allMessagesData) => {
+      this.allMessages = allMessagesData;
+      console.log(this.allMessages, 'all message reached');
+    });
+
+    this.messageSubscription = this.socket.message$.subscribe((data: IChatHistoryItem) => {
+      this.allMessages.push(data);
+    });
+    this.profilePic = this.user && this.user.profilePic ? `${this.imgUrl}${this.user.profilePic}` : this.placeholder;
   }
 
   onSubmitMessage(): void {

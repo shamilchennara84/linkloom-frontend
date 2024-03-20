@@ -1,7 +1,7 @@
 
 <div class="border rounded-lg" *ngFor="let notification of allNotification">
-  <app-follow-request (action)="handleAction($event)" [notification]='notification'></app-follow-request>
-  <app-notification [notification]='notification'></app-notification>
+  <app-follow-request *ngIf="notification.type === 'FOLLOW_REQUEST'" (action)="handleAction($event)" [notification]='notification'></app-follow-request>
+  <app-notification *ngIf="notification.type !== 'FOLLOW_REQUEST'" [notification]='notification' (closeClicked)="handleCloseClick($event)"></app-notification>
 </div>
 <div *ngIf="!isLoading && (!allNotification || allNotification.length === 0)" class=" h-full">
     <div class=" text-slate-400 flex flex-col items-center justify-center h-[80vh] ml-auto p-0">

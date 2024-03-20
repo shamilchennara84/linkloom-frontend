@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { loginGuard } from '../../core/guards/login.guard';
 import { UserLayoutComponent } from './user-layout/user-layout.component';
 import { authGuard } from '../../core/guards/auth.guard';
+import { UserChatroomComponent } from './user-chatroom/user-chatroom.component';
 
 export default [
   {
@@ -57,6 +58,7 @@ export default [
         loadComponent: () => import('./user-chatroom/user-chatroom.component').then((c) => c.UserChatroomComponent),
         canActivate: [authGuard],
       },
+     
       {
         path: 'profile',
         canActivate: [authGuard],
@@ -74,7 +76,10 @@ export default [
       },
       {
         path: 'userprofile/:id',
-        loadComponent: () => import('.//user-second-profile.js/user-second-profile.js.component').then((c) => c.UserSecondProfileJsComponent),
+        loadComponent: () =>
+          import('.//user-second-profile.js/user-second-profile.js.component').then(
+            (c) => c.UserSecondProfileJsComponent
+          ),
         canActivate: [authGuard],
       },
       {

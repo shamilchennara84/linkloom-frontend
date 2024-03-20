@@ -18,7 +18,7 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
 })
 export class FollowButtonComponent implements OnInit {
   @Input() userId!: string;
-  @Input() followerCount!: number;
+  @Input() followerCount : number | undefined;
   @Output() followerCountChange = new EventEmitter<number>();
   userProfile$!: Observable<IUserRes | null>;
   followingStatus$!: Observable<FollowingStatus | null>;
@@ -61,8 +61,13 @@ export class FollowButtonComponent implements OnInit {
              });
            }
           this.statusString = response.data.status ? response.data.status.toString() : 'Follow';
+   
           this.followerCount = response.data.count;
-          this.followerCountChange.emit(this.followerCount);
+          if (this.followerCount !== undefined) {
+            this.followerCountChange.emit(this.followerCount);
+          }
+          
+          
          
         }
       });

@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FollowRequestAction, INotificationRes, NotificationType } from '../../../core/models/interfaces/notification';
+import {
+  FollowRequestAction,
+  INotificationWithUser,
+  NotificationType,
+} from '../../../core/models/interfaces/notification';
 import { environment } from '../../../../environments/environment';
 import { SocketService } from '../../../core/services/socket.service';
 
@@ -12,7 +16,7 @@ import { SocketService } from '../../../core/services/socket.service';
   styleUrl: './follow-request.component.css',
 })
 export class FollowRequestComponent implements OnInit {
-  @Input() notification!: INotificationRes;
+  @Input() notification!: INotificationWithUser;
   @Output() action = new EventEmitter<FollowRequestAction>();
   imgUrl: string = `${environment.backendUrl}images/`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
