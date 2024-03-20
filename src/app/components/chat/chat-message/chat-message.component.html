@@ -29,7 +29,7 @@
       <div class="chat-bubble chat-bubble-primary " [ngClass]="message.senderId == user._id ? 'chat-bubble-success' :'chat-bubble-primary'">
         <p>{{message.content}}</p>
       </div>
-      <div class="chat-footer opacity-50  text-white">{{message?.createdAt | date: 'short'}}</div>
+      <div class="chat-footer opacity-50  text-white">{{message?.createdAt | dateAgo}}</div>
     </div>
   </ng-template>
 

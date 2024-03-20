@@ -10,6 +10,9 @@ import { IUserRes } from '../../../core/models/interfaces/users';
 import { LoaderComponent } from '../../common/loader/loader.component';
 import { LoaderService } from '../../../core/services/loader.service';
 import { CommonModule } from '@angular/common';
+import { Store, select } from '@ngrx/store';
+import { SocketService } from '../../../core/services/socket.service';
+import { selectUserDetails } from '../../../core/states/users/user.selector';
 
 @Component({
   selector: 'app-user-layout',
@@ -32,19 +35,31 @@ export class UserLayoutComponent implements OnInit {
   sidenavWidth = computed(() => (this.collapsed() ? '60px' : '250px'));
   userDetails$!: Observable<IUserRes | null>;
   showLoader$!: Observable<boolean>;
+  userProfile$!: Observable<IUserRes | null>;
 
-  constructor(private loaderService: LoaderService) {}
+  constructor(private loaderService: LoaderService, private store: Store, private socketService: SocketService) {}
   ngOnInit() {
-    this.loaderService.showLoader();
-    this.showLoader$ = this.loaderService.loadingAction$;
-
-    this.showLoader$.subscribe((show) => {
-      console.log('Loader visibility:', show);
+    this.userProfile$ = this.store.pipe(select(selectUserDetails));
+    this.userProfile$.subscribe((userProfile) => {
+      if (userProfile) {
+        this.socketService.setupSocketConnection(userProfile._id);
+      
+      }
     });
+
+    this.loaderService.showLoader();
+
+    this.showLoader$ = this.loaderService.loadingAction$;
 
     setTimeout(() => {
       console.log('Hiding loader after 2 seconds');
       this.loaderService.hideLoader();
     }, 500);
+  }
+
+  ngOnDestroy(): void {
+    console.log('socket disconnected');
+    this.socketService.socketOff();
+    this.socketService.disconnect();
   }
 }

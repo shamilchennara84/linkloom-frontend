@@ -7,6 +7,7 @@ import { IChatHistoryItem, IChatReq } from '../models/interfaces/chats';
 import { IApiRes } from '../models/interfaces/common';
 import { IConversationListItem } from '../models/interfaces/conversation';
 import { IApiUserRes, IUserProfileData } from '../models/interfaces/users';
+import { INotification, INotificationRes } from '../models/interfaces/notification';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -25,20 +26,24 @@ export class SocketService {
 
   constructor(private http: HttpClient) {}
 
-  // private roomSubject: Subject<string> = new Subject<string>();
-  // public room$: Observable<string> = this.roomSubject.asObservable();
-
   private allMessagesSubject: Subject<IChatHistoryItem[]> = new Subject<IChatHistoryItem[]>();
   public allMessage$: Observable<IChatHistoryItem[]> = this.allMessagesSubject.asObservable();
 
-  private messageSubject: Subject<any> = new Subject<any>();
-  public message$: Observable<any> = this.messageSubject.asObservable();
+  private messageSubject: Subject<IChatHistoryItem> = new Subject<IChatHistoryItem>();
+  public message$: Observable<IChatHistoryItem> = this.messageSubject.asObservable();
 
   private selectedUserSubject: Subject<IUserProfileData> = new Subject<IUserProfileData>();
   public selectedUser$: Observable<IUserProfileData> = this.selectedUserSubject.asObservable();
 
   private conversationsStatusSubject: Subject<IConversationListItem[]> = new Subject<IConversationListItem[]>();
   public conversationsStatus$: Observable<IConversationListItem[]> = this.conversationsStatusSubject.asObservable();
+
+  //notification section
+  private allNotificationSubject: Subject<INotificationRes[]> = new Subject<INotificationRes[]>();
+  public allNotifications$: Observable<INotificationRes[]> = this.allNotificationSubject.asObservable();
+
+  private notificationSubject: Subject<INotificationRes> = new Subject<INotificationRes>();
+  public notifications$: Observable<INotificationRes> = this.notificationSubject.asObservable();
 
   setupSocketConnection(userId: String) {
     this.socket = io(this.backendUrl, {
@@ -55,8 +60,21 @@ export class SocketService {
     });
 
     this.socket.on('receive-message', (data: IChatHistoryItem) => {
-      console.log('message recieved', data);
+      console.log('message received', data);
       this.messageSubject.next(data);
+    });
+
+    this.socket.on('receive-notification', (data: INotificationRes) => {
+      console.log('notification received', data);
+      this.notificationSubject.next(data);
+    });
+  }
+
+  getNotifications() {
+    console.log('get notification');
+    return this.http.get<IApiRes<INotificationRes[] | null>>(`user/notifications`).subscribe((res) => {
+      console.log('Emitting notifications:', res.data); // Log the data being emitted
+      this.allNotificationSubject.next(res.data as INotificationRes[]);
     });
   }
 
@@ -69,7 +87,7 @@ export class SocketService {
   }
 
   getChatHistory(roomId: string) {
-    return this.http
+    this.http
       .get<IApiRes<IChatHistoryItem[] | null>>(`user/chat/history/${roomId}`, httpOptions)
       .subscribe((res) => {
         this.allMessagesSubject.next(res.data as IChatHistoryItem[]);
@@ -80,10 +98,23 @@ export class SocketService {
     this.socket.emit('send-message', messageData);
   }
 
+  sendNotification(notificationData: INotification) {
+    console.log('notification emitting', notificationData);
+    this.socket.emit('send-notification', notificationData);
+  }
+
   getSelectedUserName(userId: string) {
     this.http.get<IApiUserRes>(`user/get/${userId}`, httpOptions).subscribe((res) => {
       this.selectedUserSubject.next(res.data);
     });
+  }
+
+  declineFollowRequest(notificationId: string) {
+    return this.http.delete(`user/friendrequest/decline/${notificationId}`, httpOptions);
+  }
+
+  acceptFollowRequest(notificationId: string) {
+    return this.http.patch(`user/friendrequest/accept/${notificationId}`, httpOptions);
   }
 
   socketOff() {
@@ -93,19 +124,4 @@ export class SocketService {
   disconnect() {
     this.socket.disconnect();
   }
-  // joinRoom() {
-  //   this.room$.subscribe((conversationId: string) => {
-  //     console.log(conversationId);
-  //     this.socket.emit('join_room', conversationId);
-  //   });
-  // }
-
-  // createChat(selectedUserId: string, userId: string)Observable<strign> {
-  //   return this.http.get(`${this.apiUrl}/chat/${selectedUserId}/${userId}`, httpOptions).subscribe((chatId: string) => {
-  //     this.roomSubject.next(chatId);
-  //   });
 }
-
-
-
-// }

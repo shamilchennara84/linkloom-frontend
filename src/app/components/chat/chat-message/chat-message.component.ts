@@ -2,17 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ChatBlankComponent } from '../chat-blank/chat-blank.component';
 import { SocketService } from '../../../core/services/socket.service';
-import { Subscription } from 'rxjs';
+import { combineLatest, map, Subscription } from 'rxjs';
 import { IChatHistoryItem } from '../../../core/models/interfaces/chats';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IUser, IUserProfileData } from '../../../core/models/interfaces/users';
 import { environment } from '../../../../environments/environment';
+import { DateAgoPipe } from '../../../shared/pipes/date-ago.pipe';
 
 @Component({
   selector: 'app-chat-message',
   standalone: true,
-  imports: [CommonModule, ChatBlankComponent, FormsModule, DatePipe],
+  imports: [CommonModule, ChatBlankComponent, FormsModule, DatePipe, DateAgoPipe],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.css',
 })
@@ -35,18 +36,22 @@ export class ChatMessageComponent implements OnInit, OnDestroy {
   constructor(private socket: SocketService) {}
 
   ngOnInit(): void {
-    this.selectedUserSubscription = this.socket.selectedUser$.subscribe((data: IUserProfileData) => {
-      this.secondUserDetails = data;
-    });
-
-    this.allMessageSubscription = this.socket.allMessage$.subscribe((data: IChatHistoryItem[]) => {
-      this.allMessages = data;
-
-      this.messageSubscription = this.socket.message$.subscribe((data: IChatHistoryItem) => {
-        this.allMessages.push(data);
+    console.log("trying to get the fetched message");
+    combineLatest([this.socket.selectedUser$, this.socket.allMessage$])
+      .pipe(
+        map(([secondUserData, allMessagesData]) => {
+          this.secondUserDetails = secondUserData;
+          this.allMessages = allMessagesData;
+        })
+      )
+      .subscribe(() => {
+       
+        this.messageSubscription = this.socket.message$.subscribe((data: IChatHistoryItem) => {
+          this.allMessages.push(data);
+        });
+        this.profilePic =
+          this.user && this.user.profilePic ? `${this.imgUrl}${this.user.profilePic}` : this.placeholder;
       });
-    });
-    this.profilePic = this.user && this.user.profilePic ? `${this.imgUrl}${this.user.profilePic}` : this.placeholder;
   }
 
   onSubmitMessage(): void {

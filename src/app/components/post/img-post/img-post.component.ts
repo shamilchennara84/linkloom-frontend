@@ -26,14 +26,15 @@ export class ImgPostComponent implements OnInit {
   @Input() postUser!: string;
   @Input() liked: boolean = false;
   @Input() tagged: boolean = false;
+  @Input() userComments!: number;
   commentModal: boolean = false;
   profileImg!: string;
 
   constructor(private userService: UserService) {}
   ngOnInit(): void {
-    console.log('post image');
+    // console.log('post image');
     this.profileImg = this.userImageUrl ? this.imgUrl + this.userImageUrl : this.userPlaceholderImageUrl;
-    console.log(this.profileImg, 'last', this.userImageUrl, 'first');
+    // console.log(this.profileImg, 'last', this.userImageUrl, 'first');
   }
 
   toggleLike(event: Event) {
@@ -68,16 +69,16 @@ export class ImgPostComponent implements OnInit {
       if (this.tagged) {
         this.userService.tagPost(this.userId, this.postId).subscribe({
           next: () => {
-               Swal.fire({
-                 position: 'top-end',
-                 icon: 'success',
-                 title: 'Post saved',
-                 showConfirmButton: false,
-                 timer: 1500, // Duration in milliseconds
-                 toast: true, // Enable toast mode
-               });
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Post saved',
+              showConfirmButton: false,
+              timer: 1500, // Duration in milliseconds
+              toast: true, // Enable toast mode
+            });
           },
-          error: (error:Error) => {
+          error: (error: Error) => {
             console.error('Error tagging post:', error);
           },
         });
@@ -86,7 +87,7 @@ export class ImgPostComponent implements OnInit {
           next: () => {
             console.log('Post untagged successfully');
           },
-          error: (error:Error) => {
+          error: (error: Error) => {
             console.error('Error untagging post:', error);
           },
         });
@@ -95,5 +96,10 @@ export class ImgPostComponent implements OnInit {
   }
   toggleCommentModal(event: Event) {
     this.commentModal = !this.commentModal;
+  }
+
+  userCommentUpdate(commentCount:number) {
+    this.userComments = commentCount;
+    console.log("comment updated",this.userComments);
   }
 }

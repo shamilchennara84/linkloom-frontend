@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommentService } from '../../../core/services/comment.service';
 import { ICommentRes } from '../../../core/models/interfaces/comments';
 import { CommentComponent } from '../comment/comment.component';
 import { CommentFormComponent } from '../comment-form/comment-form.component';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-post-comments',
@@ -16,6 +17,8 @@ import Swal from 'sweetalert2';
 export class PostCommentsComponent implements OnInit {
   @Input() userId: string | undefined;
   @Input() postId!: string;
+  @Output() commentCount: EventEmitter<number> = new EventEmitter<number>();
+
   comments: ICommentRes[] = [];
   dropdownVisible = false;
   constructor(private commentService: CommentService) {}
@@ -42,6 +45,7 @@ export class PostCommentsComponent implements OnInit {
         console.log(newComment);
         this.comments = [...this.comments, newComment];
         console.log(this.comments);
+        this.commentCount.emit(this.comments.length)
       } else {
         console.log('error while creating comment');
       }
@@ -57,6 +61,7 @@ export class PostCommentsComponent implements OnInit {
       next: () => {
         this.comments = this.comments.filter((comment) => comment._id !== commentId);
         console.log('Comment removed:', commentId);
+        this.commentCount.emit(this.comments.length);
       },
       error: (error: Error) => {
         console.error('Failed to remove comment:', error);

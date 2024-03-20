@@ -3,18 +3,13 @@
     <app-chat-list class="mat-elevation-z5 chat-list" (conversationEmitter)="handleConversation($event)"></app-chat-list>
   </div>
   <div *ngIf="conversationId; else noConversation" class="w-8/12 ml-auto bg-black overflow-hidden border  ">
-
-    <app-chat-message class=" bg-black chat-message "[secondUser]="secondUser" [user]="user" [conversationId]=" conversationId"></app-chat-message>
- 
-    
+    <app-chat-message class=" bg-black chat-message " [secondUser]="secondUser" [user]="user" [conversationId]=" conversationId"></app-chat-message>
   </div>
-  
   <ng-template #noConversation>
-  
-      <div class="message-placeholder text-slate-400 flex flex-col items-center justify-center border w-8/12 h-[80vh] ml-auto p-0">
-        <fa-icon class="text-[40px]" [icon]="faUsers"></fa-icon>
-        <p class="text-[26px]">Connect with a friend</p>
-      </div>
-    
+    <div class="message-placeholder text-slate-400 flex flex-col items-center justify-center border w-8/12 h-[80vh] ml-auto p-0">
+      <fa-icon class="text-[40px]" [icon]="faUsers"></fa-icon>
+      <p class="text-[26px]">Connect with a friend</p>
+    </div>
+
   </ng-template>
 </div>

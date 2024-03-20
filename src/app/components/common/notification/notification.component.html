@@ -1,0 +1,18 @@
+<div class="rounded-lg shadow-xl w-10/12 lg:w-2/6 ps-2">
+ <div class="flex align-items-center justify-content-center my-4">
+    <div class="w-2/5 p-2 grid place-items-center">
+      <img class="w-12 h-12 rounded-full border border-gray-100 shadow-sm" [src]="profileImg" alt="user image" />
+    </div>
+    <div class="w-3/5 p-2">
+      <p class="text-gray-400 whitespace-normal sm:whitespace-nowrap">{{notification.message}}<span class="text-gray-400 font-bold"> {{notification.relatedUser.fullname | titlecase}} </span></p>
+      <p class="text-gray-400 whitespace-normal sm:whitespace-nowrap">
+        {{ notification.timestamp |  dateAgo }}
+      
+      
+        
+
+      </p>
+     
+    </div>
+ </div>
+</div>

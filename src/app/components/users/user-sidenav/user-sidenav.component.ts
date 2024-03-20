@@ -10,35 +10,29 @@ import { IUserRes } from '../../../core/models/interfaces/users';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import Swal from 'sweetalert2';
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../../environments/environment';
+import { deleteUserFromStore } from '../../../core/states/users/user.actions';
 
 
 @Component({
   selector: 'app-user-sidenav',
   standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatListModule,
-    MatIconModule,
-    CommonModule,
-    NgOptimizedImage,
-    RouterModule,
-    
-  ],
+  imports: [MatToolbarModule, MatListModule, MatIconModule, CommonModule, NgOptimizedImage, RouterModule],
   templateUrl: './user-sidenav.component.html',
   styleUrl: './user-sidenav.component.css',
 })
 export class UserSidenavComponent implements OnInit {
+  placeholder = 'assets/placeholder/profile.png';
   imgUrl: string = `${environment.backendUrl}images/`;
   sideNavCollapsed = signal(true);
   userDetails$!: Observable<IUserRes | null>;
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
-  placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
+
 
   constructor(private store: Store, private router: Router) {}
 
@@ -52,6 +46,7 @@ export class UserSidenavComponent implements OnInit {
   onLogout(): void {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userRefreshToken');
+    this.store.dispatch(deleteUserFromStore());
     void this.router.navigate(['/user/login']);
   }
   showConfirmDialog() {

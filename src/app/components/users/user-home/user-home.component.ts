@@ -33,7 +33,7 @@ export class UserHomeComponent implements OnInit {
     if (this.userId) {
       this.userService.getLatestPosts(this.userId).subscribe((response) => {
         this.homePosts$ = of(response.data);
-        console.log(response.data);
+       
       });
     }
   }

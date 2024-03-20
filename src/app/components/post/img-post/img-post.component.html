@@ -50,12 +50,15 @@
 
       </label>
     </div>
-    <div class="font-semibold text-sm mx-4 mt-2 mb-4">
+    <div class="font-medium text-sm mx-4 mt-2 mb-2">
       {{ userLikes }} likes
+    </div>
+    <div class="font-mono text-sm mx-4 mt-2 mb-4" *ngIf="userComments>0 && !commentModal">
+      {{ userComments === 1 ? ('view ' + 1 + ' comment') : ('view all ' + userComments + ' comments') }}
     </div>
   </div>
   <div *ngIf="commentModal">
-    <app-post-comments [postId]="postId" [userId]="userId"></app-post-comments>
+    <app-post-comments [postId]="postId" [userId]="userId" (commentCount)="userCommentUpdate($event)"></app-post-comments>
 
   </div>
 </div>
