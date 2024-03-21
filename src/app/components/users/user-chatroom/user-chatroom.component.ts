@@ -26,6 +26,8 @@ export class UserChatroomComponent implements OnInit {
   userProfile$!: Observable<IUserRes | null>;
   followedUsers$!: Observable<IUserRes[]>;
   conversationId: string | undefined;
+  defaultPage = 1
+  defaultLimit = 7
 
   constructor( private store: Store,private socketService:SocketService) {}
   
@@ -43,7 +45,7 @@ export class UserChatroomComponent implements OnInit {
   handleConversation(conversation: IConversation | null) {
     if (conversation) {
       this.secondUser = conversation.members.filter((x)=>x!==this.user._id)[0]
-      this.socketService.getChatHistory(conversation._id);
+      this.socketService.getChatHistory(conversation._id, this.defaultPage, this.defaultLimit);
       this.socketService.getSelectedUserName(this.secondUser);
       this.conversationId = conversation._id;
     } 

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Socket, io } from 'socket.io-client';
-import { map, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
 import { IChatHistoryItem, IChatReq } from '../models/interfaces/chats';
 import { IApiRes } from '../models/interfaces/common';
 import { IConversationListItem } from '../models/interfaces/conversation';
@@ -26,7 +26,7 @@ export class SocketService {
 
   constructor(private http: HttpClient) {}
 
-  private allMessagesSubject: Subject<IChatHistoryItem[]> = new Subject<IChatHistoryItem[]>();
+  private allMessagesSubject: BehaviorSubject<IChatHistoryItem[]> = new BehaviorSubject<IChatHistoryItem[]>([]);
   public allMessage$: Observable<IChatHistoryItem[]> = this.allMessagesSubject.asObservable();
 
   private messageSubject: Subject<IChatHistoryItem> = new Subject<IChatHistoryItem>();
@@ -37,6 +37,9 @@ export class SocketService {
 
   private conversationsStatusSubject: Subject<IConversationListItem[]> = new Subject<IConversationListItem[]>();
   public conversationsStatus$: Observable<IConversationListItem[]> = this.conversationsStatusSubject.asObservable();
+
+  private newMessagesBlankSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public newMessagesBlank$: Observable<boolean> = this.newMessagesBlankSubject.asObservable();
 
   //notification section
   private allNotificationSubject: Subject<INotificationWithUser[]> = new Subject<INotificationWithUser[]>();
@@ -72,8 +75,8 @@ export class SocketService {
 
   getNotifications() {
     console.log('get notification');
-     this.allNotificationSubject.next([]);
-     const cacheBuster = new Date().getTime();
+    this.allNotificationSubject.next([]);
+    const cacheBuster = new Date().getTime();
     return this.http
       .get<IApiRes<INotificationWithUser[] | null>>(`user/notifications?${cacheBuster}`)
       .subscribe((res) => {
@@ -90,12 +93,21 @@ export class SocketService {
       });
   }
 
-  getChatHistory(roomId: string) {
-     const cacheBuster = new Date().getTime();
+  getChatHistory(roomId: string, page: number, limit: number) {
+    const cacheBuster = new Date().getTime();
     this.http
-      .get<IApiRes<IChatHistoryItem[] | null>>(`user/chat/history/${roomId}?${cacheBuster}`, httpOptions)
+      .get<IApiRes<IChatHistoryItem[] | null>>(
+        `user/chat/history/${roomId}?page=${page}&limit=${limit}&${cacheBuster}`,
+        httpOptions
+      )
       .subscribe((res) => {
-        this.allMessagesSubject.next(res.data as IChatHistoryItem[]);
+        const newMessages = res.data as IChatHistoryItem[];
+
+        const currentMessages = this.allMessagesSubject.getValue();
+        this.allMessagesSubject.next([...newMessages, ...currentMessages]);
+
+         const areNewMessagesBlank = newMessages.length === 0;
+         this.newMessagesBlankSubject.next(areNewMessagesBlank);
       });
   }
 

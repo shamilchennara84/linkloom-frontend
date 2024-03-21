@@ -126,7 +126,10 @@ export class UserService {
     return this.http.get<IApiRes<IUserRes[] | null>>(`user/followerUsersList/${userId}`);
   }
 
-  getFollowingUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> { 
+  getFollowingUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
     return this.http.get<IApiRes<IUserRes[] | null>>(`user/followingUsersList/${userId}`);
+  }
+  deleteAccount(): Observable<IApiRes<IUserRes| null>> {
+    return this.http.delete<IApiRes<IUserRes | null>>(`user/`);
   }
 }
