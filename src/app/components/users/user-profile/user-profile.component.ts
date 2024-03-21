@@ -24,12 +24,12 @@ import { FollowerListComponent } from '../follower-list/follower-list.component'
 })
 export class UserProfileComponent implements OnInit {
   imgUrl: string = `${environment.backendUrl}images/`;
+  placeholder = 'assets/placeholder/profile.png';
   faCheck = faCheck;
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserRes | null>;
   userPosts$!: Observable<IPostRes[] | null>;
   userSavedPosts$!: Observable<ITaggedPost[] | null>;
-  placeholder = 'assets/placeholder/profile.png';
   profileImg: string = '';
   userId: string | undefined = undefined;
   userPostsCount!: number;
@@ -88,10 +88,10 @@ export class UserProfileComponent implements OnInit {
 
   openFollowerListModal() {
     const dialogRef = this.dialog.open(FollowerListComponent, {
-      width: '30%',
-      height: '40%',
+      width: '35%',
+      height: '45%',
       data: {
-        user: this.user,
+        userId: this.user?._id,
       },
     });
 

@@ -9,6 +9,7 @@ import {
   IUserChatSearch,
   IUserPerMonth,
   IUserPerYear,
+  IUserRes,
   IUserUpdate,
   IUsersAndCount,
 } from '../models/interfaces/users';
@@ -106,7 +107,8 @@ export class UserService {
   }
 
   followStatus(userId: string): Observable<IApiRes<IFollowStatus | null>> {
-    return this.http.get<IApiRes<IFollowStatus | null>>(`user/follow/${userId}`, {});
+    const cacheBuster = new Date().getTime();
+    return this.http.get<IApiRes<IFollowStatus | null>>(`user/follow/${userId}?${cacheBuster}`, {});
   }
 
   followRequest(userId: string, statusString: string): Observable<IApiRes<IFollowCountRes | null>> {
@@ -119,5 +121,8 @@ export class UserService {
 
   searchUser(query: string): Observable<IApiRes<IUserSearchItem[] | null>> {
     return this.http.get<IApiRes<IUserSearchItem[] | null>>(`user/userSearch?query=${query}`);
+  }
+  getFollowerUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
+    return this.http.get<IApiRes<IUserRes[] | null>>(`user/followerUsersList/${userId}`);
   }
 }
