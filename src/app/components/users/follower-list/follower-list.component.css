@@ -1,0 +1,23 @@
+.scrolling-container { 
+ max-height: 250px; 
+ overflow-y: auto;
+ overscroll-behavior: contain;
+}
+
+/* Custom scrollbar styles */
+.scrolling-container::-webkit-scrollbar {
+ width: 10px;
+}
+
+.scrolling-container::-webkit-scrollbar-track {
+ background: #f1f1f1; /* Use Tailwind's bg-gray-200 for example */
+}
+
+.scrolling-container::-webkit-scrollbar-thumb {
+ background: #292727; /* Use Tailwind's bg-gray-500 for example */
+ border-radius: 5px; /* Use Tailwind's rounded-md for example */
+}
+
+.scrolling-container::-webkit-scrollbar-thumb:hover {
+ background: #555; /* Use Tailwind's bg-gray-700 for example */
+}

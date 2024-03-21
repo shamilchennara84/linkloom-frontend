@@ -125,4 +125,8 @@ export class UserService {
   getFollowerUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
     return this.http.get<IApiRes<IUserRes[] | null>>(`user/followerUsersList/${userId}`);
   }
+
+  getFollowingUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> { 
+    return this.http.get<IApiRes<IUserRes[] | null>>(`user/followingUsersList/${userId}`);
+  }
 }

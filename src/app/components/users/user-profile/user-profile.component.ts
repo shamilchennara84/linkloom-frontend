@@ -14,6 +14,7 @@ import { UserService } from '../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfilePostComponent } from '../../post/profile-post/profile-post.component';
 import { FollowerListComponent } from '../follower-list/follower-list.component';
+import { FollowingListComponent } from '../following-list/following-list.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -88,6 +89,28 @@ export class UserProfileComponent implements OnInit {
 
   openFollowerListModal() {
     const dialogRef = this.dialog.open(FollowerListComponent, {
+      width: '35%',
+      height: '45%',
+      data: {
+        userId: this.user?._id,
+      },
+    });
+
+    const dialogComponentInstance = dialogRef.componentInstance;
+
+    dialogComponentInstance.closeModal.subscribe(() => {
+      dialogRef.close();
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  
+
+  openFollowingListModal() {
+     const dialogRef = this.dialog.open(FollowingListComponent, {
       width: '35%',
       height: '45%',
       data: {
