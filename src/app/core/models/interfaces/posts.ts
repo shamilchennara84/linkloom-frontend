@@ -23,9 +23,10 @@ export interface IPostUserRes extends IPostRes {
   user: IUserRes[];
   likes: ILikeRes[];
   likeCount: number;
-  commentCount:number;
+  commentCount: number;
   likedByCurrentUser: boolean;
-  taggedByCurrentUser:boolean
+  taggedByCurrentUser: boolean;
+  reportedByCurrentUser: boolean;
 }
 
 export interface ILikeRes {

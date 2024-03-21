@@ -6,6 +6,7 @@ import { IConversation, IConversationListItem } from './conversation';
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from './followers';
 import { INotificationRes, INotificationWithUser } from './notification';
 import { ILikeCountRes, IPostPerMonth, IPostUserRes, ITagRes } from './posts';
+import { IReportRes } from './report';
 import { IUserChatSearch, IUserPerMonth, IUserPerYear, IUserRes, IUsersAndCount } from './users';
 
 export interface ICoords {
@@ -44,6 +45,7 @@ export type AllResTypes =
   | ITagRes
   | INotificationWithUser[]
   | INotificationRes
+  | IReportRes
   | null;
 
 export interface IApiRes<T extends AllResTypes> {

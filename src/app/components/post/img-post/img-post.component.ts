@@ -5,6 +5,8 @@ import { PostCommentsComponent } from '../post-comments/post-comments.component'
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportModalComponent } from '../../users/report-modal/report-modal.component';
 
 @Component({
   selector: 'app-img-post',
@@ -27,10 +29,11 @@ export class ImgPostComponent implements OnInit {
   @Input() liked: boolean = false;
   @Input() tagged: boolean = false;
   @Input() userComments!: number;
+  @Input() reported!: boolean;
   commentModal: boolean = false;
   profileImg!: string;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private dialog: MatDialog) {}
   ngOnInit(): void {
     // console.log('post image');
     this.profileImg = this.userImageUrl ? this.imgUrl + this.userImageUrl : this.userPlaceholderImageUrl;
@@ -94,12 +97,32 @@ export class ImgPostComponent implements OnInit {
       }
     }
   }
+  toggleReportHandler($event: Event) {
+    this.reported = !this.reported;
+    if (this.userId && this.postUrl) {
+      if (this.reported) {
+        this.openReportDialog();
+      }
+    }
+  }
+  openReportDialog() {
+    const dialogRef = this.dialog.open(ReportModalComponent, {
+      height: '30%',
+      width: '30%',
+      data: { postId: this.postId,userId: this.userId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        console.log("reported");
+    });
+  }
+
   toggleCommentModal(event: Event) {
     this.commentModal = !this.commentModal;
   }
 
-  userCommentUpdate(commentCount:number) {
+  userCommentUpdate(commentCount: number) {
     this.userComments = commentCount;
-    console.log("comment updated",this.userComments);
+    console.log('comment updated', this.userComments);
   }
 }

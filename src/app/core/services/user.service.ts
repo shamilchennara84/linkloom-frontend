@@ -18,6 +18,7 @@ import { IApiPostRes, IApiSavedPost, ILikeCountRes, IPostPerMonth, IPostPerYear,
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 
 import { IAdminCardData } from '../models/interfaces/admin';
+import { IReportRes } from '../models/interfaces/report';
 
 @Injectable({
   providedIn: 'root',
@@ -129,7 +130,15 @@ export class UserService {
   getFollowingUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
     return this.http.get<IApiRes<IUserRes[] | null>>(`user/followingUsersList/${userId}`);
   }
-  deleteAccount(): Observable<IApiRes<IUserRes| null>> {
+  deleteAccount(): Observable<IApiRes<IUserRes | null>> {
     return this.http.delete<IApiRes<IUserRes | null>>(`user/`);
+  }
+  postReport(userId: string, postId: string, reportReason: string): Observable<IApiRes<IReportRes | null>> {
+    const body = {
+      userId: userId,
+      postId: postId,
+      reason: reportReason,
+    };
+    return this.http.post<IApiRes<IReportRes | null>>(`user/report`, body);
   }
 }

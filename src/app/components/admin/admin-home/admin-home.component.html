@@ -8,7 +8,7 @@
   <div class="flex" *ngIf="adminCardData$ | async as adminCardData">
 <app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="usersSVG" [title]="'Active Members'" [number]="adminCardData.ActiveUser"></app-report-card>
 <app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="postSVG" [title]="'Posts Published'" [number]="adminCardData.Posts"></app-report-card>
-<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0 hover:scale-105" [svgPath]="reportsSVG" [title]="'Reported Incidents'" [number]="12768"></app-report-card>
+<app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0 hover:scale-105" [svgPath]="reportsSVG" [title]="'Reported Incidents'" [number]="adminCardData.Reports"></app-report-card>
 <app-report-card class="flex-grow w-full sm:w-64 flex-shrink-0  hover:scale-105" [svgPath]="deleteUserSVG" [title]="'Deleted Accounts'" [number]="adminCardData.DeletedUser"></app-report-card>
 
   </div>
