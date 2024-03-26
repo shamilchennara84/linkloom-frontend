@@ -55,5 +55,10 @@ export class AdminSidenavComponent {
       label: 'Users',
       route: '/admin/users',
     },
+    {
+      icon: 'report',
+      label: 'Post Reports',
+      route: '/admin/postReports',
+    },
   ]);
 }

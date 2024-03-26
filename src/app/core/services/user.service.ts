@@ -14,11 +14,20 @@ import {
   IUsersAndCount,
 } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
-import { IApiPostRes, IApiSavedPost, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes, ITagRes } from '../models/interfaces/posts';
+import {
+  IApiPostRes,
+  IApiSavedPost,
+  ILikeCountRes,
+  IPostPerMonth,
+  IPostPerYear,
+  IPostRes,
+  IPostUserRes,
+  ITagRes,
+} from '../models/interfaces/posts';
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 
 import { IAdminCardData } from '../models/interfaces/admin';
-import { IReportRes } from '../models/interfaces/report';
+import { IReportRes, IReportsAndCount } from '../models/interfaces/report';
 
 @Injectable({
   providedIn: 'root',
@@ -33,9 +42,18 @@ export class UserService {
       `admin/users?page=${page}&limit=${limit}&searchQuery=${searchQuery}`
     );
   }
+  getAllPostReports(page: number, limit: number, searchQuery: string): Observable<IApiRes<IReportsAndCount | null>> {
+    return this.http.get<IApiRes<IReportsAndCount | null>>(
+      `admin/reports?page=${page}&limit=${limit}&searchQuery=${searchQuery}`
+    );
+  }
 
   blockUser(userId: string): Observable<IApiUserRes> {
     return this.http.patch<IApiUserRes>(`admin/users/block/${userId}`, {});
+  }
+
+  ResolvePostReport(reportId: string):Observable<IApiRes<IPostRes>> {
+    return this.http.patch<IApiRes<IPostRes>>(`admin/reports/resolve/${reportId}`, {});
   }
 
   getBlockedUsers(): Observable<IApiUsersRes> {

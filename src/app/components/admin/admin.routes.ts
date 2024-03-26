@@ -30,6 +30,11 @@ export default [
         loadComponent: () => import('./admin-users/admin-users.component').then((m) => m.AdminUsersComponent),
         
       },
+      {
+        path: 'postReports',
+        loadComponent: () => import('./admin-postreports/admin-postreports.component').then((m) => m.AdminPostreportsComponent),
+        
+      },
       // Add more routes as needed
     ],
   },
