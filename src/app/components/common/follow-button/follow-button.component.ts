@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { FollowingStatus } from '../../../core/models/enums/follow';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
 })
 export class FollowButtonComponent implements OnInit {
   @Input() userId!: string;
-  @Input() followerCount : number | undefined;
+  @Input() followerCount: number | undefined;
   @Output() followerCountChange = new EventEmitter<number>();
   userProfile$!: Observable<IUserRes | null>;
   followingStatus$!: Observable<FollowingStatus | null>;
@@ -26,12 +26,13 @@ export class FollowButtonComponent implements OnInit {
   statusString: string = 'Follow';
   currentUserId: string | undefined;
   currentUserUsername!: string | undefined;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private userService: UserService, private socketService: SocketService, private store: Store) {}
 
   ngOnInit() {
     this.currentUserProfile$ = this.store.pipe(select(selectUserDetails));
-    this.currentUserProfile$.subscribe((userProfile) => {
+    this.currentUserProfile$.pipe(takeUntil(this.unsubscribe$)).subscribe((userProfile) => {
       this.currentUserId = userProfile?._id;
       this.currentUserUsername = userProfile?.username;
     });
@@ -40,7 +41,7 @@ export class FollowButtonComponent implements OnInit {
       .followStatus(this.userId)
       .pipe(map((response) => (response && response.data ? response.data.status : null)));
 
-    this.followingStatus$.subscribe((status) => {
+    this.followingStatus$.pipe(takeUntil(this.unsubscribe$)).subscribe((status) => {
       this.statusString = status ? status.toString() : 'Follow';
       console.log(this.statusString);
     });
@@ -50,27 +51,29 @@ export class FollowButtonComponent implements OnInit {
     {
       this.userService.followRequest(this.userId, this.statusString).subscribe((response) => {
         if (response && response.data) {
-           if (this.statusString === 'Request') {
-             this.socketService.sendNotification({
-               type: NotificationType.FollowRequest,
-               message: 'You have a new follow request from',
-               timestamp: new Date(),
-               userId: this.userId,
-               relatedUserId: this.currentUserId,
-               isRead:false
-             });
-           }
+          if (this.statusString === 'Request') {
+            this.socketService.sendNotification({
+              type: NotificationType.FollowRequest,
+              message: 'You have a new follow request from',
+              timestamp: new Date(),
+              userId: this.userId,
+              relatedUserId: this.currentUserId,
+              isRead: false,
+            });
+          }
           this.statusString = response.data.status ? response.data.status.toString() : 'Follow';
-   
+
           this.followerCount = response.data.count;
           if (this.followerCount !== undefined) {
             this.followerCountChange.emit(this.followerCount);
           }
-          
-          
-         
         }
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

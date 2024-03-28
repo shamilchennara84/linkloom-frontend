@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, computed, effect, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, computed, effect, inject, signal } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { filter } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { CropperDialogueComponent, type CropperDialogueResult } from '../cropper-dialogue/cropper-dialogue.component';
 
 @Component({
@@ -10,9 +10,8 @@ import { CropperDialogueComponent, type CropperDialogueResult } from '../cropper
   templateUrl: './profile-dp.component.html',
   styleUrl: './profile-dp.component.css',
 })
-export class ProfileDpComponent {
+export class ProfileDpComponent implements OnDestroy{
   imageWidth = signal(0);
-
   @Input() set width(val: number) {
     this.imageWidth.set(val);
   }
@@ -26,6 +25,23 @@ export class ProfileDpComponent {
 
   croppedImage = signal<CropperDialogueResult | undefined>(undefined);
   placeholder = computed(() => 'assets/placeholder/profile.png');
+
+  private destroy$ = new Subject<void>();
+
+  constructor() {
+    effect(() => {
+      if (this.croppedImage() !== undefined) {
+        this.imageReady.emit(this.croppedImage()?.blob);
+      }
+    });
+  }
+
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   imageSource(): string {
     return this.currDp ? this.currDp : this.placeholder();
@@ -44,19 +60,14 @@ export class ProfileDpComponent {
 
       dialogRef
         .afterClosed()
-        .pipe(filter((result) => !!result))
+        .pipe(
+          filter((result) => !!result),
+          takeUntil(this.destroy$) // Unsubscribe when the component is destroyed
+        )
         .subscribe((result) => {
           this.croppedImage.set(result);
         });
     }
-  }
-
-  constructor() {
-    effect(() => {
-      if (this.croppedImage() !== undefined) {
-        this.imageReady.emit(this.croppedImage()?.blob);
-      }
-    });
   }
 
   deleteProfilePic(): void {

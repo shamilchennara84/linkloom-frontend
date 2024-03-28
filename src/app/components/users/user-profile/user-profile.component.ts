@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserLayoutComponent } from '../user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCheck, faCertificate } from '@fortawesome/free-solid-svg-icons';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -25,7 +25,7 @@ import { deleteUserFromStore } from '../../../core/states/users/user.actions';
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css',
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit,OnDestroy {
   imgUrl: string = `${environment.backendUrl}images/`;
   placeholder = 'assets/placeholder/profile.png';
   faCheck = faCheck;
@@ -40,6 +40,7 @@ export class UserProfileComponent implements OnInit {
   followingCount!: number;
   user!: IUserRes | null;
   activeTab: string = 'post';
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private store: Store,
@@ -50,7 +51,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
-    this.userProfile$.subscribe((userProfile) => {
+    this.userProfile$.pipe(takeUntil(this.unsubscribe$)).subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
       this.user = userProfile;
@@ -58,19 +59,28 @@ export class UserProfileComponent implements OnInit {
     });
 
     if (this.userId) {
-      this.userService.getUserPosts(this.userId).subscribe((response) => {
-        this.userPosts$ = of(response.data);
-      });
-      this.userService.getUserSavedPosts(this.userId).subscribe((response) => {
-        console.log(response, 'user save post recieved');
-        this.userSavedPosts$ = of(response.data);
-      });
+      this.userService
+        .getUserPosts(this.userId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((response) => {
+          this.userPosts$ = of(response.data);
+        });
+      this.userService
+        .getUserSavedPosts(this.userId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((response) => {
+          console.log(response, 'user save post recieved');
+          this.userSavedPosts$ = of(response.data);
+        });
 
-      this.userService.getUserDetails(this.userId).subscribe((response) => {
-        this.userPostsCount = response.data.postsCount;
-        this.followersCount = response.data.followersCount;
-        this.followingCount = response.data.followingCount;
-      });
+      this.userService
+        .getUserDetails(this.userId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((response) => {
+          this.userPostsCount = response.data.postsCount;
+          this.followersCount = response.data.followersCount;
+          this.followingCount = response.data.followingCount;
+        });
     }
   }
 
@@ -137,14 +147,14 @@ export class UserProfileComponent implements OnInit {
   setActiveTab(tab: string): void {
     this.activeTab = tab;
   }
-  
+
   onLogout(): void {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userRefreshToken');
     this.store.dispatch(deleteUserFromStore());
     void this.router.navigate(['/user/login']);
   }
-  
+
   openDeleteAccountModal() {
     Swal.fire({
       title: 'Are you sure?',
@@ -158,14 +168,14 @@ export class UserProfileComponent implements OnInit {
       if (result.isConfirmed) {
         this.userService.deleteAccount().subscribe({
           next: () => {
-           Swal.fire({
-             title: 'Account Deleted',
-             text: 'Your account has been deleted. If you need to recover your account, please contact the admin.',
-             icon: 'success',
-             confirmButtonText: 'OK',
-           }).then(() => {
-             this.onLogout();
-           });
+            Swal.fire({
+              title: 'Account Deleted',
+              text: 'Your account has been deleted. If you need to recover your account, please contact the admin.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              this.onLogout();
+            });
           },
           error: (error) => {
             console.error('Error deleting account:', error);
@@ -176,4 +186,8 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

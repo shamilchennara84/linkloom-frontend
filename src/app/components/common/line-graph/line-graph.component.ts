@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
 import { UserService } from '../../../core/services/user.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { IApiRes } from '../../../core/models/interfaces/common';
 import { IUserPerMonth, IUserPerYear } from '../../../core/models/interfaces/users';
 
@@ -12,9 +12,10 @@ import { IUserPerMonth, IUserPerYear } from '../../../core/models/interfaces/use
   templateUrl: './line-graph.component.html',
   styleUrl: './line-graph.component.css',
 })
-export class LineGraphComponent {
+export class LineGraphComponent implements OnInit, OnDestroy {
   chart!: Chart;
   showYearlyData = false;
+  private destroy$ = new Subject<void>();
 
   constructor(private userService: UserService) {} // Inject the service to fetch user data
 
@@ -27,19 +28,27 @@ export class LineGraphComponent {
       : (this.userService.getNewActiveUsersPerMonth() as Observable<IApiRes<IUserPerMonth[]>>);
 
     if (this.showYearlyData) {
-      (dataFetcher as Observable<IApiRes<IUserPerYear[] | null>>).subscribe(
-        (response: IApiRes<IUserPerYear[] | null>) => {
-          if (response.data) {
-            const chartData = response.data.map((item) => [Date.parse(item.year), item.count]) as [number, number][];
-            this.updateChart(chartData);
-          }
-        }
-      );
+            (dataFetcher as Observable<IApiRes<IUserPerYear[] | null>>)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((response: IApiRes<IUserPerYear[] | null>) => {
+                if (response.data) {
+                  const chartData = response.data.map((item) => [Date.parse(item.year), item.count]) as [
+                    number,
+                    number
+                  ][];
+                  this.updateChart(chartData);
+                }
+              });
     } else {
-      (dataFetcher as Observable<IApiRes<IUserPerMonth[]>>).subscribe((response: IApiRes<IUserPerMonth[]>) => {
-        const chartData = response.data.map((item) => [Date.parse(item.month), item.count]) as [number, number][];
-        this.updateChart(chartData);
-      });
+            (dataFetcher as Observable<IApiRes<IUserPerMonth[]>>)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((response: IApiRes<IUserPerMonth[]>) => {
+                const chartData = response.data.map((item) => [Date.parse(item.month), item.count]) as [
+                  number,
+                  number
+                ][];
+                this.updateChart(chartData);
+              });
     }
   }
 
@@ -102,5 +111,10 @@ export class LineGraphComponent {
   toggleDataView() {
     this.showYearlyData = !this.showYearlyData;
     this.loadData();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

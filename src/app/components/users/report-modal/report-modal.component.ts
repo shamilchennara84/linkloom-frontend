@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
 import { UserService } from '../../../core/services/user.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-report-modal',
@@ -12,11 +13,11 @@ import { UserService } from '../../../core/services/user.service';
   templateUrl: './report-modal.component.html',
   styleUrl: './report-modal.component.css',
 })
-export class ReportModalComponent implements OnInit {
-  @Input() userId!: string; // Add this line
-  @Input() postId!: string; // Add this line
-
+export class ReportModalComponent implements OnInit,OnDestroy {
+  @Input() userId!: string; 
+  @Input() postId!: string; 
   reportReason = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserService,
@@ -30,13 +31,22 @@ export class ReportModalComponent implements OnInit {
   }
 
   submitReport() {
-    this.userService.postReport(this.userId, this.postId, this.reportReason).subscribe(
-      (response) => {
-        this.dialogRef.close();
-      },
-      (error) => {
-        console.error('Error submitting report:', error);
-      }
-    );
+    this.userService
+      .postReport(this.userId, this.postId, this.reportReason)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          console.log('Report submitted successfully:', response);
+          this.dialogRef.close();
+        },
+        error: (error) => {
+          console.error('Error submitting report:', error);
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

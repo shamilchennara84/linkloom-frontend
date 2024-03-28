@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LogoComponent } from '../../../shared/reusableComponents/logo/logo.component';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { saveUserOnStore } from '../../../core/states/users/user.actions';
 import { PasswordValidationComponent } from '../../common/password-validation/password-validation.component';
 import Swal from 'sweetalert2';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-login',
@@ -20,9 +21,10 @@ import Swal from 'sweetalert2';
   styleUrl: './user-login.component.css',
   imports: [LogoComponent, RouterLink, ReactiveFormsModule, EmailValidationComponent, PasswordValidationComponent],
 })
-export class UserLoginComponent {
+export class UserLoginComponent implements OnInit,OnDestroy {
   loginForm!: FormGroup;
   isSubmitted = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,17 +48,22 @@ export class UserLoginComponent {
     this.isSubmitted = true;
     if (!this.loginForm.invalid) {
       const user = this.loginForm.getRawValue();
-      this.http.post<IApiUserAuthRes>('user/login', user).subscribe({
-        next: (res: any) => {
-          localStorage.setItem('userAccessToken', res.accessToken);
-          localStorage.setItem('userRefreshToken', res.refreshToken);
-          if (res.data !== null) {
-            console.log('Dispatching saveUserOnStore action with payload:', { userDetails: res.data });
-            this.store.dispatch(saveUserOnStore({ userDetails: res.data }));
-          }
-          void this.router.navigate(['/user/home']);
-        },
-      });
+      this.http
+        .post<IApiUserAuthRes>('user/login', user)
+        .pipe(
+          takeUntil(this.destroy$) // Automatically unsubscribe when the component is destroyed
+        )
+        .subscribe({
+          next: (res: any) => {
+            localStorage.setItem('userAccessToken', res.accessToken);
+            localStorage.setItem('userRefreshToken', res.refreshToken);
+            if (res.data !== null) {
+              console.log('Dispatching saveUserOnStore action with payload:', { userDetails: res.data });
+              this.store.dispatch(saveUserOnStore({ userDetails: res.data }));
+            }
+            void this.router.navigate(['/user/home']);
+          },
+        });
     } else {
       console.log('error', this.loginForm.errors);
     }
@@ -69,5 +76,10 @@ export class UserLoginComponent {
       icon: 'info',
       confirmButtonText: 'OK',
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

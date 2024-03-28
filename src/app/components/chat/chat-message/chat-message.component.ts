@@ -27,7 +27,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   text = '';
   allMessages: IChatHistoryItem[] = [];
   secondUserDetails!: IUserProfileData;
-  placeholder = 'assets/placeholder/profile.png';
+  placeholder = '/assets/placeholder/profile.png';
 
   currentPage: number = 1;
   hasMoreMessages: boolean = true;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FollowRequestComponent } from '../../common/follow-request/follow-request.component';
 import { CommonModule } from '@angular/common';
 import { FollowRequestAction, INotificationWithUser } from '../../../core/models/interfaces/notification';
@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
   templateUrl: './notification-list.component.html',
   styleUrl: './notification-list.component.css',
 })
-export class NotificationListComponent implements OnInit {
+export class NotificationListComponent implements OnInit,OnDestroy {
   private allNotificationSubscription: Subscription | undefined;
   private notificationSubscription: Subscription | undefined;
   allNotification: INotificationWithUser[] = [];
@@ -44,8 +44,6 @@ export class NotificationListComponent implements OnInit {
 
     this.notificationSubscription = this.socketService.notifications$.subscribe({
       next: (notification: INotificationWithUser) => {
-        // console.log(this.allNotification);
-        // console.log(notification);
         this.allNotification.push(notification);
       },
     });

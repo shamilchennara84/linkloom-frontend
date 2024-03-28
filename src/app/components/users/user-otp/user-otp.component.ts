@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LogoComponent } from '../../../shared/reusableComponents/logo/logo.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { otpConcateValidator } from '../../../core/helpers/validation';
@@ -8,6 +8,7 @@ import { formatTime } from '../../../core/helpers/timer';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-otp',
@@ -16,13 +17,15 @@ import Swal from 'sweetalert2';
   templateUrl: './user-otp.component.html',
   styleUrl: './user-otp.component.css',
 })
-export class UserOtpComponent {
+export class UserOtpComponent implements OnInit,OnDestroy {
   otpForm!: FormGroup;
   isSubmitted: boolean = false;
   reminingTime = 0;
   formattedTime: string = '03:00';
   otpResendCount: number = 0;
   showOTPResend: boolean = true;
+
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
 
@@ -41,27 +44,29 @@ export class UserOtpComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.otpForm.valid) {
-      // Handle form submission logic here
       const concatenatedDigits =
         this.otpForm.value.digit1 + this.otpForm.value.digit2 + this.otpForm.value.digit3 + this.otpForm.value.digit4;
-          const otp = { otp: concatenatedDigits };
-      this.http.post('user/validateOTP', otp).subscribe({
-        next: (res: any) => {
-          if (res.error && res.error.message === 'maximum try for OTP exceeded') {
-            void this.router.navigate(['/user/signup']);
-          } else {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'User created successfully',
-              showConfirmButton: false,
-              timer: 1500,
-            }).then(() => {
-              void this.router.navigate(['/user/login']);
-            });
-          }
-        },
-      });
+      const otp = { otp: concatenatedDigits };
+      this.http
+        .post('user/validateOTP', otp)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (res: any) => {
+            if (res.error && res.error.message === 'maximum try for OTP exceeded') {
+              void this.router.navigate(['/user/signup']);
+            } else {
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'User created successfully',
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {
+                void this.router.navigate(['/user/login']);
+              });
+            }
+          },
+        });
     }
   }
 
@@ -75,5 +80,10 @@ export class UserOtpComponent {
       }
       this.formattedTime = formatTime(this.reminingTime);
     }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
