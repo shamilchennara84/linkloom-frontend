@@ -26,12 +26,12 @@ export class UserAddPostComponent implements OnInit {
   imageFile: Blob | null = null;
   userDetails$!: Observable<IUserRes | null>;
   userId = ' ';
-  user!: IUserRes 
+  user!: IUserRes;
   placeValue!: PlaceSearchResult | null;
   postQuote!: string;
 
-  constructor(private store: Store,private http:HttpClient,private router:Router) {}
-  
+  constructor(private store: Store, private http: HttpClient, private router: Router) {}
+
   handlePlaceChange(event: PlaceSearchResult) {
     console.log('Place changed:', event);
     this.placeValue = event;
@@ -58,7 +58,7 @@ export class UserAddPostComponent implements OnInit {
     const formData = new FormData();
     let hasError = false;
     let errorMessages = [];
-    formData.append('userId',this.user?._id)
+    formData.append('userId', this.user?._id);
     // Check if imageFile is not null
     if (!this.imageFile) {
       errorMessages.push('Image is not selected!');
@@ -87,13 +87,10 @@ export class UserAddPostComponent implements OnInit {
     if (!hasError) {
       this.http.post('user/addPost', formData).subscribe({
         next: (res: any) => {
-          
           void this.router.navigate(['/user/profile']);
         },
-      });}
-    
-    
-    else {
+      });
+    } else {
       // Display all error messages
       Swal.fire({
         icon: 'error',
