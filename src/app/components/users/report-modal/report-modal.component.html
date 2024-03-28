@@ -1,0 +1,13 @@
+<div class="bg-black p-8">
+  <h2 class="text-white text-center mb-4">Report Post</h2>
+  <div class="flex justify-center">
+    <form class="w-full max-w-sm" (submit)="submitReport()">
+      <div class="mb-4">
+       <textarea class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" [(ngModel)]="reportReason" [ngModelOptions]="{standalone: true}" placeholder="Enter your reason here..."></textarea>
+      </div>
+      <div class="flex justify-center">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit Report</button>
+      </div>
+    </form>
+  </div>
+</div>

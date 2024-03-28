@@ -1,18 +1,18 @@
 <div class="container grid grid-cols-1  md:grid-cols-3  ">
 
-  <!-- First Part: app-user-home-profile -->
-  <div class=" sticky px-12 hidden md:block">
+
+  <div class=" sticky me-2 pe-4 hidden md:block border-r border-white">
     <app-user-home-profile></app-user-home-profile>
   </div>
 
-  <!-- Second Part: Scrollable img-post components -->
-  <div class="overflow-y-auto  hide-scrollbar ps-12">
+
+  <div class="overflow-y-auto  hide-scrollbar ps-12 ">
     <div *ngFor="let post of homePosts$ | async" class="bg-black p-1 flex">
-      <app-img-post [liked]="post.likedByCurrentUser" [userId]="userId" [postId]="post._id" [postUser]="post.userId" [userImageUrl]="post.user[0].profilePic" [userName]="post.user[0].username | titlecase" [userLocation]="post.location" [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"></app-img-post>
+      <app-img-post [liked]="post.likedByCurrentUser" [reported]="post.reportedByCurrentUser" [tagged]="post.taggedByCurrentUser" [userId]="userId" [postId]="post._id" [postUser]="post.userId" [userImageUrl]="post.user[0].profilePic" [userName]="post.user[0].username | titlecase" [userLocation]="post.location" [postUrl]="imgUrl + post.postURL" [userLikes]="post.likeCount"  [userComments]="post.commentCount"   ></app-img-post>
     </div>
   </div>
-  <div class="sticky">
-    hello
+  <div class=" hidden md:block sticky border-l border-white">
+   
   </div>
 
 </div>

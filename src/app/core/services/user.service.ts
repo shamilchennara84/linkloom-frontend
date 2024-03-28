@@ -9,14 +9,25 @@ import {
   IUserChatSearch,
   IUserPerMonth,
   IUserPerYear,
+  IUserRes,
   IUserUpdate,
   IUsersAndCount,
 } from '../models/interfaces/users';
 import { IApiRes } from '../models/interfaces/common';
-import { IApiPostRes, ILikeCountRes, IPostPerMonth, IPostPerYear, IPostUserRes } from '../models/interfaces/posts';
+import {
+  IApiPostRes,
+  IApiSavedPost,
+  ILikeCountRes,
+  IPostPerMonth,
+  IPostPerYear,
+  IPostRes,
+  IPostUserRes,
+  ITagRes,
+} from '../models/interfaces/posts';
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from '../models/interfaces/followers';
 
 import { IAdminCardData } from '../models/interfaces/admin';
+import { IReportRes, IReportsAndCount } from '../models/interfaces/report';
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +42,18 @@ export class UserService {
       `admin/users?page=${page}&limit=${limit}&searchQuery=${searchQuery}`
     );
   }
+  getAllPostReports(page: number, limit: number, searchQuery: string): Observable<IApiRes<IReportsAndCount | null>> {
+    return this.http.get<IApiRes<IReportsAndCount | null>>(
+      `admin/reports?page=${page}&limit=${limit}&searchQuery=${searchQuery}`
+    );
+  }
 
   blockUser(userId: string): Observable<IApiUserRes> {
     return this.http.patch<IApiUserRes>(`admin/users/block/${userId}`, {});
+  }
+
+  ResolvePostReport(reportId: string):Observable<IApiRes<IPostRes>> {
+    return this.http.patch<IApiRes<IPostRes>>(`admin/reports/resolve/${reportId}`, {});
   }
 
   getBlockedUsers(): Observable<IApiUsersRes> {
@@ -83,6 +103,11 @@ export class UserService {
   getUserPosts(userId: string): Observable<IApiPostRes> {
     return this.http.get<IApiPostRes>(`user/userPost/${userId}`);
   }
+
+  getUserSavedPosts(userId: string): Observable<IApiSavedPost> {
+    return this.http.get<IApiSavedPost>(`user/usersavedPost/${userId}`);
+  }
+
   getLatestPosts(userId: string): Observable<IApiRes<IPostUserRes[] | null>> {
     return this.http.get<IApiRes<IPostUserRes[] | null>>(`user/homePost/${userId}`);
   }
@@ -93,8 +118,16 @@ export class UserService {
     return this.http.get<IApiRes<ILikeCountRes | null>>(`user/Unlike/${userId}/${postId}`);
   }
 
+  tagPost(userId: string, postId: string): Observable<IApiRes<ITagRes | null>> {
+    return this.http.get<IApiRes<ITagRes | null>>(`user/tag/${userId}/${postId}`);
+  }
+  untagPost(userId: string, postId: string): Observable<IApiRes<ITagRes | null>> {
+    return this.http.get<IApiRes<ITagRes | null>>(`user/Untag/${userId}/${postId}`);
+  }
+
   followStatus(userId: string): Observable<IApiRes<IFollowStatus | null>> {
-    return this.http.get<IApiRes<IFollowStatus | null>>(`user/follow/${userId}`, {});
+    const cacheBuster = new Date().getTime();
+    return this.http.get<IApiRes<IFollowStatus | null>>(`user/follow/${userId}?${cacheBuster}`, {});
   }
 
   followRequest(userId: string, statusString: string): Observable<IApiRes<IFollowCountRes | null>> {
@@ -107,5 +140,23 @@ export class UserService {
 
   searchUser(query: string): Observable<IApiRes<IUserSearchItem[] | null>> {
     return this.http.get<IApiRes<IUserSearchItem[] | null>>(`user/userSearch?query=${query}`);
+  }
+  getFollowerUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
+    return this.http.get<IApiRes<IUserRes[] | null>>(`user/followerUsersList/${userId}`);
+  }
+
+  getFollowingUsersList(userId: string): Observable<IApiRes<IUserRes[] | null>> {
+    return this.http.get<IApiRes<IUserRes[] | null>>(`user/followingUsersList/${userId}`);
+  }
+  deleteAccount(): Observable<IApiRes<IUserRes | null>> {
+    return this.http.delete<IApiRes<IUserRes | null>>(`user/`);
+  }
+  postReport(userId: string, postId: string, reportReason: string): Observable<IApiRes<IReportRes | null>> {
+    const body = {
+      userId: userId,
+      postId: postId,
+      reason: reportReason,
+    };
+    return this.http.post<IApiRes<IReportRes | null>>(`user/report`, body);
   }
 }

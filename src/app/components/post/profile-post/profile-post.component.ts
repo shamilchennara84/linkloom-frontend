@@ -39,14 +39,14 @@ export class ProfilePostComponent {
 
   ngOnInit(): void {
     
-
-    };
     // this.postId = this.data.post._id;
     // this.postUrl = this.data.post.postURL;
-    
 
     // this.userLikes = this.post.likeCount
     // this.liked = this.post.likedByCurrentUser;
+    };
+    
+
 
  
   
@@ -80,6 +80,10 @@ export class ProfilePostComponent {
   close() {
     this.closeModal.emit();
   }
+
+  
+
+
   toggleCommentModal(event: Event) {
     this.commentModal = !this.commentModal;
   }

@@ -4,7 +4,9 @@ import { ICommentRes } from './comments';
 import { IConversation, IConversationListItem } from './conversation';
 
 import { IFollowCountRes, IFollowStatus, IUserSearchItem } from './followers';
-import { ILikeCountRes, IPostPerMonth, IPostUserRes } from './posts';
+import { INotificationRes, INotificationWithUser } from './notification';
+import { ILikeCountRes, IPostPerMonth, IPostRes, IPostUserRes, ITagRes } from './posts';
+import { IReportRes, IReportsAndCount } from './report';
 import { IUserChatSearch, IUserPerMonth, IUserPerYear, IUserRes, IUsersAndCount } from './users';
 
 export interface ICoords {
@@ -40,6 +42,12 @@ export type AllResTypes =
   | IUserChatSearch[]
   | IAdminCardData
   | IUserSearchItem[]
+  | ITagRes
+  | INotificationWithUser[]
+  | INotificationRes
+  | IReportRes
+  | IReportsAndCount
+  | IPostRes
   | null;
 
 export interface IApiRes<T extends AllResTypes> {

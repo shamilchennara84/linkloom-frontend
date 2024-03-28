@@ -23,4 +23,8 @@ export class CommentService {
       postId
     });
   }
+
+  deleteComment(commentId:string):Observable<any>{
+    return this.http.delete(`user/comments/${commentId} `)
+  }
 }

@@ -11,13 +11,14 @@ import { IApiUserAuthRes } from '../../../core/models/interfaces/users';
 import { Store } from '@ngrx/store';
 import { saveUserOnStore } from '../../../core/states/users/user.actions';
 import { PasswordValidationComponent } from '../../common/password-validation/password-validation.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-login',
   standalone: true,
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css',
-  imports: [LogoComponent, RouterLink, ReactiveFormsModule, EmailValidationComponent,PasswordValidationComponent],
+  imports: [LogoComponent, RouterLink, ReactiveFormsModule, EmailValidationComponent, PasswordValidationComponent],
 })
 export class UserLoginComponent {
   loginForm!: FormGroup;
@@ -59,5 +60,14 @@ export class UserLoginComponent {
     } else {
       console.log('error', this.loginForm.errors);
     }
+  }
+
+  showComingSoonAlert() {
+    Swal.fire({
+      title: 'Coming Soon!',
+      text: 'This service is currently under development and will be available soon.',
+      icon: 'info',
+      confirmButtonText: 'OK',
+    });
   }
 }

@@ -1,0 +1,55 @@
+<app-table-filter (search)="onSearchPostReports($event)" (pageChange)="onPageChange($event)" (itemsPerPageChange)="onItemsPerPageChange($event)" [totalItems]="postReportCount">
+  <div class="overflow-x-auto">
+    <table class="w-full p-6 text-xs text-left whitespace-nowrap bg-gray-800 text-white">
+
+      <thead>
+        <tr class="dark:bg-gray-700">
+          <th class="p-3">No</th>
+          <th class="p-3">Post ID</th>
+          <th class="p-3">Reporter ID</th>
+          <th class="p-3">Report Reason</th>
+          <th class="p-3">Report Date</th>
+          <!-- <th class="p-3">Post Status</th> -->
+          <th class="p-3">Action</th>
+        </tr>
+      </thead>
+      <tbody class="border-b dark:bg-gray-900 dark:border-gray-700">
+        <tr *ngFor="let report of postReports; index as i">
+          <td class="px-3 font-medium dark:text-gray-400">
+            {{ ((currPage -1) * itemsPerPage) + (i + 1) }}
+          </td>
+          <td class="px-3 py-4">
+            <p>
+              {{ report.contentId }}
+            </p>
+          </td>
+          <td class="px-3 py-4">
+            <p>
+              {{ report.reporterId }}
+            </p>
+          </td>
+          <td class="px-3 py-4">
+            <p>
+              {{ report.reason}}
+            </p>
+          </td>
+          <td class="px-3 py-4">
+            <p>
+              {{ report.createdAt| date:'short' }}
+            </p>
+          </td>
+          <!-- <td class="px-3 py-4">
+            <p>
+              {{ report.contentType }}
+            </p>
+          </td> -->
+          <td class="px-3 py-4">
+           <button type="button" title="Take Action" class="px-2 rounded-full dark:text-black focus:dark:bg-gray-700" [ngClass]="report.isResolved ? 'bg-green-400 focus:dark:bg-green-600' : 'bg-red-500 focus:dark:bg-red-600'" (click)="onAction(report._id)" [disabled]="report.isResolved">
+             {{ report.isResolved ? 'Resolved' : 'Resolve' }}
+           </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-table-filter>

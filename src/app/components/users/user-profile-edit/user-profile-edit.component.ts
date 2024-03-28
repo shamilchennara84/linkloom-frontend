@@ -54,6 +54,7 @@ export class UserProfileEditComponent implements OnInit {
         fullname: ['', [validateByTrimming(nameValidators)]],
         mobile: ['', [validateByTrimming(mobileValidators)]],
         dob: [''],
+        bio: [''],
         visibility: [false],
       },
       {
@@ -70,6 +71,9 @@ export class UserProfileEditComponent implements OnInit {
 
         if (this.user.dob) {
           this.profileForm.get('dob')?.patchValue(dateToString(new Date(this.user.dob)));
+        }
+        if (this.user.bio) {
+          this.profileForm.get('bio')?.setValue(this.user.bio != null ? String(this.user.bio) : '');
         }
         if (this.user.profilePic !== undefined) this.dpUrl = environment.backendUrl + `images/${this.user.profilePic}`;
 
@@ -89,6 +93,7 @@ export class UserProfileEditComponent implements OnInit {
         fullname: userData.fullname,
         mobile: userData.mobile,
         dob: userData.dob,
+        bio:userData.bio,
         visibility: userData.visibility ? Visibility.Private : Visibility.Public,
       };
       this.userService.updateUserDetails(this.userId, user).subscribe({

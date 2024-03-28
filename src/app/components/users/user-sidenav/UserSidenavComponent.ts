@@ -21,13 +21,13 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './user-sidenav.component.css',
 })
 export class UserSidenavComponent implements OnInit {
+  placeholder = 'assets/placeholder/profile.png';
   imgUrl: string = `${environment.backendUrl}images/`;
   sideNavCollapsed = signal(true);
   userDetails$!: Observable<IUserRes | null>;
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
-   placeholder = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200';
   profileImg: string = '';
 
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
@@ -35,10 +35,17 @@ export class UserSidenavComponent implements OnInit {
   constructor(private store: Store, private router: Router) {}
   ngOnInit(): void {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
-     this.userDetails$.subscribe((userProfile) => {
+    this.userDetails$.subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
-  })}
+    });
+  }
+  onLogout(): void {
+    localStorage.removeItem('userAccessToken');
+    localStorage.removeItem('userRefreshToken');
+    this.store.dispatch(deleteUserFromStore());
+    void this.router.navigate(['/user/login']);
+  }
 
   showConfirmDialog() {
     Swal.fire({
@@ -55,12 +62,6 @@ export class UserSidenavComponent implements OnInit {
     });
   }
 
-  onLogout(): void {
-    localStorage.removeItem('userAccessToken');
-    localStorage.removeItem('userRefreshToken');
-    this.store.dispatch(deleteUserFromStore());
-    void this.router.navigate(['/user/login']);
-  }
 
   menuItems = signal<MenuItem[]>([
     {

@@ -1,0 +1,15 @@
+<div class="rounded-lg w-full   relative">
+  <div class="flex items-center my-4">
+    <div class="w-1/5  flex items-center justify-center">
+      <img class="w-12 h-12 rounded-full border border-gray-100 shadow-sm" [src]="profileImg" alt="user image" />
+    </div>
+    <div class=" p-2">
+      <p class=" w-4/5 text-gray-400 whitespace-normal sm:whitespace-nowrap">{{notification.message}} <span class="text-gray-400 font-bold">{{notification.relatedUser.fullname | titlecase}}</span>
+        <fa-icon class="ms-6 text-[40px] text-slate-500 text-base hover:text-[#ED0B51]" [icon]="faWindowClose" (click)="onCloseClick()"></fa-icon>
+      </p>
+      <p class="text-gray-400 whitespace-normal sm:whitespace-nowrap">
+        {{ notification.timestamp | dateAgo }}
+      </p>
+    </div>
+  </div>
+</div>

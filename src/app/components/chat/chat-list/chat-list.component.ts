@@ -6,7 +6,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { UserService } from '../../../core/services/user.service';
 import { Observable, Subject, combineLatest, map, startWith, takeUntil, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { IUser, IUserChatSearch } from '../../../core/models/interfaces/users';
+import {  IUserChatSearch } from '../../../core/models/interfaces/users';
 import { ChatServiceService } from '../../../core/services/chat-service.service';
 import { IConversation, IConversationListItem } from '../../../core/models/interfaces/conversation';
 import { IApiRes } from '../../../core/models/interfaces/common';
@@ -60,7 +60,6 @@ export class ChatListComponent implements OnInit {
 
     this.filtered$ = combineLatest([this.alluser$, this.searchControl.valueChanges.pipe(startWith(''))]).pipe(
       map(([users, searchString]) => {
-        console.log('Filtering users:', users, 'with search string:', searchString);
         return (
           users?.filter((u) => u && u.fullname.toLowerCase().includes((searchString ?? '').toLowerCase())) || undefined
         );
@@ -78,18 +77,19 @@ export class ChatListComponent implements OnInit {
       if (index !== -1) {
         this.allConversationItems[index].unreadCount = 0;
       }
-      console.log('emmiting conversation', conversation);
+      console.log('emitting conversation', conversation);
       this.conversationEmitter.emit(conversation);
     });
   }
 
   selectConversation(conversation: IConversation) {
+    console.log('selected');
     const index = this.allConversationItems.findIndex((item) => item._id === conversation?._id);
 
     if (index !== -1) {
       this.allConversationItems[index].unreadCount = 0;
     }
-    console.log('emmiting conversation', conversation);
+    console.log('emitting conversation', conversation);
     this.conversationEmitter.emit(conversation);
   }
 

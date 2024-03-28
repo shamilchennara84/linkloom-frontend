@@ -1,0 +1,16 @@
+<div class='flex flex-col items-center h-full p-3 bg-[#111111] border'>
+  <h1 class="my-2 font-small sm:text-2xl">
+    Follower List
+  </h1>
+  <div class='user-list w-full max-w-lg mx-auto bg-[#111111] h-[80%] rounded-xl shadow-xl flex flex-col py-4'>
+    <div *ngFor="let user of users" class="user-list w-full max-w-lg mx-auto bg-[#111111]  rounded-xl shadow-xl flex flex-col p-1 ">
+      <div class="scrolling-container">
+        <app-follower-list-row [user]="user" [currentUserId]="currentUserId" (close)="close()"></app-follower-list-row>
+      </div>
+    </div>
+    <div *ngIf="users && users.length === 0" class="user-row flex flex-col items-center justify-between cursor-pointer p-4 duration-300 sm:flex-row sm:py-4 sm:px-8">
+      <h1 class="my-2 font-small sm:text-2xl"></h1>
+    </div>
+  </div>
+  <button class="absolute top-2 right-2 bg-[#ED0B51] text-white font-bold py-2 px-4 rounded" (click)="close()">Close</button>
+</div>

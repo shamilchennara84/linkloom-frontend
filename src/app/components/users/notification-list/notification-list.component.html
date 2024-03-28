@@ -1,0 +1,16 @@
+
+<div class="border rounded-lg" *ngFor="let notification of allNotification">
+  <app-follow-request *ngIf="notification.type === 'FOLLOW_REQUEST'" (action)="handleAction($event)" [notification]='notification'></app-follow-request>
+  <app-notification *ngIf="notification.type !== 'FOLLOW_REQUEST'" [notification]='notification' (closeClicked)="handleCloseClick($event)"></app-notification>
+</div>
+<div *ngIf="!isLoading && (!allNotification || allNotification.length === 0)" class=" h-full">
+    <div class=" text-slate-400 flex flex-col items-center justify-center h-[80vh] ml-auto p-0">
+      <fa-icon class="text-[40px]" [icon]="faBell"></fa-icon>
+      <p class="text-[26px]">No Notifications </p>
+    </div>
+</div>
+<div *ngIf="isLoading " class=" h-full">
+    <div class=" text-slate-400 flex flex-col items-center justify-center h-[80vh] ml-auto p-0">
+     <mat-progress-spinner *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
+    </div>
+</div>

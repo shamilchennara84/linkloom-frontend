@@ -19,6 +19,7 @@ import { MobileValidationComponent } from '../../common/mobile-validation/mobile
 import { RepeatPasswordValidationComponent } from '../../common/repeat-password-validation/repeat-password-validation.component';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-signup',
@@ -41,19 +42,21 @@ import { Router } from '@angular/router';
 export class UserSignupComponent {
   signupForm!: FormGroup;
   isSubmitted = false;
- 
 
-  constructor(private formBuilder: FormBuilder,private http:HttpClient,private router:Router,) {}
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    this.signupForm = this.formBuilder.group({
-      fullname: ['', [validateByTrimming(nameValidators)]],
-      username: ['', [validateByTrimming(userNameValidators)]],
-      email: ['', [validateByTrimming(emailValidators)]],
-      mobile: ['', [validateByTrimming(mobileValidators)]],
-      password: ['', [validateByTrimming(passwordValidators)]],
-      confirmPassword: [''],
-    },{validators:passwordMatchValidator});
+    this.signupForm = this.formBuilder.group(
+      {
+        fullname: ['', [validateByTrimming(nameValidators)]],
+        username: ['', [validateByTrimming(userNameValidators)]],
+        email: ['', [validateByTrimming(emailValidators)]],
+        mobile: ['', [validateByTrimming(mobileValidators)]],
+        password: ['', [validateByTrimming(passwordValidators)]],
+        confirmPassword: [''],
+      },
+      { validators: passwordMatchValidator }
+    );
   }
 
   get f(): Record<string, AbstractControl> {
@@ -64,17 +67,25 @@ export class UserSignupComponent {
     this.isSubmitted = true;
     // console.log(this.signupForm.invalid, this.signupForm.get('confirmPassword'), this.signupForm.get('fullname'));
     if (!this.signupForm.invalid) {
-      const user = this.signupForm.getRawValue()
+      const user = this.signupForm.getRawValue();
       console.log(user);
-      this.http.post('user/register',user).subscribe({
-        next:(res:any) =>{
-           localStorage.setItem('userAuthToken', res.token);
-           void this.router.navigate(['/user/otp']);
-        }
-      })
+      this.http.post('user/register', user).subscribe({
+        next: (res: any) => {
+          localStorage.setItem('userAuthToken', res.token);
+          void this.router.navigate(['/user/otp']);
+        },
+      });
+    } else {
+      console.log('error', this.signupForm.errors);
     }
-    else {
-      console.log('error', this.signupForm.errors)
-    }
+  }
+
+  showComingSoonAlert() {
+    Swal.fire({
+      title: 'Coming Soon!',
+      text: 'This service is currently under development and will be available soon.',
+      icon: 'info',
+      confirmButtonText: 'OK',
+    });
   }
 }

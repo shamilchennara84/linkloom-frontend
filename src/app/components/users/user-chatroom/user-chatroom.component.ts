@@ -6,7 +6,6 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { IUser, IUserRes } from '../../../core/models/interfaces/users';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -20,21 +19,23 @@ import { SocketService } from '../../../core/services/socket.service';
   templateUrl: './user-chatroom.component.html',
   styleUrl: './user-chatroom.component.css',
 })
-export class UserChatroomComponent implements OnInit,OnDestroy {
+export class UserChatroomComponent implements OnInit {
   faUsers = faUsers;
   user!:IUser
   secondUser!:string
   userProfile$!: Observable<IUserRes | null>;
   followedUsers$!: Observable<IUserRes[]>;
-  conversationId!: string | null;
+  conversationId: string | undefined;
+  defaultPage = 1
+  defaultLimit = 7
 
-  constructor(private userService: UserService, private store: Store,private socketService:SocketService) {}
+  constructor( private store: Store,private socketService:SocketService) {}
   
   ngOnInit(): void {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
     this.userProfile$.subscribe((userProfile) => {
       if (userProfile) {
-        this.socketService.setupSocketConnection(userProfile._id);
+        // this.socketService.setupSocketConnection(userProfile._id);
         this.user = userProfile
       }
     });
@@ -43,19 +44,17 @@ export class UserChatroomComponent implements OnInit,OnDestroy {
   
   handleConversation(conversation: IConversation | null) {
     if (conversation) {
-      this.conversationId = conversation._id;
       this.secondUser = conversation.members.filter((x)=>x!==this.user._id)[0]
-      this.socketService.getChatHistory(this.conversationId);
-       this.socketService.getSelectedUserName(this.secondUser);
-    } else {
-      this.conversationId = null;
-    }
+      this.socketService.getChatHistory(conversation._id, this.defaultPage, this.defaultLimit);
+      this.socketService.getSelectedUserName(this.secondUser);
+      this.conversationId = conversation._id;
+    } 
   }
 
 
 
-  ngOnDestroy(): void {
-    this.socketService.socketOff();
-    this.socketService.disconnect();
-  }
+  // ngOnDestroy(): void {
+  //   this.socketService.socketOff();
+  //   this.socketService.disconnect();
+  // }
 }

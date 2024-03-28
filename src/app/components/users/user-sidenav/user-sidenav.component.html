@@ -1,9 +1,9 @@
+
 <div *ngIf="userDetails$ | async as userDetails">
   <div class="sidenav-header text-center mt-4">
     <a routerLink="/user/profile" class="profile-image">
       <img class="rounded-full mx-auto object-cover mb-[10px]" [width]="profilePicSize()" [height]="profilePicSize()" [src]="profileImg" alt="profilepic">
     </a>
-
     <div class="header-text " [class.hide-header-text]="sideNavCollapsed()">
       <p class="font-bold ">
         {{ userDetails?.username}}
@@ -15,13 +15,11 @@
   </div>
 
   <mat-nav-list>
-    <a mat-list-item *ngFor="let item of menuItems()" class="text-left menu-item" [routerLink]='item.route' routerLinkActive="selected-menu-item" #rla="routerLinkActive" [activated]="rla.isActive">
-      <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+    <a mat-list-item *ngFor="let item of menuItems()" class="text-left menu-item" [routerLink]='item.route' routerLinkActive="selected-menu-item" #rla="routerLinkActive" [activated]="rla.isActive" >
+      <mat-icon matBadge="15" matBadgeColor="warn" matBadgeSize="small" matListItemIcon>{{item.icon}} </mat-icon>
+      <!-- <span *ngIf="item.label === 'Notification'" class="badge">1</span> -->
       <span matListItemTitle *ngIf="!sideNavCollapsed()">{{item.label}}</span>
-
     </a>
-
-
     <a mat-list-item class="text-left menu-item" (click)="showConfirmDialog()">
       <mat-icon matListItemIcon>exit_to_app</mat-icon>
       <span matListItemTitle *ngIf="!sideNavCollapsed()">Logout</span>
