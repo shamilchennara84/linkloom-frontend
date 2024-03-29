@@ -7,6 +7,7 @@
           <th class="p-3">No</th>
           <th class="p-3">Post ID</th>
           <th class="p-3">Reporter ID</th>
+          <th class="p-3">Reporter Username</th>
           <th class="p-3">Report Reason</th>
           <th class="p-3">Report Date</th>
           <!-- <th class="p-3">Post Status</th> -->
@@ -21,11 +22,18 @@
           <td class="px-3 py-4">
             <p>
               {{ report.contentId }}
-            </p>
+            <mat-icon class="ml-2 cursor-pointer" style="font-size: 16px;" (click)="viewPost(report.postImg)">visibility</mat-icon>
+               </p>
+            
           </td>
           <td class="px-3 py-4">
             <p>
               {{ report.reporterId }}
+            </p>
+          </td>
+          <td class="px-3 py-4">
+            <p>
+              {{ report.username }}
             </p>
           </td>
           <td class="px-3 py-4">
