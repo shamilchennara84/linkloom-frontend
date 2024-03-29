@@ -3,11 +3,14 @@ import {  IReportStatusRes } from '../../../core/models/interfaces/report';
 import { UserService } from '../../../core/services/user.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableFilterComponent } from '../../common/table-filter/table-filter.component';
+import { PostreportModalComponent } from '../../common/postreport-modal/postreport-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-admin-postreports',
   standalone: true,
-  imports: [DatePipe, CommonModule, TableFilterComponent],
+  imports: [DatePipe, CommonModule, TableFilterComponent, PostreportModalComponent,MatIconModule],
   templateUrl: './admin-postreports.component.html',
   styleUrl: './admin-postreports.component.css',
 })
@@ -17,9 +20,8 @@ export class AdminPostreportsComponent {
   itemsPerPage = 10;
   searchQuery: string = '';
   postReportCount = 0;
- 
 
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getPostReports();
@@ -36,28 +38,24 @@ export class AdminPostreportsComponent {
     });
   }
 
- onAction(reportId: string): void {
- 
- this.userService.ResolvePostReport(reportId).subscribe({
-    next: (res: any) => { 
-      
-        const reportToResolve = this.postReports.find(report => report._id === reportId);
+  onAction(reportId: string): void {
+    this.userService.ResolvePostReport(reportId).subscribe({
+      next: (res: any) => {
+        const reportToResolve = this.postReports.find((report) => report._id === reportId);
 
         if (reportToResolve) {
           const contentId = reportToResolve.contentId;
 
-          this.postReports = this.postReports.map(report => {
+          this.postReports = this.postReports.map((report) => {
             if (report.contentId === contentId) {
               return { ...report, isResolved: true };
             }
             return report;
           });
         }
-      }
-    })
- };
-
-  
+      },
+    });
+  }
 
   onSearchPostReports(searchQuery: string): void {
     this.searchQuery = searchQuery;
@@ -73,5 +71,11 @@ export class AdminPostreportsComponent {
     this.itemsPerPage = itemsPerPage;
     this.currPage = 1;
     this.getPostReports();
+  }
+
+  viewPost(imgUrl: string) {
+    this.dialog.open(PostreportModalComponent, {
+      data: { imgUrl: imgUrl },
+    });
   }
 }

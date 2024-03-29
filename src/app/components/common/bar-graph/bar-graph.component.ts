@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { IApiRes } from '../../../core/models/interfaces/common';
 import { UserService } from '../../../core/services/user.service';
 import { IPostPerMonth, IPostPerYear } from '../../../core/models/interfaces/posts';
@@ -12,9 +12,10 @@ import { IPostPerMonth, IPostPerYear } from '../../../core/models/interfaces/pos
   templateUrl: './bar-graph.component.html',
   styleUrl: './bar-graph.component.css',
 })
-export class BarGraphComponent implements OnInit {
+export class BarGraphComponent implements OnInit,OnDestroy {
   chart!: Chart;
   showYearlyData = false;
+  private destroy$ = new Subject<void>();
 
   ngOnInit() {
     this.loadData();
@@ -28,8 +29,9 @@ export class BarGraphComponent implements OnInit {
       : (this.userService.getPostsPerMonth() as Observable<IApiRes<IPostPerMonth[]>>);
 
     if (this.showYearlyData) {
-      (dataFetcher as Observable<IApiRes<IPostPerYear[] | null>>).subscribe(
-        (response: IApiRes<IPostPerYear[] | null>) => {
+      (dataFetcher as Observable<IApiRes<IPostPerYear[] | null>>)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: IApiRes<IPostPerYear[] | null>) => {
           if (response.data) {
             const chartData = response.data.map((item) => [Date.parse(item.year), item.count, 0, 0]) as [
               number,
@@ -40,18 +42,19 @@ export class BarGraphComponent implements OnInit {
             this.updateChart(chartData);
             console.log(chartData);
           }
-        }
-      );
+        });
     } else {
-      (dataFetcher as Observable<IApiRes<IPostPerMonth[]>>).subscribe((response: IApiRes<IPostPerMonth[]>) => {
-        const chartData = response.data.map((item) => [
-          Date.parse(item.monthYear),
-          item.count,
-          item.likes,
-          item.comments,
-        ]) as [number, number, number, number][];
-        this.updateChart(chartData);
-      });
+      (dataFetcher as Observable<IApiRes<IPostPerMonth[]>>)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: IApiRes<IPostPerMonth[]>) => {
+          const chartData = response.data.map((item) => [
+            Date.parse(item.monthYear),
+            item.count,
+            item.likes,
+            item.comments,
+          ]) as [number, number, number, number][];
+          this.updateChart(chartData);
+        });
     }
   }
 
@@ -135,5 +138,10 @@ export class BarGraphComponent implements OnInit {
         },
       },
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

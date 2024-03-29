@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PostControlComponent } from '../../post/post-control/post-control.component';
@@ -14,6 +14,7 @@ import { IUserRes } from '../../../core/models/interfaces/users';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-user-add-post',
@@ -22,13 +23,14 @@ import { Router } from '@angular/router';
   templateUrl: './user-add-post.component.html',
   styleUrl: './user-add-post.component.css',
 })
-export class UserAddPostComponent implements OnInit {
+export class UserAddPostComponent implements OnInit,OnDestroy {
   imageFile: Blob | null = null;
   userDetails$!: Observable<IUserRes | null>;
   userId = ' ';
   user!: IUserRes;
   placeValue!: PlaceSearchResult | null;
   postQuote!: string;
+  private userDetailsSubscription!: Subscription;
 
   constructor(private store: Store, private http: HttpClient, private router: Router) {}
 
@@ -41,7 +43,7 @@ export class UserAddPostComponent implements OnInit {
     this.postQuote = '';
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
 
-    this.userDetails$.subscribe((user) => {
+    this.userDetailsSubscription = this.userDetails$.subscribe((user) => {
       this.user = user ?? this.user;
       if (this.user !== null && this.user !== undefined) {
         this.userId = this.user._id;
@@ -98,5 +100,9 @@ export class UserAddPostComponent implements OnInit {
         html: errorMessages.join('<br/>'),
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.userDetailsSubscription.unsubscribe();
   }
 }

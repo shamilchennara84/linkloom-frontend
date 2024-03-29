@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FullnameValidationComponent } from '../../common/fullname-validation/fullname-validation.component';
 import { MobileValidationComponent } from '../../common/mobile-validation/mobile-validation.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { DobValidationComponent } from '../../common/dob-validation/dob-validation.component';
 import { ProfileDpComponent } from '../../common/profile-dp/profile-dp.component';
 import { Visibility } from '../../../core/models/enums/privacy';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -30,7 +31,7 @@ import { Visibility } from '../../../core/models/enums/privacy';
   templateUrl: './user-profile-edit.component.html',
   styleUrl: './user-profile-edit.component.css',
 })
-export class UserProfileEditComponent implements OnInit {
+export class UserProfileEditComponent implements OnInit,OnDestroy {
   userDetails$ = this.store.pipe(select(selectUserDetails));
   user: IUserRes | null = null;
   userId = '';
@@ -40,6 +41,7 @@ export class UserProfileEditComponent implements OnInit {
   selectedFile!: File;
   dpUrl = '';
   isPrivate = false;
+  private userDetailsSubscription: Subscription | null = null;
 
   constructor(
     private store: Store,
@@ -62,7 +64,7 @@ export class UserProfileEditComponent implements OnInit {
       }
     );
 
-    this.userDetails$.subscribe((user) => {
+    this.userDetailsSubscription = this.userDetails$.subscribe((user) => {
       this.user = user ?? this.user;
       if (this.user !== null && this.user !== undefined) {
         this.userId = this.user._id;
@@ -93,7 +95,7 @@ export class UserProfileEditComponent implements OnInit {
         fullname: userData.fullname,
         mobile: userData.mobile,
         dob: userData.dob,
-        bio:userData.bio,
+        bio: userData.bio,
         visibility: userData.visibility ? Visibility.Private : Visibility.Public,
       };
       this.userService.updateUserDetails(this.userId, user).subscribe({
@@ -143,6 +145,12 @@ export class UserProfileEditComponent implements OnInit {
       privacyControl.setValue(this.isPrivate);
     } else {
       console.warn('No control named "privacy" found in the form group.');
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.userDetailsSubscription) {
+      this.userDetailsSubscription.unsubscribe();
     }
   }
 }

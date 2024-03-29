@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, computed, signal } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MenuItem } from '../../../core/models/types/menuItems';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { Store, select } from '@ngrx/store';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
@@ -21,7 +21,7 @@ import { deleteUserFromStore } from '../../../core/states/users/user.actions';
   templateUrl: './user-sidenav.component.html',
   styleUrl: './user-sidenav.component.css',
 })
-export class UserSidenavComponent implements OnInit {
+export class UserSidenavComponent implements OnInit,OnDestroy {
   placeholder = 'assets/placeholder/profile.png';
   imgUrl: string = `${environment.backendUrl}images/`;
   sideNavCollapsed = signal(true);
@@ -30,15 +30,14 @@ export class UserSidenavComponent implements OnInit {
     this.sideNavCollapsed.set(val);
   }
   profileImg: string = '';
-
   profilePicSize = computed(() => (this.sideNavCollapsed() ? '32' : '100'));
-
+  private destroy$ = new Subject<void>();
 
   constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
     this.userDetails$ = this.store.pipe(select(selectUserDetails));
-    this.userDetails$.subscribe((userProfile) => {
+    this.userDetails$.pipe(takeUntil(this.destroy$)).subscribe((userProfile) => {
       this.profileImg =
         userProfile && userProfile.profilePic ? `${this.imgUrl}${userProfile.profilePic}` : this.placeholder;
     });
@@ -91,4 +90,9 @@ export class UserSidenavComponent implements OnInit {
       route: '/user/posts',
     },
   ]);
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

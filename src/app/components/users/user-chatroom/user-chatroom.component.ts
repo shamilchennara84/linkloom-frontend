@@ -4,7 +4,7 @@ import { ChatMessageComponent } from '../../chat/chat-message/chat-message.compo
 import { ChatListComponent } from '../../chat/chat-list/chat-list.component';
 import { selectUserDetails } from '../../../core/states/users/user.selector';
 import { IUser, IUserRes } from '../../../core/models/interfaces/users';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -19,42 +19,41 @@ import { SocketService } from '../../../core/services/socket.service';
   templateUrl: './user-chatroom.component.html',
   styleUrl: './user-chatroom.component.css',
 })
-export class UserChatroomComponent implements OnInit {
+export class UserChatroomComponent implements OnInit,OnDestroy {
   faUsers = faUsers;
-  user!:IUser
-  secondUser!:string
+  user!: IUser;
+  secondUser!: string;
   userProfile$!: Observable<IUserRes | null>;
   followedUsers$!: Observable<IUserRes[]>;
   conversationId: string | undefined;
-  defaultPage = 1
-  defaultLimit = 7
+  defaultPage = 1;
+  defaultLimit = 7;
+  private unsubscribe$ = new Subject<void>();
 
-  constructor( private store: Store,private socketService:SocketService) {}
-  
+  constructor(private store: Store, private socketService: SocketService) {}
+
   ngOnInit(): void {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
-    this.userProfile$.subscribe((userProfile) => {
+    this.userProfile$.pipe(takeUntil(this.unsubscribe$)).subscribe((userProfile) => {
       if (userProfile) {
         // this.socketService.setupSocketConnection(userProfile._id);
-        this.user = userProfile
+        this.user = userProfile;
       }
     });
     this.socketService.allConversationHistory();
   }
-  
+
   handleConversation(conversation: IConversation | null) {
     if (conversation) {
-      this.secondUser = conversation.members.filter((x)=>x!==this.user._id)[0]
+      this.secondUser = conversation.members.filter((x) => x !== this.user._id)[0];
       this.socketService.getChatHistory(conversation._id, this.defaultPage, this.defaultLimit);
       this.socketService.getSelectedUserName(this.secondUser);
       this.conversationId = conversation._id;
-    } 
+    }
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
-
-
-  // ngOnDestroy(): void {
-  //   this.socketService.socketOff();
-  //   this.socketService.disconnect();
-  // }
 }

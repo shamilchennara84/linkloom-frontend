@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -27,7 +27,7 @@ import { SocketService } from '../../../core/services/socket.service';
   templateUrl: './chat-list.component.html',
   styleUrl: './chat-list.component.css',
 })
-export class ChatListComponent implements OnInit {
+export class ChatListComponent implements OnInit,OnDestroy {
   searchControl = new FormControl('');
   alluser$!: Observable<IUserChatSearch[] | null>;
   filtered$!: Observable<IUserChatSearch[] | undefined>;

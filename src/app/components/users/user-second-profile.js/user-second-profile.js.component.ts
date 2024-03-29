@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { faCertificate, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../../environments/environment';
 import { Observable, Subject, map, switchMap, takeUntil, tap } from 'rxjs';
@@ -28,7 +28,7 @@ import { FollowingListComponent } from '../following-list/following-list.compone
   templateUrl: './user-second-profile.js.component.html',
   styleUrl: './user-second-profile.js.component.css',
 })
-export class UserSecondProfileJsComponent {
+export class UserSecondProfileJsComponent implements OnInit,OnDestroy{
   private destroy$ = new Subject<void>();
   imgUrl: string = `${environment.backendUrl}images/`;
   faCheck = faCheck;

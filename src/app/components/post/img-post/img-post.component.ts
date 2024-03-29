@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { PostCommentsComponent } from '../post-comments/post-comments.component';
@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportModalComponent } from '../../users/report-modal/report-modal.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-img-post',
@@ -15,7 +16,7 @@ import { ReportModalComponent } from '../../users/report-modal/report-modal.comp
   templateUrl: './img-post.component.html',
   styleUrl: './img-post.component.css',
 })
-export class ImgPostComponent implements OnInit {
+export class ImgPostComponent implements OnInit,OnDestroy{
   imgUrl: string = `${environment.backendUrl}images/`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   @Input() userName!: string;
@@ -33,6 +34,8 @@ export class ImgPostComponent implements OnInit {
   commentModal: boolean = false;
   profileImg!: string;
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(private userService: UserService, private dialog: MatDialog) {}
   ngOnInit(): void {
     // console.log('post image');
@@ -44,25 +47,18 @@ export class ImgPostComponent implements OnInit {
     event.stopPropagation();
     this.liked = !this.liked;
     if (this.userId && this.postUrl) {
-      if (this.liked) {
-        this.userService.likePost(this.userId, this.postId).subscribe({
-          next: (response) => {
-            this.userLikes = response.data?.count ?? this.userLikes;
-          },
-          error: (error) => {
-            console.error('Error liking post:', error);
-          },
-        });
-      } else {
-        this.userService.unlikePost(this.userId, this.postId).subscribe({
-          next: (response) => {
-            this.userLikes = response.data?.count ?? this.userLikes;
-          },
-          error: (error) => {
-            console.error('Error unliking post:', error);
-          },
-        });
-      }
+      const toggleLike$ = this.liked
+        ? this.userService.likePost(this.userId, this.postId)
+        : this.userService.unlikePost(this.userId, this.postId);
+
+      toggleLike$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (response) => {
+          this.userLikes = response.data?.count ?? this.userLikes;
+        },
+        error: (error) => {
+          console.error('Error toggling post:', error);
+        },
+      });
     }
   }
   toggleTagHandler(event: Event) {
@@ -109,12 +105,15 @@ export class ImgPostComponent implements OnInit {
     const dialogRef = this.dialog.open(ReportModalComponent, {
       height: '30%',
       width: '30%',
-      data: { postId: this.postId,userId: this.userId },
+      data: { postId: this.postId, userId: this.userId },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-        console.log("reported");
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((result) => {
+        console.log('reported');
+      });
   }
 
   toggleCommentModal(event: Event) {
@@ -124,5 +123,10 @@ export class ImgPostComponent implements OnInit {
   userCommentUpdate(commentCount: number) {
     this.userComments = commentCount;
     console.log('comment updated', this.userComments);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

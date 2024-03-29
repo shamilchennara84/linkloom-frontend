@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LogoComponent } from '../../../shared/reusableComponents/logo/logo.component';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import { RepeatPasswordValidationComponent } from '../../common/repeat-password-
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-signup',
@@ -39,9 +40,10 @@ import Swal from 'sweetalert2';
   templateUrl: './user-signup.component.html',
   styleUrl: './user-signup.component.css',
 })
-export class UserSignupComponent {
+export class UserSignupComponent implements OnInit,OnDestroy {
   signupForm!: FormGroup;
   isSubmitted = false;
+  private destroy$ = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
 
@@ -65,16 +67,17 @@ export class UserSignupComponent {
 
   onSubmit(): void {
     this.isSubmitted = true;
-    // console.log(this.signupForm.invalid, this.signupForm.get('confirmPassword'), this.signupForm.get('fullname'));
     if (!this.signupForm.invalid) {
       const user = this.signupForm.getRawValue();
-      console.log(user);
-      this.http.post('user/register', user).subscribe({
-        next: (res: any) => {
-          localStorage.setItem('userAuthToken', res.token);
-          void this.router.navigate(['/user/otp']);
-        },
-      });
+      this.http
+        .post('user/register', user)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: any) => {
+            localStorage.setItem('userAuthToken', res.token);
+            void this.router.navigate(['/user/otp']);
+          },
+        });
     } else {
       console.log('error', this.signupForm.errors);
     }
@@ -87,5 +90,10 @@ export class UserSignupComponent {
       icon: 'info',
       confirmButtonText: 'OK',
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

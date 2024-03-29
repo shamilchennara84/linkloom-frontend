@@ -1,11 +1,11 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { UserSidenavComponent } from '../user-sidenav/UserSidenavComponent';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IUserRes } from '../../../core/models/interfaces/users';
 import { LoaderComponent } from '../../common/loader/loader.component';
 import { LoaderService } from '../../../core/services/loader.service';
@@ -30,20 +30,20 @@ import { selectUserDetails } from '../../../core/states/users/user.selector';
   templateUrl: './user-layout.component.html',
   styleUrl: './user-layout.component.css',
 })
-export class UserLayoutComponent implements OnInit {
+export class UserLayoutComponent implements OnInit,OnDestroy {
   collapsed = signal(true);
   sidenavWidth = computed(() => (this.collapsed() ? '60px' : '250px'));
   userDetails$!: Observable<IUserRes | null>;
   showLoader$!: Observable<boolean>;
   userProfile$!: Observable<IUserRes | null>;
+  private userProfileSubscription!: Subscription;
 
   constructor(private loaderService: LoaderService, private store: Store, private socketService: SocketService) {}
   ngOnInit() {
     this.userProfile$ = this.store.pipe(select(selectUserDetails));
-    this.userProfile$.subscribe((userProfile) => {
+    this.userProfileSubscription = this.userProfile$.subscribe((userProfile) => {
       if (userProfile) {
         this.socketService.setupSocketConnection(userProfile._id);
-      
       }
     });
 
@@ -61,5 +61,11 @@ export class UserLayoutComponent implements OnInit {
     console.log('socket disconnected');
     this.socketService.socketOff();
     this.socketService.disconnect();
+
+     if (this.userProfileSubscription) {
+       this.userProfileSubscription.unsubscribe();
+     }
   }
+
+  
 }
