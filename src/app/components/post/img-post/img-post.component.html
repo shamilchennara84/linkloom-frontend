@@ -10,6 +10,9 @@
             {{ userName }}</span>
           <span class="text-xs block">
             {{ userLocation }}</span>
+          <span class="text-xs block">
+            {{ caption }}</span>
+          
         </div>
       </div>
       
@@ -25,11 +28,6 @@
       </label>
     </div>
     <img [src]="postUrl || userPlaceholderImageUrl" />
-        <div class="mt-2">
-          <span class="text-xs block">
-            {{ caption }}
-          </span>
-        </div>
     <div class="flex items-center justify-between mx-4 mt-3 mb-2">
       <div class="flex gap-5">
 
