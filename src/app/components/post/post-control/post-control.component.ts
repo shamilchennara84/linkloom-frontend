@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -17,7 +27,7 @@ import Swal from 'sweetalert2';
   templateUrl: './post-control.component.html',
   styleUrl: './post-control.component.css',
 })
-export class PostControlComponent implements OnInit, OnDestroy {
+export class PostControlComponent implements OnDestroy {
   imageWidth = signal(0);
   imageHeight = signal(0);
   croppedImage = signal<CropperDialogueResult | undefined>(undefined);
@@ -35,15 +45,15 @@ export class PostControlComponent implements OnInit, OnDestroy {
   @Input() set height(val: number) {
     this.imageHeight.set(val);
   }
-  constructor() {}
-
-  ngOnInit() {
+  constructor() {
     effect(() => {
       if (this.croppedImage()) {
         this.imageReady.emit(this.croppedImage()?.blob);
       }
     });
   }
+
+  ngOnInit() {}
 
   fileSelected(event: any) {
     const file = event.target.files[0];
