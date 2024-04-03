@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './postreport-modal.component.css',
 })
 export class PostreportModalComponent implements OnInit {
-  imgPath: string = `${environment.backendUrl}images/`;
+  imgPath: string = `${environment.backendUrl}images`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   postImageUrl!: string;
 

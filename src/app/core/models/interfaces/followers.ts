@@ -9,11 +9,12 @@ export interface IFollowStatus {
   status: FollowingStatus;
 }
 
-export interface IUserSearchItem{
-  _id:string,
-  username:string,
-  userfname:string,
-  profilePic:string
-  followers:number,
-  isFollowing:boolean
+export interface IUserSearchItem {
+  _id: string;
+  username: string;
+  userfname: string;
+  profilePic: string;
+  followers: number;
+  isFollowing: boolean;
+  mutualConnections: number;
 }

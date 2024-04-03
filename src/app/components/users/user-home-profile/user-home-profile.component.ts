@@ -13,8 +13,8 @@ import { UserService } from '../../../core/services/user.service';
   templateUrl: './user-home-profile.component.html',
   styleUrl: './user-home-profile.component.css',
 })
-export class UserHomeProfileComponent implements OnInit,OnDestroy {
-  imgUrl: string = `${environment.backendUrl}images/`;
+export class UserHomeProfileComponent implements OnInit, OnDestroy {
+  imgUrl: string = `${environment.backendUrl}images`;
   userProfile$!: Observable<IUserRes | null>;
 
   placeholder = 'assets/placeholder/profile.png';

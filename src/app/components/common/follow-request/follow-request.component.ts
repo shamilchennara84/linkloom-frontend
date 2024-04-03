@@ -18,7 +18,7 @@ import { SocketService } from '../../../core/services/socket.service';
 export class FollowRequestComponent implements OnInit {
   @Input() notification!: INotificationWithUser;
   @Output() action = new EventEmitter<FollowRequestAction>();
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   profileImg!: string;
   ngOnInit(): void {

@@ -16,8 +16,8 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './img-post.component.html',
   styleUrl: './img-post.component.css',
 })
-export class ImgPostComponent implements OnInit,OnDestroy{
-  imgUrl: string = `${environment.backendUrl}images/`;
+export class ImgPostComponent implements OnInit, OnDestroy {
+  imgUrl: string = `${environment.backendUrl}images`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   @Input() userName!: string;
   @Input() userLocation!: string;

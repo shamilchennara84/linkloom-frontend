@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatBlankComponent } from '../chat-blank/chat-blank.component';
 import { SocketService } from '../../../core/services/socket.service';
-import {  Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { IChatHistoryItem } from '../../../core/models/interfaces/chats';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -22,7 +22,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() secondUser!: string;
   @Input() user!: IUser;
 
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   profilePic: string = '';
   text = '';
   allMessages: IChatHistoryItem[] = [];
@@ -61,12 +61,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.profilePic = this.user && this.user.profilePic ? `${this.imgUrl}${this.user.profilePic}` : this.placeholder;
   }
 
-  ngAfterViewInit() {
-    
-  }
+  ngAfterViewInit() {}
   scrollToBottom(): void {
     try {
-      console.log("scrolling");
+      console.log('scrolling');
       this.chatSection.nativeElement.scrollTop = this.chatSection.nativeElement.scrollHeight;
     } catch (err) {}
   }

@@ -13,7 +13,6 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 import { deleteUserFromStore } from '../../../core/states/users/user.actions';
 
-
 @Component({
   selector: 'app-user-sidenav',
   standalone: true,
@@ -21,9 +20,9 @@ import { deleteUserFromStore } from '../../../core/states/users/user.actions';
   templateUrl: './user-sidenav.component.html',
   styleUrl: './user-sidenav.component.css',
 })
-export class UserSidenavComponent implements OnInit,OnDestroy {
+export class UserSidenavComponent implements OnInit, OnDestroy {
   placeholder = 'assets/placeholder/profile.png';
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   sideNavCollapsed = signal(true);
   userDetails$!: Observable<IUserRes | null>;
   @Input() set collapsed(val: boolean) {

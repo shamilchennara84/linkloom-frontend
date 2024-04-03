@@ -26,7 +26,7 @@ import { UserHomeProfileComponent } from '../user-home-profile/user-home-profile
   styleUrl: './user-search.component.css',
 })
 export class UserSearchComponent implements OnInit {
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   searchControl = new FormControl('');
   alluser$!: Observable<IUserSearchItem[] | null>;
   filtered$!: Observable<IUserSearchItem[] | null>;
@@ -51,5 +51,3 @@ export class UserSearchComponent implements OnInit {
     return user.profilePic ? `${this.imgUrl}${user.profilePic}` : this.placeholder;
   }
 }
-
-

@@ -28,9 +28,9 @@ import { FollowingListComponent } from '../following-list/following-list.compone
   templateUrl: './user-second-profile.js.component.html',
   styleUrl: './user-second-profile.js.component.css',
 })
-export class UserSecondProfileJsComponent implements OnInit,OnDestroy{
+export class UserSecondProfileJsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   faCheck = faCheck;
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserProfileData | null>;

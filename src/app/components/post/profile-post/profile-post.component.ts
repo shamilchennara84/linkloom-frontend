@@ -17,7 +17,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrl: './profile-post.component.css',
 })
 export class ProfilePostComponent implements OnDestroy {
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   postPlaceholderImageUrl: string = 'assets/placeholder/post.png';
   postId!: string;

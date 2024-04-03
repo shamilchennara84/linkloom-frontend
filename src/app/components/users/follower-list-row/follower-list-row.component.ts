@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './follower-list-row.component.css',
 })
 export class FollowerListRowComponent implements OnInit {
-  imgUrl: string = `${environment.backendUrl}images/`;
+  imgUrl: string = `${environment.backendUrl}images`;
   placeholder = 'assets/placeholder/profile.png';
   @Input() user!: IUser;
   @Input() currentUserId!: string;
@@ -25,6 +25,6 @@ export class FollowerListRowComponent implements OnInit {
   }
 
   onProfileClick() {
-     this.close.emit();
+    this.close.emit();
   }
 }
