@@ -30,7 +30,7 @@ import { FollowingListComponent } from '../following-list/following-list.compone
 })
 export class UserSecondProfileJsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   faCheck = faCheck;
   faCertificate = faCertificate;
   userProfile$!: Observable<IUserProfileData | null>;

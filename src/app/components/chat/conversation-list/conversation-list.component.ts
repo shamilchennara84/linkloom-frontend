@@ -11,6 +11,6 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './conversation-list.component.css',
 })
 export class ConversationListComponent {
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   @Input() conversation!: IConversationListItem;
 }

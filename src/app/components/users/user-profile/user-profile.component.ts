@@ -26,7 +26,7 @@ import { deleteUserFromStore } from '../../../core/states/users/user.actions';
   styleUrl: './user-profile.component.css',
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   placeholder = 'assets/placeholder/profile.png';
   faCheck = faCheck;
   faCertificate = faCertificate;

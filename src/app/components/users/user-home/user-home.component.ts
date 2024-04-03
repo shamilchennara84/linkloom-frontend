@@ -19,7 +19,7 @@ import { UserSearchComponent } from '../user-search/user-search.component';
   styleUrl: './user-home.component.css',
 })
 export class UserHomeComponent implements OnInit, OnDestroy {
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   userProfile$!: Observable<IUserRes | null>;
   userId: string | undefined;
   homePosts$!: Observable<IPostUserRes[] | null>;

@@ -22,7 +22,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() secondUser!: string;
   @Input() user!: IUser;
 
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   profilePic: string = '';
   text = '';
   allMessages: IChatHistoryItem[] = [];

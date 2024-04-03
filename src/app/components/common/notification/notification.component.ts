@@ -22,7 +22,7 @@ export class NotificationComponent {
   }
 
   @Input() notification!: INotificationWithUser;
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   profileImg!: string;
 

@@ -16,7 +16,7 @@ export class CommentComponent implements OnInit {
   @Input() userImageUrl!: string;
   @Output() commentRemoved = new EventEmitter<string>();
   @Output() commentReported = new EventEmitter<string>();
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   userPlaceholderImageUrl: string = 'assets/placeholder/profile.png';
   profileImg!: string;
   showDropdown = false;

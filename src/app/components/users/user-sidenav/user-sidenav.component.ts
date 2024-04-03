@@ -22,7 +22,7 @@ import { deleteUserFromStore } from '../../../core/states/users/user.actions';
 })
 export class UserSidenavComponent implements OnInit, OnDestroy {
   placeholder = 'assets/placeholder/profile.png';
-  imgUrl: string = `${environment.backendUrl}images`;
+  imgUrl: string = `${environment.imageUrl}`;
   sideNavCollapsed = signal(true);
   userDetails$!: Observable<IUserRes | null>;
   @Input() set collapsed(val: boolean) {
