@@ -29,6 +29,12 @@ export class PostControlComponent implements OnInit, OnDestroy {
   @Output() imageReady = new EventEmitter<Blob>();
   private subscription!: Subscription;
 
+  @Input() set width(val: number) {
+    this.imageWidth.set(val);
+  }
+  @Input() set height(val: number) {
+    this.imageHeight.set(val);
+  }
   constructor() {}
 
   ngOnInit() {
