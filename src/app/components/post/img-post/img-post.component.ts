@@ -31,6 +31,7 @@ export class ImgPostComponent implements OnInit, OnDestroy {
   @Input() tagged: boolean = false;
   @Input() userComments!: number;
   @Input() reported!: boolean;
+  @Input() caption!:string
   commentModal: boolean = false;
   profileImg!: string;
 
